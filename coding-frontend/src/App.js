@@ -1,5 +1,5 @@
 import React from "react";
-import LoginRegister from "./views/LoginRegister";
+import LoginRegister from "./views/LoginRegister/LoginRegister";
 import { makeStyles } from "@mui/styles";
 import clsx from "clsx";
 
