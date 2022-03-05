@@ -59,7 +59,7 @@ const Login = () => {
         <Button
           variant="contained"
           size="large"
-          style={{ backgroundColor: Colors.secondary_color }}
+          style={{ backgroundColor: Colors.primary_color }}
         >
           Login
         </Button>
