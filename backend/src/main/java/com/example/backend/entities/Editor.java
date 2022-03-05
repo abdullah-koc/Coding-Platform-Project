@@ -8,7 +8,7 @@ public class Editor extends Person {
         super();
     }
 
-    public Editor(int ID,
+    public Editor(long ID,
                   String full_name,
                   String email,
                   String photo,
@@ -22,6 +22,22 @@ public class Editor extends Person {
                   int salary) {
         super(ID, full_name, email, photo, password, nickname, phone, is_confirmed, reg_date, birth_date);
         this.experience_level = experience_level;
+        this.salary = salary;
+    }
+
+    public String getExperience_level() {
+        return experience_level;
+    }
+
+    public void setExperience_level(String experience_level) {
+        this.experience_level = experience_level;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
         this.salary = salary;
     }
 }
