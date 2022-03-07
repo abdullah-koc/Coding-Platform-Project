@@ -8,9 +8,7 @@ import com.example.backend.services.EditorService;
 import com.example.backend.services.PersonService;
 import com.example.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "api/auth")
@@ -29,9 +27,9 @@ public class AuthController {
     @Autowired
     CompanyService companyService;
 
-
+    
     @PostMapping(path="/signUp")
-    public void signUp(SignUpDto signUpDto) {
+    public void signUp(@RequestBody SignUpDto signUpDto) {
         String type = signUpDto.getType();
         if(type.equals("User")) {
             UserDto userDto = new UserDto();
