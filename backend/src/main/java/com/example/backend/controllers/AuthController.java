@@ -57,7 +57,7 @@ public class AuthController {
             companyDto.setCompany_name(signUpDto.getFull_name());
             companyDto.setPassword(signUpDto.getPassword());
             companyDto.setCompany_address(signUpDto.getCompany_address());
-            //companyService.signUp(companyDto);
+            companyService.signUp(companyDto);
         }
         else {
             // exception
