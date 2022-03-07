@@ -5,6 +5,8 @@ import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import Colors from "../../utils/Colors";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   return (
     <Grid
       container
@@ -28,6 +30,8 @@ const Login = () => {
         <TextField
           style={{ width: "400px" }}
           placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           color="warning"
           InputProps={{
             startAdornment: (
@@ -44,6 +48,8 @@ const Login = () => {
           style={{ width: "400px" }}
           placeholder="Password"
           type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           color="warning"
           InputProps={{
             startAdornment: (

@@ -1,6 +1,7 @@
 import React from "react";
 import LoginRegister from "./views/LoginRegister/LoginRegister";
 import { makeStyles } from "@mui/styles";
+import { Routes, Route, Link } from "react-router-dom";
 import clsx from "clsx";
 
 const useStyles = makeStyles({
@@ -21,7 +22,10 @@ const App = () => {
   return (
     <div className={clsx(classes.root, classes.loginregister)}>
       <div>
-        <LoginRegister />
+        <Routes>
+          <Route path="/" element={<LoginRegister />} />
+          <Route path="/login-register" element={<LoginRegister />} />
+        </Routes>
       </div>
     </div>
   );
