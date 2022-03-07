@@ -4,8 +4,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Companies")
+@Table(name = "companies")
 public class Company {
+    @Id
+    private int id;
     private String company_name;
     private String company_email;
     private String password;

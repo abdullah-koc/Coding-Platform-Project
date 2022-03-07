@@ -3,14 +3,13 @@ import com.example.backend.dto.CompanyDto;
 import com.example.backend.dto.EditorDto;
 import com.example.backend.dto.SignUpDto;
 import com.example.backend.dto.UserDto;
+import com.example.backend.entities.Person;
 import com.example.backend.services.CompanyService;
 import com.example.backend.services.EditorService;
 import com.example.backend.services.PersonService;
 import com.example.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "api/auth")
@@ -31,7 +30,7 @@ public class AuthController {
 
 
     @PostMapping(path="/signUp")
-    public void signUp(SignUpDto signUpDto) {
+    public void signUp(@RequestBody SignUpDto signUpDto) {
         String type = signUpDto.getType();
         if(type.equals("User")) {
             UserDto userDto = new UserDto();
@@ -64,5 +63,10 @@ public class AuthController {
             // exception
         }
 
+    }
+
+    @GetMapping("/login/{email}/{password}")
+    public boolean login(@PathVariable String email, @PathVariable String password) {
+        return personService.login(email,password);
     }
 }
