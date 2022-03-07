@@ -18,9 +18,9 @@ public class UserService {
     }*/
 
     public void signUp(UserDto userDto) {
-        if(userRepository.findByEmail(userDto.getEmail()) != null) {
+        /*if(userRepository.findByEmail(userDto.getEmail()) != null) {
             throw new RuntimeException("User already exists");
-        }
+        }*/
 
         User user = new User();
         user.setFull_name(userDto.getFull_name());
@@ -28,14 +28,14 @@ public class UserService {
         user.setBirth_date(userDto.getBirth_date());
         user.setNickname(userDto.getNickname());
         user.setPassword(userDto.getPassword());
-        userRepository.save( user );
+        //userRepository.save( user );
     }
 
     public boolean loginUser(String email, String password) {
-        Person user = userRepository.findByEmail(email);
+        /*Person user = userRepository.findByEmail(email);
         if(user.getPassword() != password) {
             return false;
-        }
+        }*/
         return true;
     }
 }
