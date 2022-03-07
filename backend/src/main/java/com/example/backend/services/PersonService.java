@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class PersonService {
     PersonRepository personRepository;
 
-    public PersonService(PersonRepository personRepository) {
+    /*public PersonService(PersonRepository personRepository) {
         this.personRepository = personRepository;
-    }
+    }*/
 }
