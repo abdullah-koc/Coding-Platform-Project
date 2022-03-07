@@ -3,6 +3,7 @@ import com.example.backend.dto.CompanyDto;
 import com.example.backend.dto.EditorDto;
 import com.example.backend.dto.SignUpDto;
 import com.example.backend.dto.UserDto;
+import com.example.backend.entities.Person;
 import com.example.backend.services.CompanyService;
 import com.example.backend.services.EditorService;
 import com.example.backend.services.PersonService;
@@ -27,7 +28,7 @@ public class AuthController {
     @Autowired
     CompanyService companyService;
 
-    
+
     @PostMapping(path="/signUp")
     public void signUp(@RequestBody SignUpDto signUpDto) {
         String type = signUpDto.getType();
@@ -62,5 +63,10 @@ public class AuthController {
             // exception
         }
 
+    }
+
+    @GetMapping("/login/{email}/{password}")
+    public boolean login(@PathVariable String email, @PathVariable String password) {
+        return personService.login(email,password);
     }
 }
