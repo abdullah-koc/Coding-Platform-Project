@@ -386,7 +386,7 @@ CREATE TABLE `people` (
   `nickname` varchar(45) NOT NULL,
   `phone` varchar(45) DEFAULT NULL,
   `is_confirmed` bit(1) NOT NULL DEFAULT b'0',
-  `reg_date` datetime NOT NULL,
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `birth_date` datetime DEFAULT NULL,
   PRIMARY KEY (`person_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -633,4 +633,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-03 16:39:18
+-- Dump completed on 2022-04-03 16:46:30
