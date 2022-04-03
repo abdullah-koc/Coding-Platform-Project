@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `syncoder_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `syncoder_db`;
 -- MySQL dump 10.13  Distrib 8.0.27, for macos11 (x86_64)
 --
 -- Host: localhost    Database: syncoder_db
@@ -25,7 +23,7 @@ DROP TABLE IF EXISTS `admins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `admins` (
-  `admin_id` int NOT NULL AUTO_INCREMENT,
+  `admin_id` varchar(20) NOT NULL,
   `admin_name` varchar(45) NOT NULL,
   `admin_email` varchar(45) NOT NULL,
   `admin_password` varchar(45) NOT NULL,
@@ -43,37 +41,37 @@ LOCK TABLES `admins` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `answers`
+-- Table structure for table `attempts`
 --
 
-DROP TABLE IF EXISTS `answers`;
+DROP TABLE IF EXISTS `attempts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `answers` (
-  `answer_id` int NOT NULL,
-  `user_answer` longtext,
+CREATE TABLE `attempts` (
+  `attempt_id` varchar(20) NOT NULL,
+  `user_answer` longtext NOT NULL,
   `try_count` int NOT NULL,
   `is_succeeded` bit(1) NOT NULL,
-  `user_id` int NOT NULL,
-  `question_id` int NOT NULL,
-  `test_case_id` int DEFAULT NULL,
-  PRIMARY KEY (`answer_id`),
-  KEY `user_answer_id_idx` (`user_id`),
-  KEY `question_answer_id_idx` (`question_id`),
-  KEY `test_case_answer_id_idx` (`test_case_id`),
-  CONSTRAINT `question_answer_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`),
-  CONSTRAINT `test_case_answer_id` FOREIGN KEY (`test_case_id`) REFERENCES `test_cases` (`test_case_id`),
-  CONSTRAINT `user_answer_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  `user_id` varchar(20) NOT NULL,
+  `question_id` varchar(20) NOT NULL,
+  `test_case_id` varchar(20) NOT NULL,
+  PRIMARY KEY (`attempt_id`),
+  KEY `user_id_idx` (`user_id`),
+  KEY `question_id_idx` (`question_id`),
+  KEY `test_case_id_idx` (`test_case_id`),
+  CONSTRAINT `q_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`),
+  CONSTRAINT `tc_id` FOREIGN KEY (`test_case_id`) REFERENCES `test_cases` (`test_case_id`),
+  CONSTRAINT `u_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `answers`
+-- Dumping data for table `attempts`
 --
 
-LOCK TABLES `answers` WRITE;
-/*!40000 ALTER TABLE `answers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `answers` ENABLE KEYS */;
+LOCK TABLES `attempts` WRITE;
+/*!40000 ALTER TABLE `attempts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `attempts` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -84,9 +82,8 @@ DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
-  `category_id` int NOT NULL AUTO_INCREMENT,
-  `category_name` varchar(45) NOT NULL,
-  PRIMARY KEY (`category_id`)
+  `category_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`category_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -109,7 +106,10 @@ DROP TABLE IF EXISTS `choices`;
 CREATE TABLE `choices` (
   `choice_description` varchar(300) NOT NULL,
   `is_correct` bit(1) NOT NULL,
-  PRIMARY KEY (`choice_description`)
+  `non_coding_question_id` varchar(20) NOT NULL,
+  PRIMARY KEY (`choice_description`),
+  KEY `non_coding_question_id_idx` (`non_coding_question_id`),
+  CONSTRAINT `nqd_id` FOREIGN KEY (`non_coding_question_id`) REFERENCES `non_coding_questions` (`non_coding_question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -123,53 +123,27 @@ LOCK TABLES `choices` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `coding_challenge_test_case`
+-- Table structure for table `coding_questions`
 --
 
-DROP TABLE IF EXISTS `coding_challenge_test_case`;
+DROP TABLE IF EXISTS `coding_questions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `coding_challenge_test_case` (
-  `coding_challenge_id` int NOT NULL,
-  `test_case_id` int NOT NULL,
-  PRIMARY KEY (`coding_challenge_id`,`test_case_id`),
-  KEY `test_case_id_idx` (`test_case_id`),
-  CONSTRAINT `coding_challenge_id` FOREIGN KEY (`coding_challenge_id`) REFERENCES `coding_challenges` (`coding_challenge_id`),
-  CONSTRAINT `test_case_id` FOREIGN KEY (`test_case_id`) REFERENCES `test_cases` (`test_case_id`)
+CREATE TABLE `coding_questions` (
+  `coding_question_id` varchar(20) NOT NULL,
+  `prog_language` varchar(45) NOT NULL,
+  PRIMARY KEY (`coding_question_id`),
+  CONSTRAINT `question_id` FOREIGN KEY (`coding_question_id`) REFERENCES `questions` (`question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `coding_challenge_test_case`
+-- Dumping data for table `coding_questions`
 --
 
-LOCK TABLES `coding_challenge_test_case` WRITE;
-/*!40000 ALTER TABLE `coding_challenge_test_case` DISABLE KEYS */;
-/*!40000 ALTER TABLE `coding_challenge_test_case` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `coding_challenges`
---
-
-DROP TABLE IF EXISTS `coding_challenges`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `coding_challenges` (
-  `coding_challenge_id` int NOT NULL,
-  `programming_language` varchar(45) NOT NULL,
-  PRIMARY KEY (`coding_challenge_id`),
-  CONSTRAINT `question_coding_id` FOREIGN KEY (`coding_challenge_id`) REFERENCES `questions` (`question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `coding_challenges`
---
-
-LOCK TABLES `coding_challenges` WRITE;
-/*!40000 ALTER TABLE `coding_challenges` DISABLE KEYS */;
-/*!40000 ALTER TABLE `coding_challenges` ENABLE KEYS */;
+LOCK TABLES `coding_questions` WRITE;
+/*!40000 ALTER TABLE `coding_questions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `coding_questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -180,19 +154,18 @@ DROP TABLE IF EXISTS `companies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `companies` (
-  `company_id` int NOT NULL AUTO_INCREMENT,
+  `company_id` varchar(20) NOT NULL,
   `company_name` varchar(45) NOT NULL,
-  `company_photo_url` varchar(150) DEFAULT NULL,
-  `company_address` varchar(150) NOT NULL,
-  `company_phone_number` varchar(45) NOT NULL,
+  `company_photo` varchar(45) DEFAULT NULL,
+  `company_address` varchar(300) DEFAULT NULL,
+  `company_phone` varchar(300) DEFAULT NULL,
   `company_email` varchar(45) NOT NULL,
-  `is_approved` bit(1) NOT NULL,
-  `password` varchar(45) NOT NULL,
-  `admin_id` int NOT NULL,
+  `company_password` varchar(45) NOT NULL,
+  `is_approved` bit(1) NOT NULL DEFAULT b'0',
+  `admin_id` varchar(20) NOT NULL,
   PRIMARY KEY (`company_id`),
-  UNIQUE KEY `company_id_UNIQUE` (`company_id`),
   KEY `admin_id_idx` (`admin_id`),
-  CONSTRAINT `comp_admin_id` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`)
+  CONSTRAINT `admin_id` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -213,13 +186,13 @@ DROP TABLE IF EXISTS `company_contest`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `company_contest` (
-  `company_id` int NOT NULL,
-  `contest_id` int NOT NULL,
+  `company_id` varchar(20) NOT NULL,
+  `contest_id` varchar(20) NOT NULL,
   `money` int NOT NULL,
   PRIMARY KEY (`company_id`,`contest_id`),
-  KEY `contest_company_id_idx` (`contest_id`),
-  CONSTRAINT `company_contest_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`),
-  CONSTRAINT `contest_company_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`)
+  KEY `contest_com_id_idx` (`contest_id`),
+  CONSTRAINT `company_con_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`),
+  CONSTRAINT `contest_com_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -240,13 +213,13 @@ DROP TABLE IF EXISTS `contests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `contests` (
-  `contest_id` int NOT NULL,
+  `contest_id` varchar(20) NOT NULL,
   `contest_name` varchar(45) NOT NULL,
-  `contest_photo_url` varchar(150) DEFAULT NULL,
+  `contest_photo` varchar(300) DEFAULT NULL,
   `start_date` datetime NOT NULL,
   `end_date` datetime NOT NULL,
-  `prize` varchar(150) DEFAULT NULL,
-  `creation_date` datetime NOT NULL,
+  `prize` varchar(500) DEFAULT NULL,
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`contest_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -268,8 +241,8 @@ DROP TABLE IF EXISTS `editor_contest`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `editor_contest` (
-  `editor_id` int NOT NULL,
-  `contest_id` int NOT NULL,
+  `editor_id` varchar(20) NOT NULL,
+  `contest_id` varchar(20) NOT NULL,
   PRIMARY KEY (`editor_id`,`contest_id`),
   KEY `contest_editor_id_idx` (`contest_id`),
   CONSTRAINT `contest_editor_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`),
@@ -294,15 +267,15 @@ DROP TABLE IF EXISTS `editors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `editors` (
-  `editor_id` int NOT NULL,
+  `editor_id` varchar(20) NOT NULL,
   `experience_level` varchar(45) NOT NULL,
   `salary` int NOT NULL,
-  `admin_id` int NOT NULL,
-  `cv_url` varchar(150) NOT NULL,
+  `admin_id` varchar(20) NOT NULL,
+  `cv` longtext NOT NULL,
+  `is_approved` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`editor_id`),
-  KEY `admin_id_idx` (`admin_id`),
-  CONSTRAINT `admin_id` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`),
-  CONSTRAINT `person_id` FOREIGN KEY (`editor_id`) REFERENCES `people` (`id`)
+  KEY `admin-id_idx` (`admin_id`),
+  CONSTRAINT `admin-id` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -323,12 +296,12 @@ DROP TABLE IF EXISTS `interview_question`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `interview_question` (
-  `interview_id` int NOT NULL,
-  `question_id` int NOT NULL,
+  `interview_id` varchar(20) NOT NULL,
+  `question_id` varchar(20) NOT NULL,
   PRIMARY KEY (`interview_id`,`question_id`),
-  KEY `questiob_interview_id_idx` (`question_id`),
-  CONSTRAINT `interview_question_id` FOREIGN KEY (`interview_id`) REFERENCES `interviews` (`interview_id`),
-  CONSTRAINT `questiob_interview_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
+  KEY `question_i_id_idx` (`question_id`),
+  CONSTRAINT `interview_q_id` FOREIGN KEY (`interview_id`) REFERENCES `interviews` (`interview_id`),
+  CONSTRAINT `question_i_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -349,14 +322,14 @@ DROP TABLE IF EXISTS `interviews`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `interviews` (
-  `interview_id` int NOT NULL AUTO_INCREMENT,
+  `interview_id` varchar(20) NOT NULL,
   `interview_name` varchar(45) NOT NULL,
   `interview_date` datetime NOT NULL,
-  `duration` int NOT NULL,
-  `company_id` int NOT NULL,
+  `interview_duration` int NOT NULL,
+  `company_id` varchar(20) NOT NULL,
   PRIMARY KEY (`interview_id`),
-  KEY `company_id_idx` (`company_id`),
-  CONSTRAINT `company_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`)
+  KEY `comp_id_idx` (`company_id`),
+  CONSTRAINT `comp_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -370,32 +343,6 @@ LOCK TABLES `interviews` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `non_coding_question_choice`
---
-
-DROP TABLE IF EXISTS `non_coding_question_choice`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `non_coding_question_choice` (
-  `non_coding_question_id` int NOT NULL,
-  `choice_description` varchar(300) NOT NULL,
-  PRIMARY KEY (`non_coding_question_id`,`choice_description`),
-  KEY `choice_description_non_coding_question_id_idx` (`choice_description`),
-  CONSTRAINT `choice_description_non_coding_question_id` FOREIGN KEY (`choice_description`) REFERENCES `choices` (`choice_description`),
-  CONSTRAINT `non_coding_question_choice_id` FOREIGN KEY (`non_coding_question_id`) REFERENCES `non_coding_questions` (`non_coding_question_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `non_coding_question_choice`
---
-
-LOCK TABLES `non_coding_question_choice` WRITE;
-/*!40000 ALTER TABLE `non_coding_question_choice` DISABLE KEYS */;
-/*!40000 ALTER TABLE `non_coding_question_choice` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `non_coding_questions`
 --
 
@@ -403,10 +350,12 @@ DROP TABLE IF EXISTS `non_coding_questions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `non_coding_questions` (
-  `non_coding_question_id` int NOT NULL,
-  `type_description` varchar(1000) NOT NULL,
+  `non_coding_question_id` varchar(20) NOT NULL,
+  `type_description` varchar(300) NOT NULL,
   PRIMARY KEY (`non_coding_question_id`),
-  CONSTRAINT `question_non_coding_id` FOREIGN KEY (`non_coding_question_id`) REFERENCES `questions` (`question_id`)
+  KEY `type_description_idx` (`type_description`),
+  CONSTRAINT `non_coding_question_id` FOREIGN KEY (`non_coding_question_id`) REFERENCES `questions` (`question_id`),
+  CONSTRAINT `type_description` FOREIGN KEY (`type_description`) REFERENCES `choices` (`choice_description`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -427,19 +376,17 @@ DROP TABLE IF EXISTS `people`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `people` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `person_id` varchar(20) NOT NULL,
   `full_name` varchar(45) NOT NULL,
   `email` varchar(45) NOT NULL,
-  `photo_url` varchar(150) DEFAULT NULL,
+  `photo` varchar(250) DEFAULT NULL,
   `password` varchar(45) NOT NULL,
   `nickname` varchar(45) NOT NULL,
-  `phone_number` varchar(45) DEFAULT NULL,
-  `is_confirmed` bit(1) NOT NULL,
+  `phone` varchar(45) DEFAULT NULL,
+  `is_confirmed` bit(1) NOT NULL DEFAULT b'0',
   `reg_date` datetime NOT NULL,
   `birth_date` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `editor_id` FOREIGN KEY (`id`) REFERENCES `editors` (`editor_id`),
-  CONSTRAINT `user_id` FOREIGN KEY (`id`) REFERENCES `users` (`user_id`)
+  PRIMARY KEY (`person_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -453,6 +400,32 @@ LOCK TABLES `people` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `question_category`
+--
+
+DROP TABLE IF EXISTS `question_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `question_category` (
+  `question_id` varchar(20) NOT NULL,
+  `category_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`question_id`,`category_name`),
+  KEY `c_q_id_idx` (`category_name`),
+  CONSTRAINT `c_q_id` FOREIGN KEY (`category_name`) REFERENCES `categories` (`category_name`),
+  CONSTRAINT `q_c_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `question_category`
+--
+
+LOCK TABLES `question_category` WRITE;
+/*!40000 ALTER TABLE `question_category` DISABLE KEYS */;
+/*!40000 ALTER TABLE `question_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `question_contest`
 --
 
@@ -460,12 +433,12 @@ DROP TABLE IF EXISTS `question_contest`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `question_contest` (
-  `question_id` int NOT NULL,
-  `contest_id` int NOT NULL,
+  `question_id` varchar(20) NOT NULL,
+  `contest_id` varchar(20) NOT NULL,
   PRIMARY KEY (`question_id`,`contest_id`),
-  KEY `contest_question_id_idx` (`contest_id`),
-  CONSTRAINT `contest_question_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`),
-  CONSTRAINT `question_contest_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
+  KEY `contest_quest_id_idx` (`contest_id`),
+  CONSTRAINT `contest_quest_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`),
+  CONSTRAINT `question_con_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -486,7 +459,7 @@ DROP TABLE IF EXISTS `questions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `questions` (
-  `question_id` int NOT NULL AUTO_INCREMENT,
+  `question_id` varchar(20) NOT NULL,
   `title` varchar(45) NOT NULL,
   `explanation` varchar(5000) NOT NULL,
   `question_duration` int NOT NULL,
@@ -496,17 +469,15 @@ CREATE TABLE `questions` (
   `max_try` int NOT NULL,
   `like_count` int NOT NULL,
   `dislike_count` int NOT NULL,
-  `creation_date` datetime NOT NULL,
-  `category_id` int NOT NULL,
-  `editor_id` int DEFAULT NULL,
-  `company_id` int DEFAULT NULL,
+  `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `video_link` varchar(500) DEFAULT NULL,
+  `editor_id` varchar(20) DEFAULT NULL,
+  `company_id` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`question_id`),
-  KEY `ccategory_id_idx` (`category_id`),
   KEY `editor_id_idx` (`editor_id`),
-  KEY `company_question_id_idx` (`company_id`),
-  CONSTRAINT `category_id` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`),
-  CONSTRAINT `company_question_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`),
-  CONSTRAINT `editor_question_id` FOREIGN KEY (`editor_id`) REFERENCES `editors` (`editor_id`)
+  KEY `company_id_idx` (`company_id`),
+  CONSTRAINT `company_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`),
+  CONSTRAINT `editor_id` FOREIGN KEY (`editor_id`) REFERENCES `editors` (`editor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -527,9 +498,9 @@ DROP TABLE IF EXISTS `test_cases`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `test_cases` (
-  `test_case_id` int NOT NULL,
-  `example_input` varchar(500) NOT NULL,
-  `example_output` varchar(500) NOT NULL,
+  `example_input` longtext NOT NULL,
+  `example_output` longtext NOT NULL,
+  `test_case_id` varchar(20) NOT NULL,
   PRIMARY KEY (`test_case_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -551,12 +522,12 @@ DROP TABLE IF EXISTS `user_contest`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_contest` (
-  `user_id` int NOT NULL,
-  `contest_id` int NOT NULL,
+  `user_id` varchar(20) NOT NULL,
+  `contest_id` varchar(20) NOT NULL,
   PRIMARY KEY (`user_id`,`contest_id`),
-  KEY `contest_user_id_idx` (`contest_id`),
-  CONSTRAINT `contest_user_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`),
-  CONSTRAINT `user_contest_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  KEY `cont_user_id_idx` (`contest_id`),
+  CONSTRAINT `cont_user_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`),
+  CONSTRAINT `user_cont_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -570,6 +541,60 @@ LOCK TABLES `user_contest` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user_interview`
+--
+
+DROP TABLE IF EXISTS `user_interview`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_interview` (
+  `user_id` varchar(20) NOT NULL,
+  `interview_id` varchar(20) NOT NULL,
+  `is_passed` bit(1) NOT NULL,
+  PRIMARY KEY (`user_id`,`interview_id`),
+  KEY `inter_user_id_idx` (`interview_id`),
+  CONSTRAINT `inter_user_id` FOREIGN KEY (`interview_id`) REFERENCES `interviews` (`interview_id`),
+  CONSTRAINT `user_inter_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_interview`
+--
+
+LOCK TABLES `user_interview` WRITE;
+/*!40000 ALTER TABLE `user_interview` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_interview` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_question`
+--
+
+DROP TABLE IF EXISTS `user_question`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_question` (
+  `user_id` varchar(20) NOT NULL,
+  `question_id` varchar(20) NOT NULL,
+  `is_resolved` bit(1) NOT NULL,
+  PRIMARY KEY (`user_id`,`question_id`),
+  KEY `q_user_id_idx` (`question_id`),
+  CONSTRAINT `q_user_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`),
+  CONSTRAINT `user_q_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_question`
+--
+
+LOCK TABLES `user_question` WRITE;
+/*!40000 ALTER TABLE `user_question` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_question` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -577,14 +602,14 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `user_id` int NOT NULL,
+  `user_id` varchar(20) NOT NULL,
   `school` varchar(45) DEFAULT NULL,
   `department` varchar(45) DEFAULT NULL,
   `cur_company` varchar(45) DEFAULT NULL,
   `success_rate` int DEFAULT NULL,
   `user_point` int DEFAULT NULL,
   PRIMARY KEY (`user_id`),
-  CONSTRAINT `id` FOREIGN KEY (`user_id`) REFERENCES `people` (`id`)
+  CONSTRAINT `person_id` FOREIGN KEY (`user_id`) REFERENCES `people` (`person_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -596,32 +621,6 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `users_interview`
---
-
-DROP TABLE IF EXISTS `users_interview`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users_interview` (
-  `user_id` int NOT NULL,
-  `interview_id` int NOT NULL,
-  PRIMARY KEY (`user_id`,`interview_id`),
-  KEY `interview_id_idx` (`interview_id`),
-  CONSTRAINT `interview_id` FOREIGN KEY (`interview_id`) REFERENCES `interviews` (`interview_id`),
-  CONSTRAINT `user_interview_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users_interview`
---
-
-LOCK TABLES `users_interview` WRITE;
-/*!40000 ALTER TABLE `users_interview` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users_interview` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -632,4 +631,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-05 20:19:14
+-- Dump completed on 2022-04-03 16:33:34
