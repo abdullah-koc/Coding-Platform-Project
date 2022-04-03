@@ -57,6 +57,7 @@ CREATE TABLE `attempts` (
   `user_id` varchar(20) NOT NULL,
   `question_id` varchar(20) NOT NULL,
   `test_case_id` varchar(20) NOT NULL,
+  `programming_language` varchar(45) NOT NULL,
   PRIMARY KEY (`attempt_id`),
   KEY `user_id_idx` (`user_id`),
   KEY `question_id_idx` (`question_id`),
@@ -133,7 +134,8 @@ DROP TABLE IF EXISTS `coding_questions`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `coding_questions` (
   `coding_question_id` varchar(20) NOT NULL,
-  `prog_language` varchar(45) NOT NULL,
+  `video_link` varchar(500) NOT NULL,
+  `video_request_count` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`coding_question_id`),
   CONSTRAINT `question_id` FOREIGN KEY (`coding_question_id`) REFERENCES `questions` (`question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -386,7 +388,7 @@ CREATE TABLE `people` (
   `nickname` varchar(45) NOT NULL,
   `phone` varchar(45) DEFAULT NULL,
   `is_confirmed` bit(1) NOT NULL DEFAULT b'0',
-  `reg_date` datetime NOT NULL,
+  `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `birth_date` datetime DEFAULT NULL,
   PRIMARY KEY (`person_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -472,7 +474,6 @@ CREATE TABLE `questions` (
   `like_count` int NOT NULL,
   `dislike_count` int NOT NULL,
   `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `video_link` varchar(500) DEFAULT NULL,
   `editor_id` varchar(20) DEFAULT NULL,
   `company_id` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`question_id`),
@@ -503,6 +504,7 @@ CREATE TABLE `test_cases` (
   `example_input` longtext NOT NULL,
   `example_output` longtext NOT NULL,
   `test_case_id` varchar(20) NOT NULL,
+  `is_locked` bit(1) NOT NULL,
   PRIMARY KEY (`test_case_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -633,4 +635,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-03 16:39:18
+-- Dump completed on 2022-04-03 18:15:13
