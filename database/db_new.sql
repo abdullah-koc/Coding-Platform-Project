@@ -533,7 +533,7 @@ CREATE TABLE `test_cases` (
   `test_case_id` varchar(20) NOT NULL,
   `is_locked` bit(1) NOT NULL,
   `coding_question_id` varchar(20) NOT NULL,
-  PRIMARY KEY (`test_case_id`),
+  PRIMARY KEY (`test_case_id`,`coding_question_id`),
   KEY `coding_q_id_idx` (`coding_question_id`),
   CONSTRAINT `coding_q_id` FOREIGN KEY (`coding_question_id`) REFERENCES `coding_questions` (`coding_question_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -668,4 +668,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-04 18:30:34
+-- Dump completed on 2022-04-04 21:12:30
