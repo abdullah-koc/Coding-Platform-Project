@@ -279,7 +279,8 @@ CREATE TABLE `editors` (
   `is_approved` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`editor_id`),
   KEY `admin-id_idx` (`admin_id`),
-  CONSTRAINT `admin-id` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`)
+  CONSTRAINT `admin-id` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`),
+  CONSTRAINT `person-id` FOREIGN KEY (`editor_id`) REFERENCES `people` (`person_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -638,4 +639,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-03 18:19:45
+-- Dump completed on 2022-04-04 12:24:20
