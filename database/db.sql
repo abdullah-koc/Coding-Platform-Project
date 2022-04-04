@@ -43,6 +43,32 @@ LOCK TABLES `admins` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `attempt_test_case`
+--
+
+DROP TABLE IF EXISTS `attempt_test_case`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `attempt_test_case` (
+  `attempt_id` varchar(20) NOT NULL,
+  `test_case_id` varchar(20) NOT NULL,
+  PRIMARY KEY (`attempt_id`,`test_case_id`),
+  KEY `test_case_atmpt_id_idx` (`test_case_id`),
+  CONSTRAINT `atmpt_test_id` FOREIGN KEY (`attempt_id`) REFERENCES `attempts` (`attempt_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `test_case_atmpt_id` FOREIGN KEY (`test_case_id`) REFERENCES `test_cases` (`test_case_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `attempt_test_case`
+--
+
+LOCK TABLES `attempt_test_case` WRITE;
+/*!40000 ALTER TABLE `attempt_test_case` DISABLE KEYS */;
+/*!40000 ALTER TABLE `attempt_test_case` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `attempts`
 --
 
@@ -56,15 +82,12 @@ CREATE TABLE `attempts` (
   `is_succeeded` bit(1) NOT NULL,
   `user_id` varchar(20) NOT NULL,
   `question_id` varchar(20) NOT NULL,
-  `test_case_id` varchar(20) NOT NULL,
   `programming_language` varchar(45) NOT NULL,
   PRIMARY KEY (`attempt_id`),
   KEY `user_id_idx` (`user_id`),
   KEY `question_id_idx` (`question_id`),
-  KEY `test_case_id_idx` (`test_case_id`),
-  CONSTRAINT `q_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`),
-  CONSTRAINT `tc_id` FOREIGN KEY (`test_case_id`) REFERENCES `test_cases` (`test_case_id`),
-  CONSTRAINT `u_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `q_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `u_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -112,7 +135,7 @@ CREATE TABLE `choices` (
   `non_coding_question_id` varchar(20) NOT NULL,
   PRIMARY KEY (`choice_description`),
   KEY `non_coding_question_id_idx` (`non_coding_question_id`),
-  CONSTRAINT `nqd_id` FOREIGN KEY (`non_coding_question_id`) REFERENCES `non_coding_questions` (`non_coding_question_id`)
+  CONSTRAINT `nqd_id` FOREIGN KEY (`non_coding_question_id`) REFERENCES `non_coding_questions` (`non_coding_question_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -137,7 +160,7 @@ CREATE TABLE `coding_questions` (
   `video_link` varchar(500) NOT NULL,
   `video_request_count` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`coding_question_id`),
-  CONSTRAINT `question_id` FOREIGN KEY (`coding_question_id`) REFERENCES `questions` (`question_id`)
+  CONSTRAINT `question_id` FOREIGN KEY (`coding_question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -166,10 +189,10 @@ CREATE TABLE `companies` (
   `company_email` varchar(45) NOT NULL,
   `company_password` varchar(45) NOT NULL,
   `is_approved` bit(1) NOT NULL DEFAULT b'0',
-  `admin_id` varchar(20) NOT NULL,
+  `admin_id` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`company_id`),
   KEY `admin_id_idx` (`admin_id`),
-  CONSTRAINT `admin_id` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`)
+  CONSTRAINT `admin_id` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -195,8 +218,8 @@ CREATE TABLE `company_contest` (
   `money` int NOT NULL,
   PRIMARY KEY (`company_id`,`contest_id`),
   KEY `contest_com_id_idx` (`contest_id`),
-  CONSTRAINT `company_con_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`),
-  CONSTRAINT `contest_com_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`)
+  CONSTRAINT `company_con_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `contest_com_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -249,8 +272,8 @@ CREATE TABLE `editor_contest` (
   `contest_id` varchar(20) NOT NULL,
   PRIMARY KEY (`editor_id`,`contest_id`),
   KEY `contest_editor_id_idx` (`contest_id`),
-  CONSTRAINT `contest_editor_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`),
-  CONSTRAINT `editor_contest_id` FOREIGN KEY (`editor_id`) REFERENCES `editors` (`editor_id`)
+  CONSTRAINT `contest_editor_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `editor_contest_id` FOREIGN KEY (`editor_id`) REFERENCES `editors` (`editor_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -274,13 +297,13 @@ CREATE TABLE `editors` (
   `editor_id` varchar(20) NOT NULL,
   `experience_level` varchar(45) NOT NULL,
   `salary` int NOT NULL,
-  `admin_id` varchar(20) NOT NULL,
+  `admin_id` varchar(20) DEFAULT NULL,
   `cv` longtext NOT NULL,
   `is_approved` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`editor_id`),
   KEY `admin-id_idx` (`admin_id`),
-  CONSTRAINT `admin-id` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`),
-  CONSTRAINT `person-id` FOREIGN KEY (`editor_id`) REFERENCES `people` (`person_id`)
+  CONSTRAINT `admin-id` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `person-id` FOREIGN KEY (`editor_id`) REFERENCES `people` (`person_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -303,10 +326,13 @@ DROP TABLE IF EXISTS `interview_question`;
 CREATE TABLE `interview_question` (
   `interview_id` varchar(20) NOT NULL,
   `question_id` varchar(20) NOT NULL,
-  PRIMARY KEY (`interview_id`,`question_id`),
+  `company_id` varchar(20) NOT NULL,
+  PRIMARY KEY (`interview_id`,`question_id`,`company_id`),
   KEY `question_i_id_idx` (`question_id`),
-  CONSTRAINT `interview_q_id` FOREIGN KEY (`interview_id`) REFERENCES `interviews` (`interview_id`),
-  CONSTRAINT `question_i_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
+  KEY `company_c_id_idx` (`company_id`),
+  CONSTRAINT `company_c_id` FOREIGN KEY (`company_id`) REFERENCES `interviews` (`company_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `interview_q_id` FOREIGN KEY (`interview_id`) REFERENCES `interviews` (`interview_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `question_i_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -334,7 +360,7 @@ CREATE TABLE `interviews` (
   `company_id` varchar(20) NOT NULL,
   PRIMARY KEY (`interview_id`),
   KEY `comp_id_idx` (`company_id`),
-  CONSTRAINT `comp_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`)
+  CONSTRAINT `comp_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -358,9 +384,7 @@ CREATE TABLE `non_coding_questions` (
   `non_coding_question_id` varchar(20) NOT NULL,
   `type_description` varchar(300) NOT NULL,
   PRIMARY KEY (`non_coding_question_id`),
-  KEY `type_description_idx` (`type_description`),
-  CONSTRAINT `non_coding_question_id` FOREIGN KEY (`non_coding_question_id`) REFERENCES `questions` (`question_id`),
-  CONSTRAINT `type_description` FOREIGN KEY (`type_description`) REFERENCES `choices` (`choice_description`)
+  CONSTRAINT `non_coding_question_id` FOREIGN KEY (`non_coding_question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -416,8 +440,8 @@ CREATE TABLE `question_category` (
   `category_name` varchar(50) NOT NULL,
   PRIMARY KEY (`question_id`,`category_name`),
   KEY `c_q_id_idx` (`category_name`),
-  CONSTRAINT `c_q_id` FOREIGN KEY (`category_name`) REFERENCES `categories` (`category_name`),
-  CONSTRAINT `q_c_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
+  CONSTRAINT `c_q_id` FOREIGN KEY (`category_name`) REFERENCES `categories` (`category_name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `q_c_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -442,8 +466,8 @@ CREATE TABLE `question_contest` (
   `contest_id` varchar(20) NOT NULL,
   PRIMARY KEY (`question_id`,`contest_id`),
   KEY `contest_quest_id_idx` (`contest_id`),
-  CONSTRAINT `contest_quest_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`),
-  CONSTRAINT `question_con_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`)
+  CONSTRAINT `contest_quest_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `question_con_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -480,8 +504,8 @@ CREATE TABLE `questions` (
   PRIMARY KEY (`question_id`),
   KEY `editor_id_idx` (`editor_id`),
   KEY `company_id_idx` (`company_id`),
-  CONSTRAINT `company_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`),
-  CONSTRAINT `editor_id` FOREIGN KEY (`editor_id`) REFERENCES `editors` (`editor_id`)
+  CONSTRAINT `company_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `editor_id` FOREIGN KEY (`editor_id`) REFERENCES `editors` (`editor_id`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -507,9 +531,9 @@ CREATE TABLE `test_cases` (
   `test_case_id` varchar(20) NOT NULL,
   `is_locked` bit(1) NOT NULL,
   `coding_question_id` varchar(20) NOT NULL,
-  PRIMARY KEY (`test_case_id`),
+  PRIMARY KEY (`test_case_id`,`coding_question_id`),
   KEY `coding_q_id_idx` (`coding_question_id`),
-  CONSTRAINT `coding_q_id` FOREIGN KEY (`coding_question_id`) REFERENCES `coding_questions` (`coding_question_id`)
+  CONSTRAINT `coding_q_id` FOREIGN KEY (`coding_question_id`) REFERENCES `coding_questions` (`coding_question_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -534,8 +558,8 @@ CREATE TABLE `user_contest` (
   `contest_id` varchar(20) NOT NULL,
   PRIMARY KEY (`user_id`,`contest_id`),
   KEY `cont_user_id_idx` (`contest_id`),
-  CONSTRAINT `cont_user_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`),
-  CONSTRAINT `user_cont_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `cont_user_id` FOREIGN KEY (`contest_id`) REFERENCES `contests` (`contest_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_cont_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -559,10 +583,13 @@ CREATE TABLE `user_interview` (
   `user_id` varchar(20) NOT NULL,
   `interview_id` varchar(20) NOT NULL,
   `is_passed` bit(1) NOT NULL,
-  PRIMARY KEY (`user_id`,`interview_id`),
+  `company_id` varchar(20) NOT NULL,
+  PRIMARY KEY (`user_id`,`interview_id`,`company_id`),
   KEY `inter_user_id_idx` (`interview_id`),
-  CONSTRAINT `inter_user_id` FOREIGN KEY (`interview_id`) REFERENCES `interviews` (`interview_id`),
-  CONSTRAINT `user_inter_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  KEY `comp_user_id_idx` (`company_id`),
+  CONSTRAINT `comp_user_id` FOREIGN KEY (`company_id`) REFERENCES `interviews` (`company_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `inter_user_id` FOREIGN KEY (`interview_id`) REFERENCES `interviews` (`interview_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_inter_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -588,8 +615,8 @@ CREATE TABLE `user_question` (
   `is_resolved` bit(1) NOT NULL,
   PRIMARY KEY (`user_id`,`coding_question_id`),
   KEY `q_user_id_idx` (`coding_question_id`),
-  CONSTRAINT `q_user_id` FOREIGN KEY (`coding_question_id`) REFERENCES `coding_questions` (`coding_question_id`),
-  CONSTRAINT `user_q_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `q_user_id` FOREIGN KEY (`coding_question_id`) REFERENCES `coding_questions` (`coding_question_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_q_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -617,7 +644,7 @@ CREATE TABLE `users` (
   `success_rate` int DEFAULT NULL,
   `user_point` int DEFAULT NULL,
   PRIMARY KEY (`user_id`),
-  CONSTRAINT `person_id` FOREIGN KEY (`user_id`) REFERENCES `people` (`person_id`)
+  CONSTRAINT `person_id` FOREIGN KEY (`user_id`) REFERENCES `people` (`person_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -639,4 +666,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-04 12:24:20
+-- Dump completed on 2022-04-04 22:19:16
