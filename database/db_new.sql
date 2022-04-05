@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `syncoder_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `syncoder_db`;
--- MySQL dump 10.13  Distrib 8.0.27, for macos11 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.25, for Win64 (x86_64)
 --
 -- Host: localhost    Database: syncoder_db
 -- ------------------------------------------------------
--- Server version	8.0.27
+-- Server version	8.0.25
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -384,7 +384,9 @@ CREATE TABLE `non_coding_questions` (
   `non_coding_question_id` varchar(20) NOT NULL,
   `type_description` varchar(300) NOT NULL,
   PRIMARY KEY (`non_coding_question_id`),
-  CONSTRAINT `non_coding_question_id` FOREIGN KEY (`non_coding_question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `type_description_idx` (`type_description`),
+  CONSTRAINT `non_coding_question_id` FOREIGN KEY (`non_coding_question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `type_description` FOREIGN KEY (`type_description`) REFERENCES `choices` (`choice_description`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -666,4 +668,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-04 22:19:16
+-- Dump completed on 2022-04-04 21:12:30
