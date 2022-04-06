@@ -4,6 +4,7 @@ import { makeStyles } from "@mui/styles";
 import { Routes, Route, Link } from "react-router-dom";
 import clsx from "clsx";
 import UserStatus from "./components/UserStatus";
+import QuestionExplanation from "./components/QuestionExplanation";
 
 const useStyles = makeStyles({
   root: {
@@ -24,7 +25,7 @@ const App = () => {
     <div className={clsx(classes.root, classes.loginregister)}>
       <div>
         <Routes>
-          <Route path="/" element={<UserStatus />} />
+          <Route path="/" element={<QuestionExplanation />} />
           <Route path="/login-register" element={<LoginRegister />} />
         </Routes>
       </div>
