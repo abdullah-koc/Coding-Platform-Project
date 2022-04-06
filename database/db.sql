@@ -79,7 +79,7 @@ DROP TABLE IF EXISTS `attempts`;
 CREATE TABLE `attempts` (
   `attempt_id` varchar(20) NOT NULL,
   `user_answer` longtext NOT NULL,
-  `try_count` int NOT NULL,
+  `try_count` int NOT NULL DEFAULT '0',
   `is_solved` bit(1) NOT NULL DEFAULT b'0',
   `user_id` varchar(20) NOT NULL,
   `question_id` varchar(20) NOT NULL,
@@ -216,7 +216,7 @@ DROP TABLE IF EXISTS `company_contest`;
 CREATE TABLE `company_contest` (
   `company_id` varchar(20) NOT NULL,
   `contest_id` varchar(20) NOT NULL,
-  `money` int NOT NULL,
+  `money` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`company_id`,`contest_id`),
   KEY `contest_com_id_idx` (`contest_id`),
   CONSTRAINT `company_con_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -297,7 +297,7 @@ DROP TABLE IF EXISTS `editors`;
 CREATE TABLE `editors` (
   `editor_id` varchar(20) NOT NULL,
   `experience_level` varchar(45) NOT NULL,
-  `salary` int NOT NULL,
+  `salary` int NOT NULL DEFAULT '0',
   `admin_id` varchar(20) DEFAULT NULL,
   `cv` longtext NOT NULL,
   `is_approved` bit(1) NOT NULL DEFAULT b'0',
@@ -357,7 +357,7 @@ CREATE TABLE `interviews` (
   `interview_id` varchar(20) NOT NULL,
   `interview_name` varchar(45) NOT NULL,
   `interview_date` datetime NOT NULL,
-  `interview_duration` int NOT NULL,
+  `interview_duration` int NOT NULL DEFAULT '0',
   `company_id` varchar(20) NOT NULL,
   PRIMARY KEY (`interview_id`),
   KEY `comp_id_idx` (`company_id`),
@@ -530,13 +530,13 @@ CREATE TABLE `questions` (
   `question_id` varchar(20) NOT NULL,
   `title` varchar(45) NOT NULL,
   `explanation` varchar(5000) NOT NULL,
-  `question_duration` int NOT NULL,
+  `question_duration` int NOT NULL DEFAULT '0',
   `difficulty` varchar(45) NOT NULL,
-  `question_point` int NOT NULL,
+  `question_point` int NOT NULL DEFAULT '0',
   `solution` longtext,
-  `max_try` int NOT NULL,
-  `like_count` int NOT NULL,
-  `dislike_count` int NOT NULL,
+  `max_try` int NOT NULL DEFAULT '0',
+  `like_count` int NOT NULL DEFAULT '0',
+  `dislike_count` int NOT NULL DEFAULT '0',
   `creation_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `editor_id` varchar(20) DEFAULT NULL,
   `company_id` varchar(20) DEFAULT NULL,
@@ -718,8 +718,8 @@ CREATE TABLE `users` (
   `school` varchar(45) DEFAULT NULL,
   `department` varchar(45) DEFAULT NULL,
   `cur_company` varchar(45) DEFAULT NULL,
-  `success_rate` int DEFAULT NULL,
-  `user_point` int DEFAULT NULL,
+  `success_rate` int DEFAULT '0',
+  `user_point` int DEFAULT '0',
   PRIMARY KEY (`user_id`),
   CONSTRAINT `person_id` FOREIGN KEY (`user_id`) REFERENCES `people` (`person_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -743,4 +743,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-06 23:08:12
+-- Dump completed on 2022-04-06 23:13:13
