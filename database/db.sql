@@ -80,7 +80,7 @@ CREATE TABLE `attempts` (
   `attempt_id` varchar(20) NOT NULL,
   `user_answer` longtext NOT NULL,
   `try_count` int NOT NULL,
-  `is_succeeded` bit(1) NOT NULL,
+  `is_solved` bit(1) NOT NULL DEFAULT b'0',
   `user_id` varchar(20) NOT NULL,
   `question_id` varchar(20) NOT NULL,
   `programming_language` varchar(45) NOT NULL,
@@ -743,4 +743,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-06 23:05:39
+-- Dump completed on 2022-04-06 23:08:12
