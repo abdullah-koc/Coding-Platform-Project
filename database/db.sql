@@ -52,6 +52,7 @@ DROP TABLE IF EXISTS `attempt_test_case`;
 CREATE TABLE `attempt_test_case` (
   `attempt_id` varchar(20) NOT NULL,
   `test_case_id` varchar(20) NOT NULL,
+  `is_passed` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`attempt_id`,`test_case_id`),
   KEY `test_case_atmpt_id_idx` (`test_case_id`),
   CONSTRAINT `atmpt_test_id` FOREIGN KEY (`attempt_id`) REFERENCES `attempts` (`attempt_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -157,7 +158,7 @@ DROP TABLE IF EXISTS `coding_questions`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `coding_questions` (
   `coding_question_id` varchar(20) NOT NULL,
-  `video_link` varchar(500) NOT NULL,
+  `video_link` varchar(500) DEFAULT NULL,
   `video_request_count` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`coding_question_id`),
   CONSTRAINT `question_id` FOREIGN KEY (`coding_question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -382,7 +383,7 @@ DROP TABLE IF EXISTS `non_coding_questions`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `non_coding_questions` (
   `non_coding_question_id` varchar(20) NOT NULL,
-  `type_description` varchar(300) NOT NULL,
+  `type_description` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`non_coding_question_id`),
   CONSTRAINT `non_coding_question_id` FOREIGN KEY (`non_coding_question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -566,7 +567,7 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `insertCodingQuestion` AFTER INSERT ON `questions` FOR EACH ROW BEGIN
 IF (NEW.question_id IS NOT NULL AND  NEW.question_id LIKE 'CQ%') THEN
-INSERT INTO coding_questions(coding_questions_id) VALUES(NEW.question_id); 
+INSERT INTO coding_questions(coding_question_id) VALUES(NEW.question_id); 
 END IF;
 END */;;
 DELIMITER ;
@@ -742,4 +743,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-05 17:02:51
+-- Dump completed on 2022-04-06 23:05:39
