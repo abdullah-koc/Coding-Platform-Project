@@ -689,7 +689,7 @@ DROP TABLE IF EXISTS `user_question`;
 CREATE TABLE `user_question` (
   `user_id` varchar(20) NOT NULL,
   `coding_question_id` varchar(20) NOT NULL,
-  `is_resolved` bit(1) NOT NULL,
+  `is_resolved` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`user_id`,`coding_question_id`),
   KEY `q_user_id_idx` (`coding_question_id`),
   CONSTRAINT `q_user_id` FOREIGN KEY (`coding_question_id`) REFERENCES `coding_questions` (`coding_question_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -743,4 +743,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-06 23:13:13
+-- Dump completed on 2022-04-06 23:30:15
