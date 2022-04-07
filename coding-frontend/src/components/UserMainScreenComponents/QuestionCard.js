@@ -26,7 +26,7 @@ const QuestionCard = () => {
   const [difficulty, setDifficulty] = React.useState("Easy");
   const [likeRate, setLikeRate] = React.useState(80);
   const [isSolved, setIsSolved] = React.useState(0);
-  const [solveFrequency, setSolveFrequency] = React.useState(42);
+  const [questionPoint, setQuestionPoint] = React.useState(42);
   return (
     <div className={classes.root} onClick={() => console.log("sdfsdf")}>
       <Grid container>
@@ -65,7 +65,7 @@ const QuestionCard = () => {
           {isSolved ? "Solved" : "Not Solved"}
         </Grid>
         <Grid item xs={1} style={{ display: "flex", alignItems: "center" }}>
-          {solveFrequency}%
+          {questionPoint}
         </Grid>
       </Grid>
     </div>
