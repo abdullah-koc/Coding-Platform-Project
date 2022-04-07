@@ -83,7 +83,7 @@ CREATE TABLE `attempts` (
   `is_solved` bit(1) NOT NULL DEFAULT b'0',
   `user_id` varchar(20) NOT NULL,
   `question_id` varchar(20) NOT NULL,
-  `programming_language` varchar(45) NOT NULL,
+  `programming_language` varchar(45),
   PRIMARY KEY (`attempt_id`),
   KEY `user_id_idx` (`user_id`),
   KEY `question_id_idx` (`question_id`),
