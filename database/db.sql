@@ -417,7 +417,7 @@ CREATE TABLE `people` (
   `is_confirmed` bit(1) NOT NULL DEFAULT b'0',
   `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `birth_date` datetime DEFAULT NULL,
-  PRIMARY KEY (`person_id`)
+  PRIMARY KEY (`person_id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `nickname_UNIQUE` (`nickname`),
   UNIQUE KEY `phone_UNIQUE` (`phone`)
