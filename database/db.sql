@@ -192,6 +192,7 @@ CREATE TABLE `companies` (
   `is_approved` bit(1) NOT NULL DEFAULT b'0',
   `admin_id` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`company_id`),
+  UNIQUE KEY `company_email_UNIQUE` (`company_email`),
   KEY `admin_id_idx` (`admin_id`),
   CONSTRAINT `admin_id` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -417,6 +418,9 @@ CREATE TABLE `people` (
   `reg_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `birth_date` datetime DEFAULT NULL,
   PRIMARY KEY (`person_id`)
+  UNIQUE KEY `email_UNIQUE` (`email`),
+  UNIQUE KEY `nickname_UNIQUE` (`nickname`),
+  UNIQUE KEY `phone_UNIQUE` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
