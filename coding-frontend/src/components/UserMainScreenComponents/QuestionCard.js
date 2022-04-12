@@ -16,17 +16,16 @@ const useStyles = makeStyles({
   },
 });
 
-const QuestionCard = () => {
+const QuestionCard = ({
+  isCoding,
+  question,
+  difficulty,
+  likeRate,
+  isSolved,
+  questionPoint,
+}) => {
   const classes = useStyles();
   const handleJoinContest = () => {};
-  const [isCoding, setIsCoding] = React.useState(1);
-  const [question, setQuestion] = React.useState(
-    "1. What is the best way to learn React?"
-  );
-  const [difficulty, setDifficulty] = React.useState("Easy");
-  const [likeRate, setLikeRate] = React.useState(80);
-  const [isSolved, setIsSolved] = React.useState(0);
-  const [questionPoint, setQuestionPoint] = React.useState(42);
   return (
     <div className={classes.root} onClick={() => console.log("sdfsdf")}>
       <Grid container>
