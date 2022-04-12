@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import { TextField, Grid, MenuItem, Select, Button } from "@mui/material";
 import Colors from "../utils/Colors";
+import TestCases from "./TestCases";
 
 const CodingQuestionText = () => {
   const [questionText, setQuestionText] = useState("");
   const [programmingLanguage, setProgrammingLanguage] = useState("Java 8");
   const [remainingAttempts, setRemainingAttempts] = useState(3);
+  const [isTestCasesShown, setIsTestCasesShown] = useState(false);
+  const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 
   const handleSubmitButtonPress = () => {
-    console.log("submit button pressed");
+    setIsTestCasesShown(true);
+    if (remainingAttempts === 1) {
+      setIsSubmitButtonDisabled(true);
+    }
+    setRemainingAttempts(remainingAttempts - 1);
   };
 
   const handleVideoRequestButtonPress = () => {
@@ -42,11 +49,12 @@ const CodingQuestionText = () => {
             label=""
             color="success"
             multiline
-            rows="20"
+            rows={isTestCasesShown ? "12" : "20"}
             value={questionText}
             onChange={(e) => setQuestionText(e.target.value)}
             variant="outlined"
             fullWidth
+            style={{ height: isTestCasesShown ? "40vh" : "100%" }}
           />
         </Grid>
         <Grid
@@ -70,14 +78,24 @@ const CodingQuestionText = () => {
               Remaining attempts: {remainingAttempts}
             </div>
             <Button
+              disabled={isSubmitButtonDisabled}
               variant="contained"
-              style={{ backgroundColor: Colors.dark_color }}
+              style={{
+                backgroundColor: isSubmitButtonDisabled
+                  ? Colors.light_grey_color
+                  : Colors.dark_color,
+              }}
               onClick={handleSubmitButtonPress}
             >
               Submit
             </Button>
           </div>
         </Grid>
+        {isTestCasesShown && (
+          <Grid item xs={12}>
+            <TestCases />
+          </Grid>
+        )}
       </Grid>
     </div>
   );
