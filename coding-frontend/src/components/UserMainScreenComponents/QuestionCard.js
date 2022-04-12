@@ -6,7 +6,7 @@ import { Grid } from "@mui/material";
 const useStyles = makeStyles({
   root: {
     height: "60px",
-    width: "100vw",
+    width: "100%",
     background: Colors.dark_color,
     borderRadius: "10px",
     display: "flex",
