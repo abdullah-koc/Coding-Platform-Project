@@ -12,6 +12,8 @@ const useStyles = makeStyles({
     width: "80vw",
     height: "80vh",
     borderRadius: "10px",
+    marginLeft: "10vw",
+    marginTop: "10vh",
     boxShadow: "0px 2px 10px rgb(0, 0, 0, 0.1)",
   },
   welcomeText: {

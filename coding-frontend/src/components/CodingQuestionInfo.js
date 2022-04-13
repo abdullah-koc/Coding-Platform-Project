@@ -255,8 +255,8 @@ const CodingQuestionInfo = () => {
                       >
                         {attempt.passedTests !== attempt.totalTestCaseCount && (
                           <div>
-                            Attempt {attempt.attemptCount}{" "}
-                            <CloseIcon style={{ color: "red" }}></CloseIcon>
+                            Attempt {attempt.attemptCount}
+                            {" ❌"}
                             <br></br>
                             <br></br>
                             Failed {attempt.passedTests}/
@@ -265,8 +265,8 @@ const CodingQuestionInfo = () => {
                         )}
                         {attempt.passedTests === attempt.totalTestCaseCount && (
                           <div>
-                            Attempt {attempt.attemptCount}{" "}
-                            <DoneIcon style={{ color: "green" }}></DoneIcon>
+                            Attempt {attempt.attemptCount}
+                            {" ✅"}
                             <br></br>
                             <br></br>
                             Passed {attempt.passedTests}/

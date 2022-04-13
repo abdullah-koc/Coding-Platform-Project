@@ -1,10 +1,10 @@
 import React from "react";
 import LoginRegister from "./views/LoginRegister/LoginRegister";
 import { makeStyles } from "@mui/styles";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import clsx from "clsx";
-import UserStatus from "./components/UserStatus";
 import CodingQuestionInfo from "./components/CodingQuestionInfo";
+import ProblemsScreen from "./views/ProblemsScreen";
 
 const useStyles = makeStyles({
   root: {
@@ -26,8 +26,9 @@ const App = () => {
     <div className={clsx(classes.root)}>
       <div>
         <Routes>
-          <Route path="/" element={<CodingQuestionInfo />} />
-          <Route path="/login-register" element={<LoginRegister />} />
+          <Route path="/" element={<LoginRegister />} />
+          <Route path="problems" element={<ProblemsScreen />} />
+          <Route path="/question" element={<CodingQuestionInfo />} />
         </Routes>
       </div>
     </div>

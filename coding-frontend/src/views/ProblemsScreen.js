@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { TextField, Grid, MenuItem, Select, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Grid, MenuItem, Select, Pagination } from "@mui/material";
 import NavbarUser from "../components/Navbars/NavbarUser";
 import Colors from "../utils/Colors";
 import QuestionCard from "../components/UserMainScreenComponents/QuestionCard";
-import { style } from "@mui/system";
+import UserStatus from "../components/UserStatus";
 
 const ProblemsScreen = () => {
   const [questionType, setQuestionType] = useState("All");
@@ -35,14 +35,99 @@ const ProblemsScreen = () => {
       isSolved: true,
       questionPoint: 12,
     },
+    {
+      isCoding: "C",
+      question: "What is the output of the following code?",
+      difficulty: "Easy",
+      likeRate: 87,
+      isSolved: true,
+      questionPoint: 12,
+    },
+    {
+      isCoding: "C",
+      question: "What is the output of the following code?",
+      difficulty: "Easy",
+      likeRate: 87,
+      isSolved: true,
+      questionPoint: 12,
+    },
+    {
+      isCoding: "C",
+      question: "What is the output of the following code?",
+      difficulty: "Easy",
+      likeRate: 87,
+      isSolved: true,
+      questionPoint: 12,
+    },
+    {
+      isCoding: "C",
+      question: "What is the output of the following code?",
+      difficulty: "Easy",
+      likeRate: 87,
+      isSolved: true,
+      questionPoint: 12,
+    },
+    {
+      isCoding: "C",
+      question: "What is the output of the following code?",
+      difficulty: "Easy",
+      likeRate: 87,
+      isSolved: true,
+      questionPoint: 12,
+    },
+    {
+      isCoding: "C",
+      question: "What is the output of the following code?",
+      difficulty: "Easy",
+      likeRate: 87,
+      isSolved: true,
+      questionPoint: 12,
+    },
+    {
+      isCoding: "C",
+      question: "What is the output of the following code?",
+      difficulty: "Easy",
+      likeRate: 87,
+      isSolved: true,
+      questionPoint: 12,
+    },
+    {
+      isCoding: "C",
+      question: "What is the output of the following code?",
+      difficulty: "Easy",
+      likeRate: 87,
+      isSolved: true,
+      questionPoint: 12,
+    },
   ]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [curQuestions, setCurQuestions] = useState([]);
+
+  useEffect(() => {
+    setTotalPages(Math.ceil(questions.length / 7));
+    setCurQuestions(questions.slice(0, 7));
+  });
+
+  useEffect(() => {
+    setCurQuestions(questions.slice((page - 1) * 7, 7 * page));
+  }, [page]);
+
   return (
     <div>
       <NavbarUser />
-      <div style={{ padding: "60px", paddingTop: "30px" }}>
+      <div
+        style={{
+          paddingLeft: "40px",
+          paddingRight: "40px",
+          paddingBottom: "20px",
+          marginTop: "30px",
+          height: "90vh",
+        }}
+      >
         <Grid container spacing={4}>
-          <Grid item xs={9}>
-            <h1 style={{}}>Problems</h1>
+          <Grid item xs={9} style={{ height: "90vh", overflowY: "scroll" }}>
+            <h1>Problems</h1>
             <Grid container>
               <Grid item xs={3}>
                 <Select
@@ -121,7 +206,7 @@ const ProblemsScreen = () => {
               </Grid>
             </Grid>
 
-            {questions.map((question, index) => (
+            {curQuestions.map((question, index) => (
               <div
                 key={index}
                 style={{ paddingRight: "40px", marginBottom: "10px" }}
@@ -137,8 +222,22 @@ const ProblemsScreen = () => {
                 />
               </div>
             ))}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={(e, page) => setPage(page)}
+              />
+            </div>
           </Grid>
-          <Grid item xs={3}></Grid>
+          <Grid item xs={3}>
+            <Grid container>
+              <Grid item xs={12} style={{ paddingTop: "60px" }}>
+                <UserStatus />
+              </Grid>
+              <Grid item xs={12}></Grid>
+            </Grid>
+          </Grid>
         </Grid>
         <div></div>
       </div>

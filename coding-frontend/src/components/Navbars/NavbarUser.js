@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@mui/styles";
 import Colors from "../../utils/Colors";
 import { Grid } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
 const useStyles = makeStyles({
@@ -11,6 +12,7 @@ const useStyles = makeStyles({
     width: "100vw",
     display: "flex",
     alignItems: "center",
+    marginBottom: "10px",
     justifyContent: "center",
     color: "white",
   },
@@ -32,10 +34,13 @@ const useStyles = makeStyles({
 });
 
 const NavbarUser = () => {
+  let navigate = useNavigate();
   const classes = useStyles();
   const goToMainPage = () => {};
   const goToAccountPage = () => {};
-  const goToProblemsPage = () => {};
+  const goToProblemsPage = () => {
+    navigate("/problems");
+  };
   const goToContestPage = () => {};
   const goToInterviewPage = () => {};
 
