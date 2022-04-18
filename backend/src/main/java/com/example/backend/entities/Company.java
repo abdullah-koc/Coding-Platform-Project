@@ -3,8 +3,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "companies")
+//@Entity
+//@Table(name = "companies")
 public class Company {
     @Id
     private String company_id;

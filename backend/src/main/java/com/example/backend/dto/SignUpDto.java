@@ -12,6 +12,7 @@ public class SignUpDto implements Serializable {
     private String birth_date;
     private String company_address;
     private String type;
+    private String cv_url;
 
 
 
@@ -81,5 +82,13 @@ public class SignUpDto implements Serializable {
 
     public void setCompany_address(String company_address) {
         this.company_address = company_address;
+    }
+
+    public String getCv_url() {
+        return cv_url;
+    }
+
+    public void setCv_url(String cv_url) {
+        this.cv_url = cv_url;
     }
 }

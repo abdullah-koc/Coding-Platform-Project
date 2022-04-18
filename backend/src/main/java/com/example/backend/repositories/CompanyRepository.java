@@ -19,7 +19,7 @@ public class CompanyRepository {
             throw new RuntimeException("Company already exists");
         }
         jdbcTemplate.update(
-                "INSERT INTO companies (company_id, company_name, company_email, company_password, company_address, company_phone) VALUES (1, ?, ?, ?, ?, ?)",
+                "INSERT INTO companies (company_id, company_name, company_email, company_password, company_address, company_phone) VALUES (2, ?, ?, ?, ?, ?)",
                 company.getCompany_name(), company.getCompany_email(), company.getCompany_password(), company.getCompany_address(), company.getCompany_phone());
         return company;
     }

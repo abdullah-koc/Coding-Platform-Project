@@ -5,38 +5,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "people")
 public class Person {
 
     @Id
-    @Column(name="person_id")
     private String person_id;
-
-    @Column(name="full_name")
     private String full_name;
-
-    @Column(name="email")
     private String email;
-
-    @Column(name="photo")
     private String photo;
-
-    @Column(name="password")
     private String password;
-
-    @Column(name="nickname")
     private String nickname;
-
-    @Column(name="phone")
     private String phone;
-
-    @Column(name="is_confirmed")
     private boolean is_confirmed;
-
-    @Column(name="reg_date")
     private String reg_date;
-
-    @Column(name="birth_date")
     private String birth_date;
 
     public Person() {

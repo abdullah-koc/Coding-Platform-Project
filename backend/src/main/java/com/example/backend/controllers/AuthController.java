@@ -47,7 +47,8 @@ public class AuthController {
             editorDto.setFull_name(signUpDto.getFull_name());
             editorDto.setPassword(signUpDto.getPassword());
             editorDto.setNickname(signUpDto.getNickname());
-            //editorService.signUp(editorDto);
+            editorDto.setCv_url(signUpDto.getCv_url());
+            editorService.signUp(editorDto);
         }
         else if(type.equals("Company")) {
             CompanyDto companyDto = new CompanyDto();
@@ -56,10 +57,6 @@ public class AuthController {
             companyDto.setCompany_name(signUpDto.getFull_name());
             companyDto.setCompany_password(signUpDto.getPassword());
             companyDto.setCompany_address(signUpDto.getCompany_address());
-            if(signUpDto.getPassword() != null)
-                System.out.println("password is not null in signup");
-            if(companyDto.getCompany_password() == null)
-                System.out.println("password is null in company");
             companyService.signUp(companyDto);
         }
         else {
