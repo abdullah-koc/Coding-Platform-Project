@@ -11,14 +11,6 @@ public class PersonService {
     @Autowired
     PersonRepository personRepository;
 
-    /*public PersonService(PersonRepository personRepository) {
-        this.personRepository = personRepository;
-    }*/
-
-    public PersonRepository getPersonRepository() {
-        return this.personRepository;
-    }
-
     public boolean login(String email, String password) {
         Person person = personRepository.findByEmail(email);
         if(person.getPassword().equals(password)) {

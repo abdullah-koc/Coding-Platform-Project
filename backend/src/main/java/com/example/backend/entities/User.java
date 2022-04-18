@@ -13,7 +13,7 @@ public class User extends Person {
         super();
     }
 
-    public User(long ID,
+    public User(String user_id,
                 String full_name,
                 String email,
                 String photo,
@@ -28,7 +28,7 @@ public class User extends Person {
                 String cur_company,
                 String success_rate,
                 String user_point) {
-        super(ID, full_name, email, photo, password, nickname, phone, is_confirmed, reg_date, birth_date);
+        super(user_id, full_name, email, photo, password, nickname, phone, is_confirmed, reg_date, birth_date);
         this.school = school;
         this.department = department;
         this.cur_company = cur_company;

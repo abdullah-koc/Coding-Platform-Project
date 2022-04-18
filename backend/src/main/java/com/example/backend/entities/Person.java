@@ -5,12 +5,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "persons")
+@Table(name = "people")
 public class Person {
 
     @Id
-    @Column(name="ID")
-    private long ID;
+    @Column(name="person_id")
+    private String person_id;
 
     @Column(name="full_name")
     private String full_name;
@@ -43,7 +43,7 @@ public class Person {
 
     }
 
-    public Person(long ID,
+    public Person(String person_id,
                   String full_name,
                   String email,
                   String photo,
@@ -53,7 +53,7 @@ public class Person {
                   boolean is_confirmed,
                   String reg_date,
                   String birth_date) {
-        this.ID = ID;
+        this.person_id = person_id;
         this.full_name = full_name;
         this.email = email;
         this.photo = photo;
@@ -65,16 +65,12 @@ public class Person {
         this.birth_date = birth_date;
     }
 
-    public void setID(Long ID) {
-        this.ID = ID;
+    public String getPerson_id() {
+        return person_id;
     }
 
-    public Long getID() {
-        return ID;
-    }
-
-    public void setID(long ID) {
-        this.ID = ID;
+    public void setPerson_id(String person_id) {
+        this.person_id = person_id;
     }
 
     public String getFull_name() {
@@ -125,7 +121,7 @@ public class Person {
         this.phone = phone;
     }
 
-    public boolean isIs_confirmed() {
+    public boolean getIs_confirmed() {
         return is_confirmed;
     }
 

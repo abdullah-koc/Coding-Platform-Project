@@ -1,16 +1,16 @@
 package com.example.backend.repositories;
 
-import com.example.backend.entities.Company;
 import com.example.backend.entities.Person;
 import com.example.backend.entities.User;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Repository
 public class UserRepository {
@@ -19,26 +19,22 @@ public class UserRepository {
     private JdbcTemplate jdbcTemplate;
 
     public User signUp(User user) {
+        if (findByEmail(user.getEmail()) != null) {
+            throw new RuntimeException("User already exists");
+        }
         jdbcTemplate.update(
-                "INSERT INTO persons (full_name, email, nickname, password, birth_date ) VALUES (?, ?, ?, ?, ?)",
-                user.getFull_name(), user.getEmail(), user.getNickname(), user.getPassword(), user.getBirth_date());
+                "INSERT INTO people (person_id, full_name, email, password, nickname, birth_date) VALUES ('U1', ?, ?, ?, ?, ?)",
+                user.getFull_name(), user.getEmail(), user.getPassword(), user.getNickname(), user.getBirth_date());
         return user;
+    }
+
+    public User findByEmail(String email) {
+
+        String sql = "SELECT u.* FROM users u NATURAL JOIN people p WHERE email = ?";
+        try {
+            return (User) jdbcTemplate.queryForObject(sql, new Object[]{email}, new BeanPropertyRowMapper(User.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }
-/*
-class UserRowMapper implements RowMapper<User> {
-
-    @Override
-    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-
-        User user = new User();
-        user.setFull_name(rs.getString("full_name"));
-        user.setEmail(rs.getString("email"));
-        user.setPassword(rs.getString("password"));
-        user.setCompany_phone(rs.getString("company_phone"));
-        user.setCompany_address(rs.getString("company_address"));
-
-        return user;
-
-    }
-}*/

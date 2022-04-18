@@ -17,7 +17,7 @@ public class CompanyController {
     CompanyService companyService;
 
     @GetMapping("/{email}")
-    public Optional<Company> getCompanyByEmail(@PathVariable String email) {
+    public Company getCompanyByEmail(@PathVariable String email) {
         return companyService.getCompanyByEmail(email);
     }
 }
