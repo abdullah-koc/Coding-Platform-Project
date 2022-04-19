@@ -37,12 +37,16 @@ const NavbarUser = () => {
   let navigate = useNavigate();
   const classes = useStyles();
   const goToMainPage = () => {};
-  const goToAccountPage = () => {};
+  const goToAccountPage = (id) => {
+    navigate("/profile/" + id);
+  };
   const goToProblemsPage = () => {
     navigate("/problems");
   };
   const goToContestPage = () => {};
   const goToInterviewPage = () => {};
+
+  const [personId, setPersonId] = React.useState("aa");
 
   return (
     <div className={classes.navbar}>
@@ -84,7 +88,10 @@ const NavbarUser = () => {
             alignItems: "center",
           }}
         >
-          <div className={classes.accountIcon}>
+          <div
+            className={classes.accountIcon}
+            onClick={() => goToAccountPage(personId)}
+          >
             <AccountCircle />
           </div>
         </Grid>

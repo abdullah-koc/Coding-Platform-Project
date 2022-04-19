@@ -6,6 +6,7 @@ import clsx from "clsx";
 import CodingQuestionInfo from "./components/CodingQuestionInfo";
 import ProblemsScreen from "./views/ProblemsScreen";
 import NonCodingQuestionInfo from "./components/NonCodingQuestionInfo";
+import UserProfileScreen from "./views/UserProfileScreen";
 
 const useStyles = makeStyles({
   root: {
@@ -31,6 +32,7 @@ const App = () => {
           <Route path="/problems" element={<ProblemsScreen />} />
           <Route path="/cquestion/:id" element={<CodingQuestionInfo />} />
           <Route path="/ncquestion/:id" element={<NonCodingQuestionInfo />} />
+          <Route path="/profile/:id" element={<UserProfileScreen />} />
         </Routes>
       </div>
     </div>
