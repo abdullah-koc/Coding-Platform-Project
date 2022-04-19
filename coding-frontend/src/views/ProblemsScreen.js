@@ -107,7 +107,7 @@ const ProblemsScreen = () => {
   useEffect(() => {
     setTotalPages(Math.ceil(questions.length / 7));
     setCurQuestions(questions.slice(0, 7));
-  });
+  }, [] );
 
   useEffect(() => {
     setCurQuestions(questions.slice((page - 1) * 7, 7 * page));
@@ -121,12 +121,12 @@ const ProblemsScreen = () => {
           paddingLeft: "40px",
           paddingRight: "40px",
           paddingBottom: "20px",
-          marginTop: "30px",
+          marginTop: "10px",
           height: "90vh",
         }}
       >
         <Grid container spacing={4}>
-          <Grid item xs={9} style={{ height: "90vh", overflowY: "scroll" }}>
+          <Grid item xs={9}>
             <h1>Problems</h1>
             <Grid container>
               <Grid item xs={3}>
@@ -203,6 +203,60 @@ const ProblemsScreen = () => {
                   <MenuItem value={"Solved"}>Solved</MenuItem>
                   <MenuItem value={"Not Solved"}>Not Solved</MenuItem>
                 </Select>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              style={{ paddingBottom: "10px", paddingTop: "10px" }}
+            >
+              <Grid
+                item
+                xs={1}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                Type
+              </Grid>
+              <Grid
+                item
+                xs={4}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                Title
+              </Grid>
+              <Grid
+                item
+                xs={2}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                Difficulty
+              </Grid>
+              <Grid
+                item
+                xs={1}
+                style={{ display: "flex", alignItems: "center",  paddingLeft: "5%" }}
+              >
+                Like Rate
+              </Grid>
+              <Grid
+                item
+                xs={2}
+                style={{ display: "flex", alignItems: "center",justifyContent: "center",  }}
+              >
+                Status
+              </Grid>
+              <Grid
+                item
+                xs={1}
+                style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingLeft: "2%" }}
+              >
+                Point
               </Grid>
             </Grid>
 

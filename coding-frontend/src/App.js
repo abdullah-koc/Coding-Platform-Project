@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   root: {
     height: "100vh",
     width: "100vw",
-    backgroundColor: "#fafafa",
+    backgroundColor: "#e9e7e9",
     overflowY: "hidden",
   },
   loginregister: {
