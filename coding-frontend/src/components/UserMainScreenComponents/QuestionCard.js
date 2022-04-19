@@ -27,7 +27,7 @@ const QuestionCard = ({
   const classes = useStyles();
   const handleJoinContest = () => {};
   return (
-    <div className={classes.root} onClick={() => console.log("sdfsdf")}>
+    <div className={classes.root}>
       <Grid container>
         <Grid
           item

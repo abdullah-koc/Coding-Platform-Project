@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Grid, MenuItem, Select, Pagination } from "@mui/material";
+import { Grid, MenuItem, Select, Pagination, Button } from "@mui/material";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import NavbarUser from "../components/Navbars/NavbarUser";
 import Colors from "../utils/Colors";
 import QuestionCard from "../components/UserMainScreenComponents/QuestionCard";
 import UserStatus from "../components/UserStatus";
+import { useNavigate } from "react-router-dom";
 
 const ProblemsScreen = () => {
+  let navigate = useNavigate();
+
   const [questionType, setQuestionType] = useState("All");
   const [difficulty, setDifficulty] = useState("All");
   const [category, setCategory] = useState("All");
   const [status, setStatus] = useState("All");
   const [questions, setQuestions] = useState([
     {
+      id: "CQ1",
       isCoding: "C",
       question: "What is the output of the following code?",
       difficulty: "Easy",
@@ -20,84 +26,94 @@ const ProblemsScreen = () => {
       questionPoint: 12,
     },
     {
+      id: "CQ2",
       isCoding: "C",
       question: "What is the output of the following code?",
       difficulty: "Easy",
-      likeRate: 87,
+      likeRate: 59,
       isSolved: true,
-      questionPoint: 12,
+      questionPoint: 39,
     },
     {
+      id: "CQ3",
       isCoding: "C",
       question: "What is the output of the following code?",
       difficulty: "Easy",
-      likeRate: 87,
+      likeRate: 43,
       isSolved: true,
-      questionPoint: 12,
+      questionPoint: 17,
     },
     {
+      id: "CQ4",
       isCoding: "C",
       question: "What is the output of the following code?",
       difficulty: "Easy",
-      likeRate: 87,
+      likeRate: 57,
       isSolved: true,
-      questionPoint: 12,
+      questionPoint: 35,
     },
     {
+      id: "CQ5",
       isCoding: "C",
       question: "What is the output of the following code?",
       difficulty: "Easy",
-      likeRate: 87,
+      likeRate: 61,
       isSolved: true,
-      questionPoint: 12,
+      questionPoint: 23,
     },
     {
+      id: "CQ6",
       isCoding: "C",
       question: "What is the output of the following code?",
       difficulty: "Easy",
-      likeRate: 87,
+      likeRate: 98,
       isSolved: true,
-      questionPoint: 12,
+      questionPoint: 65,
     },
     {
+      id: "CQ7",
       isCoding: "C",
       question: "What is the output of the following code?",
       difficulty: "Easy",
-      likeRate: 87,
+      likeRate: 20,
       isSolved: true,
-      questionPoint: 12,
+      questionPoint: 45,
     },
     {
+      id: "CQ8",
       isCoding: "C",
       question: "What is the output of the following code?",
       difficulty: "Easy",
-      likeRate: 87,
+      likeRate: 52,
       isSolved: true,
-      questionPoint: 12,
+      questionPoint: 23,
     },
     {
+      id: "CQ9",
       isCoding: "C",
       question: "What is the output of the following code?",
       difficulty: "Easy",
-      likeRate: 87,
+      likeRate: 67,
       isSolved: true,
-      questionPoint: 12,
+      questionPoint: 8,
     },
     {
+      id: "CQ10",
       isCoding: "C",
       question: "What is the output of the following code?",
       difficulty: "Easy",
-      likeRate: 87,
+      likeRate: 63,
       isSolved: true,
-      questionPoint: 12,
+      questionPoint: 71,
     },
     {
+      id: "CQ11",
       isCoding: "C",
       question: "What is the output of the following code?",
       difficulty: "Easy",
-      likeRate: 87,
+      likeRate: 75,
       isSolved: true,
-      questionPoint: 12,
+      questionPoint: 22,
     },
   ]);
   const [page, setPage] = useState(1);
@@ -107,11 +123,51 @@ const ProblemsScreen = () => {
   useEffect(() => {
     setTotalPages(Math.ceil(questions.length / 7));
     setCurQuestions(questions.slice(0, 7));
-  }, [] );
+  }, []);
 
   useEffect(() => {
     setCurQuestions(questions.slice((page - 1) * 7, 7 * page));
   }, [page]);
+
+  const handleGoToQuestion = (id) => {
+    if (id.startsWith("CQ")) {
+      navigate("/cquestion/" + id);
+    } else {
+      navigate("/ncquestion/" + id);
+    }
+  };
+
+  function ascLikeSort() {
+    const sortedData = [...questions].sort((a, b) => {
+      return a.likeRate > b.likeRate ? 1 : -1;
+    });
+    setQuestions(sortedData);
+    setCurQuestions(sortedData.slice((page - 1) * 7, 7 * page));
+  }
+
+  function descLikeSort() {
+    const sortedData = [...questions].sort((a, b) => {
+      return a.likeRate < b.likeRate ? 1 : -1;
+    });
+    setQuestions(sortedData);
+    setCurQuestions(sortedData.slice((page - 1) * 7, 7 * page));
+  }
+
+  function ascPointSort() {
+    const sortedData = [...questions].sort((a, b) => {
+      return a.questionPoint > b.questionPoint ? 1 : -1;
+    });
+    setQuestions(sortedData);
+    setCurQuestions(sortedData.slice((page - 1) * 7, 7 * page));
+  }
+
+  function descPointSort() {
+    const sortedData = [...questions].sort((a, b) => {
+      return a.questionPoint < b.questionPoint ? 1 : -1;
+    });
+    setQuestions(sortedData);
+    setCurQuestions(sortedData.slice((page - 1) * 7, 7 * page));
+  }
 
   return (
     <div>
@@ -240,23 +296,57 @@ const ProblemsScreen = () => {
               <Grid
                 item
                 xs={1}
-                style={{ display: "flex", alignItems: "center",  paddingLeft: "5%" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  zIndex: 0,
+                  paddingLeft: "5%",
+                }}
               >
                 Like Rate
+                <div style={{ zIndex: 1 }}>
+                  <ArrowDropUpIcon
+                    style={{ cursor: "pointer", marginBottom: "-10px" }}
+                    onClick={ascLikeSort}
+                  />
+                  <ArrowDropDownIcon
+                    style={{ cursor: "pointer", marginTop: "-10px" }}
+                    onClick={descLikeSort}
+                  />
+                </div>
               </Grid>
               <Grid
                 item
                 xs={2}
-                style={{ display: "flex", alignItems: "center",justifyContent: "center",  }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 Status
               </Grid>
               <Grid
                 item
                 xs={1}
-                style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingLeft: "2%" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingLeft: "2%",
+                }}
               >
                 Point
+                <div style={{ zIndex: 1 }}>
+                  <ArrowDropUpIcon
+                    style={{ cursor: "pointer", marginBottom: "-10px" }}
+                    onClick={ascPointSort}
+                  />
+                  <ArrowDropDownIcon
+                    style={{ cursor: "pointer", marginTop: "-10px" }}
+                    onClick={descPointSort}
+                  />
+                </div>
               </Grid>
             </Grid>
 
@@ -264,6 +354,7 @@ const ProblemsScreen = () => {
               <div
                 key={index}
                 style={{ paddingRight: "40px", marginBottom: "10px" }}
+                onClick={() => handleGoToQuestion(question.id)}
               >
                 <QuestionCard
                   isCoding={question.isCoding}
