@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "api/auth")
 public class AuthController {
 
-
-    @Autowired
-    PersonService personService;
+    /*@Autowired
+    PersonService personService;*/
 
     @Autowired
     UserService userService;
@@ -48,14 +47,15 @@ public class AuthController {
             editorDto.setFull_name(signUpDto.getFull_name());
             editorDto.setPassword(signUpDto.getPassword());
             editorDto.setNickname(signUpDto.getNickname());
-            //editorService.signUp(editorDto);
+            editorDto.setCv_url(signUpDto.getCv_url());
+            editorService.signUp(editorDto);
         }
         else if(type.equals("Company")) {
             CompanyDto companyDto = new CompanyDto();
             companyDto.setCompany_email(signUpDto.getEmail());
             companyDto.setCompany_phone(signUpDto.getCompany_phone());
             companyDto.setCompany_name(signUpDto.getFull_name());
-            companyDto.setPassword(signUpDto.getPassword());
+            companyDto.setCompany_password(signUpDto.getPassword());
             companyDto.setCompany_address(signUpDto.getCompany_address());
             companyService.signUp(companyDto);
         }
@@ -65,8 +65,8 @@ public class AuthController {
 
     }
 
-    @GetMapping("/login/{email}/{password}")
+    /*@GetMapping("/login/{email}/{password}")
     public boolean login(@PathVariable String email, @PathVariable String password) {
         return personService.login(email,password);
-    }
+    }*/
 }

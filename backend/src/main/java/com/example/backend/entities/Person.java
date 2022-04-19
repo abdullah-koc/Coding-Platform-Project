@@ -5,45 +5,25 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "persons")
 public class Person {
 
     @Id
-    @Column(name="ID")
-    private long ID;
-
-    @Column(name="full_name")
+    private String person_id;
     private String full_name;
-
-    @Column(name="email")
     private String email;
-
-    @Column(name="photo")
     private String photo;
-
-    @Column(name="password")
     private String password;
-
-    @Column(name="nickname")
     private String nickname;
-
-    @Column(name="phone")
     private String phone;
-
-    @Column(name="is_confirmed")
     private boolean is_confirmed;
-
-    @Column(name="reg_date")
     private String reg_date;
-
-    @Column(name="birth_date")
     private String birth_date;
 
     public Person() {
 
     }
 
-    public Person(long ID,
+    public Person(String person_id,
                   String full_name,
                   String email,
                   String photo,
@@ -53,7 +33,7 @@ public class Person {
                   boolean is_confirmed,
                   String reg_date,
                   String birth_date) {
-        this.ID = ID;
+        this.person_id = person_id;
         this.full_name = full_name;
         this.email = email;
         this.photo = photo;
@@ -65,16 +45,12 @@ public class Person {
         this.birth_date = birth_date;
     }
 
-    public void setID(Long ID) {
-        this.ID = ID;
+    public String getPerson_id() {
+        return person_id;
     }
 
-    public Long getID() {
-        return ID;
-    }
-
-    public void setID(long ID) {
-        this.ID = ID;
+    public void setPerson_id(String person_id) {
+        this.person_id = person_id;
     }
 
     public String getFull_name() {
@@ -125,7 +101,7 @@ public class Person {
         this.phone = phone;
     }
 
-    public boolean isIs_confirmed() {
+    public boolean getIs_confirmed() {
         return is_confirmed;
     }
 

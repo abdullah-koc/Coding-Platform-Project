@@ -4,7 +4,7 @@ public class CompanyDto {
 
     private String company_name;
     private String company_email;
-    private String password;
+    private String company_password;
     private String company_phone;
     private String company_address;
 
@@ -28,12 +28,12 @@ public class CompanyDto {
         this.company_email = company_email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getCompany_password() {
+        return company_password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setCompany_password(String company_password) {
+        this.company_password = company_password;
     }
 
     public String getCompany_phone() {

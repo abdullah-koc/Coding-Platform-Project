@@ -3,20 +3,28 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "companies")
+//@Entity
+//@Table(name = "companies")
 public class Company {
     @Id
-    private int id;
+    private String company_id;
     private String company_name;
-    private String company_email;
-    private String password;
-    private String company_phone;
+    private String company_photo;
     private String company_address;
-    private String photo;
+    private String company_phone;
+    private String company_email;
+    private String company_password;
     private boolean is_approved;
 
     public Company() {
+    }
+
+    public String getCompany_id() {
+        return company_id;
+    }
+
+    public void setCompany_id(String company_id) {
+        this.company_id = company_id;
     }
 
     public String getCompany_name() {
@@ -35,12 +43,12 @@ public class Company {
         this.company_email = company_email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getCompany_password() {
+        return company_password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setCompany_password(String company_password) {
+        this.company_password = company_password;
     }
 
     public String getCompany_phone() {
@@ -59,12 +67,12 @@ public class Company {
         this.company_address = company_address;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getCompany_photo() {
+        return company_photo;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setCompany_photo(String company_photo) {
+        this.company_photo = company_photo;
     }
 
     public boolean isIs_approved() {
