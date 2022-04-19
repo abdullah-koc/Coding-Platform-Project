@@ -16,12 +16,14 @@ public class EditorRepository {
         if (findByEmail(editor.getEmail()) != null) {
             throw new RuntimeException("Editor already exists");
         }
+
+
         jdbcTemplate.update(
                 "INSERT INTO people (person_id, full_name, email, password, nickname, birth_date) VALUES ('E1', ?, ?, ?, ?, ?)",
                 editor.getFull_name(), editor.getEmail(), editor.getPassword(), editor.getNickname(), editor.getBirth_date());
 
-        jdbcTemplate.update(
-                "UPDATE editors SET cv = " + editor.getCv_url() + " WHERE editor_id = " + editor.getEditor_id());
+        String update_cv = "UPDATE editors SET cv = ? WHERE editor_id = ?";
+        jdbcTemplate.update(update_cv, editor.getCv_url(), editor.getEditor_id());
 
         return editor;
     }
