@@ -24,6 +24,10 @@ const CodingQuestionInfo = () => {
     console.log(attempt);
   };
 
+  const handleSubmitCallback = (childData) => {
+    setIsSolutionDisabled(!childData);
+  };
+
   return (
     <div>
       <NavbarUser />
@@ -281,7 +285,7 @@ const CodingQuestionInfo = () => {
             </Grid>
           </Grid>
         </Box>
-        <CodingQuestionText />
+        <CodingQuestionText parentSubmitCallback={handleSubmitCallback} />
       </div>
     </div>
   );

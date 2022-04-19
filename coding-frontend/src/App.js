@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import clsx from "clsx";
 import CodingQuestionInfo from "./components/CodingQuestionInfo";
 import ProblemsScreen from "./views/ProblemsScreen";
+import NonCodingQuestionInfo from "./components/NonCodingQuestionInfo";
 
 const useStyles = makeStyles({
   root: {
@@ -27,8 +28,9 @@ const App = () => {
       <div>
         <Routes>
           <Route path="/" element={<LoginRegister />} />
-          <Route path="problems" element={<ProblemsScreen />} />
-          <Route path="/question" element={<CodingQuestionInfo />} />
+          <Route path="/problems" element={<ProblemsScreen />} />
+          <Route path="/cquestion" element={<CodingQuestionInfo />} />
+          <Route path="/ncquestion" element={<NonCodingQuestionInfo />} />
         </Routes>
       </div>
     </div>

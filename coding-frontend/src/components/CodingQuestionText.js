@@ -3,7 +3,7 @@ import { TextField, Grid, MenuItem, Select, Button } from "@mui/material";
 import Colors from "../utils/Colors";
 import TestCases from "./TestCases";
 
-const CodingQuestionText = () => {
+const CodingQuestionText = ({ parentSubmitCallback }) => {
   const [questionText, setQuestionText] = useState("");
   const [programmingLanguage, setProgrammingLanguage] = useState("Java 8");
   const [remainingAttempts, setRemainingAttempts] = useState(3);
@@ -14,6 +14,7 @@ const CodingQuestionText = () => {
     setIsTestCasesShown(true);
     if (remainingAttempts === 1) {
       setIsSubmitButtonDisabled(true);
+      parentSubmitCallback(true);
     }
     setRemainingAttempts(remainingAttempts - 1);
   };
