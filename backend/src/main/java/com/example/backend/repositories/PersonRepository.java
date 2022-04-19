@@ -1,21 +1,11 @@
 package com.example.backend.repositories;
 
-import com.example.backend.entities.Company;
 import com.example.backend.entities.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class PersonRepository {
@@ -35,6 +25,34 @@ public class PersonRepository {
 
     public Person findByEmail(String email) {
         String sql = "SELECT * FROM PEOPLE WHERE email = ?";
-        return (Person) jdbcTemplate.queryForObject(sql, new Object[]{email}, new BeanPropertyRowMapper(Person.class));
+        try {
+            return (Person) jdbcTemplate.queryForObject(sql, new Object[]{email}, new BeanPropertyRowMapper(Person.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public Person findById(String person_id) {
+        String sql = "SELECT * FROM PEOPLE WHERE person_id = ?";
+        try {
+            return (Person) jdbcTemplate.queryForObject(sql, new Object[]{person_id}, new BeanPropertyRowMapper(Person.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public void updatePassword(String person_id, String password) {
+        String sql = "UPDATE people SET password = ? WHERE person_id = ?";
+        jdbcTemplate.update(sql, password, person_id);
+    }
+
+    public void updatePhone(String person_id, String phone) {
+        String sql = "UPDATE people SET phone = ? WHERE person_id = ?";
+        jdbcTemplate.update(sql, phone, person_id);
+    }
+
+    public void updatePhoto(String person_id, String photo) {
+        String sql = "UPDATE people SET photo = ? WHERE person_id = ?";
+        jdbcTemplate.update(sql, photo, person_id);
     }
 }

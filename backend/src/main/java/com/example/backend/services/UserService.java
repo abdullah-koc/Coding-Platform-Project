@@ -8,6 +8,8 @@ import com.example.backend.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 
@@ -41,5 +43,18 @@ public class UserService {
             return false;
         }
         return true;
+    }
+
+    public void changeSchool(String user_id, String school){
+        User user;
+        userRepository.updateSchool(user_id, school);
+    }
+
+    public void changeDepartment(String user_id,String department){
+        userRepository.updateDepartment(user_id, department);
+    }
+
+    public void changeCurrentCompany(String user_id, String cur_company){
+       userRepository.updateCurrentCompany(user_id, cur_company);
     }
 }

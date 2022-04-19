@@ -30,11 +30,26 @@ public class UserRepository {
 
     public User findByEmail(String email) {
 
-        String sql = "SELECT u.* FROM users u, people p WHERE p.person_id = u.user_id and p.email = ?";
+        String sql = "SELECT u.* FROM users u , people p WHERE p.person_id = u.user_id and p.email = ?";
         try {
             return (User) jdbcTemplate.queryForObject(sql, new Object[]{email}, new BeanPropertyRowMapper(User.class));
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    public void updateSchool(String user_id, String school) {
+        String sql = "UPDATE users SET school = ? WHERE user_id = ?";
+        jdbcTemplate.update(sql, school, user_id);
+    }
+
+    public void updateDepartment(String user_id, String department) {
+        String sql = "UPDATE users SET department = ? WHERE user_id = ?";
+        jdbcTemplate.update(sql, department, user_id);
+    }
+
+    public void updateCurrentCompany(String user_id, String cur_company) {
+        String sql = "UPDATE users SET cur_company = ? WHERE user_id = ?";
+        jdbcTemplate.update(sql, cur_company, user_id);
     }
 }

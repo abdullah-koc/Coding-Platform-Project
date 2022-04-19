@@ -18,4 +18,22 @@ public class PersonService {
         }
         return false;
     }
+
+    public void changePassword(String person_id, String password) {
+        Person person = personRepository.findById(person_id);
+        person.setPassword(password);
+        personRepository.updatePassword(person_id, password);
+    }
+
+    public void changePhone(String person_id, String phone) {
+        Person person = personRepository.findById(person_id);
+        person.setPhone(phone);
+        personRepository.updatePhone(person_id, phone);
+    }
+
+    public void changePhoto(String person_id, String photo) {
+        Person person = personRepository.findById(person_id);
+        person.setPhoto(photo);
+        personRepository.updatePhoto(person_id, photo);
+    }
 }
