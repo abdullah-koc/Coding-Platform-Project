@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "api/auth")
 public class AuthController {
 
-    /*@Autowired
-    PersonService personService;*/
+    @Autowired
+    PersonService personService;
 
     @Autowired
     UserService userService;
@@ -65,8 +65,13 @@ public class AuthController {
 
     }
 
-    /*@GetMapping("/login/{email}/{password}")
+    @PutMapping("/login/{email}/{password}")
     public boolean login(@PathVariable String email, @PathVariable String password) {
-        return personService.login(email,password);
-    }*/
+        if(personService.getPersonByEmail(email) != null)
+            return personService.login(email,password);
+        else if(companyService.getCompanyByEmail(email) != null)
+            return companyService.login(email, password);
+        else
+            return false;
+    }
 }

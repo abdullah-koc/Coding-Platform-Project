@@ -36,4 +36,8 @@ public class PersonService {
         person.setPhoto(photo);
         personRepository.updatePhoto(person_id, photo);
     }
+
+    public Person getPersonByEmail(String email) {
+        return personRepository.findPersonByEmail(email);
+    }
 }

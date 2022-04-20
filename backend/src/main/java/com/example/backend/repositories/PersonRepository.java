@@ -1,6 +1,7 @@
 package com.example.backend.repositories;
 
 import com.example.backend.entities.Person;
+import com.example.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -54,5 +55,14 @@ public class PersonRepository {
     public void updatePhoto(String person_id, String photo) {
         String sql = "UPDATE people SET photo = ? WHERE person_id = ?";
         jdbcTemplate.update(sql, photo, person_id);
+    }
+
+    public Person findPersonByEmail(String email) {
+        String sql = "SELECT * FROM people WHERE email = ?";
+        try {
+            return (Person) jdbcTemplate.queryForObject(sql, new Object[]{email}, new BeanPropertyRowMapper(Person.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }

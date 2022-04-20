@@ -3,6 +3,7 @@ package com.example.backend.services;
 import com.example.backend.dto.CompanyDto;
 import com.example.backend.dto.UserDto;
 import com.example.backend.entities.Company;
+import com.example.backend.entities.Person;
 import com.example.backend.entities.User;
 import com.example.backend.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,13 @@ public class CompanyService {
 
     public Company getCompanyByEmail(String email) {
         return companyRepository.findByEmail(email);
+    }
+
+    public boolean login(String email, String password) {
+        Company company = companyRepository.findByEmail(email);
+        if(company.getCompany_password().equals(password)) {
+            return true;
+        }
+        return false;
     }
 }

@@ -1,8 +1,6 @@
 package com.example.backend.controllers;
 
-import com.example.backend.entities.Company;
 import com.example.backend.entities.User;
-import com.example.backend.services.CompanyService;
 import com.example.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
