@@ -16,19 +16,29 @@ const useStyles = makeStyles({
   },
 });
 
-const ContestInfo = () => {
+const ContestInfo = ({
+  contest_id,
+  contest_name,
+  contest_photo,
+  start_date,
+  end_date,
+  prize,
+  creation_date,
+}) => {
   const classes = useStyles();
-  const handleJoinContest = () => {};
+  const handleJoinContest = () => {
+    
+  };
   return (
     <div className={classes.root}>
       <Grid container>
         <Grid
           item
-          xs={4}
+          xs={5}
           style={{ display: "flex", alignItems: "center", paddingLeft: "20px" }}
         >
           <img
-            src={ExampleImage}
+            src={contest_photo}
             alt="logo"
             style={{
               width: "80px",
@@ -40,12 +50,12 @@ const ContestInfo = () => {
           Example Contest Name
         </Grid>
         <Grid item xs={3} style={{ display: "flex", alignItems: "center" }}>
-          12.12.2022 - 12.12.2023
+          {start_date} - {end_date}
         </Grid>
         <Grid item xs={3} style={{ display: "flex", alignItems: "center" }}>
-          Ariel, Meta, Google
+          {contest_name}
         </Grid>
-        <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
+        <Grid item xs={1} style={{ display: "flex", alignItems: "center" }}>
           <AddCircleIcon
             onClick={() => handleJoinContest()}
             style={{

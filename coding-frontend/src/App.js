@@ -9,6 +9,7 @@ import NonCodingQuestionInfo from "./components/NonCodingQuestionInfo";
 import UserProfileScreen from "./views/UserProfileScreen";
 import AdminScreen from "./views/AdminScreen";
 import EditorMainScreen from "./views/EditorMainScreen";
+import Contests from "./views/Contests";
 
 const useStyles = makeStyles({
   root: {
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/" element={<LoginRegister />} />
           <Route path="/problems" element={<ProblemsScreen />} />
           <Route path="/editor/:id" element={<EditorMainScreen />} />
+          <Route path="/contests" element={<Contests />} />
           <Route path="/cquestion/:id" element={<CodingQuestionInfo />} />
           <Route path="/ncquestion/:id" element={<NonCodingQuestionInfo />} />
           <Route path="/profile/:id" element={<UserProfileScreen />} />
