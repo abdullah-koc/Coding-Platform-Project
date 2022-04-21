@@ -7,6 +7,7 @@ import CodingQuestionInfo from "./components/CodingQuestionInfo";
 import ProblemsScreen from "./views/ProblemsScreen";
 import NonCodingQuestionInfo from "./components/NonCodingQuestionInfo";
 import UserProfileScreen from "./views/UserProfileScreen";
+import AdminScreen from "./views/AdminScreen";
 
 const useStyles = makeStyles({
   root: {
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/cquestion/:id" element={<CodingQuestionInfo />} />
           <Route path="/ncquestion/:id" element={<NonCodingQuestionInfo />} />
           <Route path="/profile/:id" element={<UserProfileScreen />} />
+          <Route path="/admin/:id" element={<AdminScreen />} />
         </Routes>
       </div>
     </div>

@@ -16,16 +16,31 @@ const Register = () => {
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
   const [birthday, setBirthday] = useState("");
-
   const [testData, setTestData] = useState();
-  useEffect(() => {
-    fetch(`${process.env.REACT_PHP_ENDPOINT}`, {
-      method: "GET",
-      action: "test",
-    })
-      .then((res) => res.json())
-      .then((data) => setTestData(data));
-  }, []);
+
+  //password should be at least 8 characters long and contain at least one number and one capital letter
+  const isPasswordValid = (password) => {
+    const regex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    return regex.test(password);
+  };
+
+  const handleRegisterButtonClick = () => {
+    if (
+      fullName === "" ||
+      email === "" ||
+      nickName === "" ||
+      password === "" ||
+      birthday === ""
+    ) {
+      alert("Please fill all the fields");
+    } else if (!isPasswordValid(password)) {
+      alert(
+        "Password should be at least 8 characters long and contain at least one number and one capital letter"
+      );
+    } else {
+      //successfully registered
+    }
+  };
 
   return (
     <Grid
@@ -149,6 +164,7 @@ const Register = () => {
           variant="contained"
           size="large"
           style={{ backgroundColor: Colors.primary_color }}
+          onClick={() => handleRegisterButtonClick()}
         >
           Register
         </Button>
