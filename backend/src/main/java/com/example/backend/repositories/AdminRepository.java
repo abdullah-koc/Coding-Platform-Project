@@ -1,6 +1,10 @@
 package com.example.backend.repositories;
 
+import com.example.backend.entities.Admin;
+import com.example.backend.entities.Person;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,5 +29,14 @@ public class AdminRepository {
         String update_admin_id = "UPDATE companies SET admin_id = ? WHERE company_id = ?";
         jdbcTemplate.update(update_admin_id, admin_id, company_id);
 
+    }
+
+    public Admin findAdminByEmail(String email) {
+        String sql = "SELECT * FROM admins WHERE admin_email = ?";
+        try {
+            return (Admin) jdbcTemplate.queryForObject(sql, new Object[]{email}, new BeanPropertyRowMapper(Admin.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }

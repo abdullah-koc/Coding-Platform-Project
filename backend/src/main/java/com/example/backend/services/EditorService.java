@@ -15,9 +15,6 @@ public class EditorService {
     private EditorRepository editorRepository;
 
     public void signUp(EditorDto editorDto) {
-        if(editorRepository.findByEmail(editorDto.getEmail()) != null ) {
-            throw new RuntimeException("Editor already exists");
-        }
 
         Editor editor = new Editor();
         editor.setFull_name(editorDto.getFull_name());

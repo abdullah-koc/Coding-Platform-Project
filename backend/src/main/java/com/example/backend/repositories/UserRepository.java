@@ -18,13 +18,15 @@ public class UserRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    private int count = 0;
+
     public User signUp(User user) {
-        if (findByEmail(user.getEmail()) != null) {
-            throw new RuntimeException("User already exists");
-        }
+        String user_id = "U" + count;
         jdbcTemplate.update(
-                "INSERT INTO people (person_id, full_name, email, password, nickname, birth_date) VALUES ('U1', ?, ?, ?, ?, ?)",
-                user.getFull_name(), user.getEmail(), user.getPassword(), user.getNickname(), user.getBirth_date());
+                "INSERT INTO people (person_id, full_name, email, password, nickname, birth_date) VALUES (?, ?, ?, ?, ?, ?)",
+                user_id, user.getFull_name(), user.getEmail(), user.getPassword(), user.getNickname(), user.getBirth_date());
+
+        count++;
         return user;
     }
 
@@ -33,6 +35,15 @@ public class UserRepository {
         String sql = "SELECT u.* FROM users u , people p WHERE p.person_id = u.user_id and p.email = ?";
         try {
             return (User) jdbcTemplate.queryForObject(sql, new Object[]{email}, new BeanPropertyRowMapper(User.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public User findByNickname(String nickname) {
+        String sql = "SELECT u.* FROM users u, people p WHERE p.person_id = u.user_id and p.nickname = ?";
+        try {
+            return (User) jdbcTemplate.queryForObject(sql, new Object[]{nickname}, new BeanPropertyRowMapper(User.class));
         } catch (EmptyResultDataAccessException e) {
             return null;
         }

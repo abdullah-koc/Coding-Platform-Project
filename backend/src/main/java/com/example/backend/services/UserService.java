@@ -19,9 +19,6 @@ public class UserService {
     private UserRepository userRepository;
 
     public void signUp(UserDto userDto) {
-        if(userRepository.findByEmail(userDto.getEmail()) != null) {
-            throw new RuntimeException("User already exists");
-        }
 
         User user = new User();
         user.setFull_name(userDto.getFull_name());

@@ -12,19 +12,18 @@ public class EditorRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    private int count = 0;
+
     public Editor signUp(Editor editor) {
-        if (findByEmail(editor.getEmail()) != null) {
-            throw new RuntimeException("Editor already exists");
-        }
-
-
+        String editor_id = "E" + count;
         jdbcTemplate.update(
-                "INSERT INTO people (person_id, full_name, email, password, nickname, birth_date) VALUES ('E1', ?, ?, ?, ?, ?)",
-                editor.getFull_name(), editor.getEmail(), editor.getPassword(), editor.getNickname(), editor.getBirth_date());
+                "INSERT INTO people (person_id, full_name, email, password, nickname, birth_date) VALUES (?, ?, ?, ?, ?, ?)",
+                editor_id, editor.getFull_name(), editor.getEmail(), editor.getPassword(), editor.getNickname(), editor.getBirth_date());
 
         String update_cv = "UPDATE editors SET cv = ? WHERE editor_id = ?";
         jdbcTemplate.update(update_cv, editor.getCv_url(), editor.getEditor_id());
 
+        count++;
         return editor;
     }
 
@@ -32,6 +31,15 @@ public class EditorRepository {
         String sql = "SELECT e.* FROM editors e, people p WHERE p.person_id = e.editor_id AND email = ?";
         try {
             return (Editor) jdbcTemplate.queryForObject(sql, new Object[]{email}, new BeanPropertyRowMapper(Editor.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public Editor findByNickname(String nickname) {
+        String sql = "SELECT e.* FROM editors e, people p WHERE p.person_id = e.editor_id AND nickname = ?";
+        try {
+            return (Editor) jdbcTemplate.queryForObject(sql, new Object[]{nickname}, new BeanPropertyRowMapper(Editor.class));
         } catch (EmptyResultDataAccessException e) {
             return null;
         }

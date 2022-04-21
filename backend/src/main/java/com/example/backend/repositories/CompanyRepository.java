@@ -14,17 +14,19 @@ public class CompanyRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    private int count = 0;
+
     public Company signUp(Company company) {
-        if(findByEmail(company.getCompany_email()) != null ) {
-            throw new RuntimeException("Company already exists");
-        }
+
+        String companyId = "C" + count;
         jdbcTemplate.update(
-                "INSERT INTO companies (company_id, company_name, company_email, company_password, company_address, company_phone) VALUES (2, ?, ?, ?, ?, ?)",
-                company.getCompany_name(), company.getCompany_email(), company.getCompany_password(), company.getCompany_address(), company.getCompany_phone());
+                "INSERT INTO companies (company_id, company_name, company_email, company_password, company_address, company_phone) VALUES (?, ?, ?, ?, ?, ?)",
+                companyId, company.getCompany_name(), company.getCompany_email(), company.getCompany_password(), company.getCompany_address(), company.getCompany_phone());
+        count++;
         return company;
     }
 
-    public Company findByEmail(String email) {
+    public Company findCompanyByEmail(String email) {
         String sql = "SELECT * FROM companies WHERE company_email = ?";
         try {
             return (Company) jdbcTemplate.queryForObject(sql, new Object[]{email}, new BeanPropertyRowMapper(Company.class));

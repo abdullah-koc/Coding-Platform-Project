@@ -1,5 +1,6 @@
 package com.example.backend.services;
 
+import com.example.backend.entities.Admin;
 import com.example.backend.repositories.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,18 @@ public class AdminService {
 
     public void approveCompany(String admin_id, String company_id) {
         adminRepository.approveCompany(admin_id, company_id);
+    }
+
+    public Admin getAdminByEmail(String email) {
+        return adminRepository.findAdminByEmail(email);
+    }
+
+    public boolean login(String email, String password) {
+        Admin admin = adminRepository.findAdminByEmail(email);
+        if(admin.getAdmin_password().equals(password)) {
+            return true;
+        }
+        return false;
     }
 
 }

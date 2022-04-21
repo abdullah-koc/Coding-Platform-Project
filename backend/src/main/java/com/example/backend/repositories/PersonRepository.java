@@ -14,9 +14,6 @@ public class PersonRepository {
     private JdbcTemplate jdbcTemplate;
 
     public Person signUp(Person person) {
-        if(findByEmail(person.getEmail()) != null ) {
-            throw new RuntimeException("Person already exists");
-        }
         jdbcTemplate.update(
 
                 "INSERT INTO people(person_id, full_name, email, nickname, password, birth_date) VALUES ('U1', ?, ?, ?, ?, ?)",
@@ -61,6 +58,15 @@ public class PersonRepository {
         String sql = "SELECT * FROM people WHERE email = ?";
         try {
             return (Person) jdbcTemplate.queryForObject(sql, new Object[]{email}, new BeanPropertyRowMapper(Person.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public Person findPersonByNickname(String nickname) {
+        String sql = "SELECT p.* FROM people p WHERE p.nickname = ?";
+        try {
+            return (Person) jdbcTemplate.queryForObject(sql, new Object[]{nickname}, new BeanPropertyRowMapper(Person.class));
         } catch (EmptyResultDataAccessException e) {
             return null;
         }

@@ -40,4 +40,6 @@ public class PersonService {
     public Person getPersonByEmail(String email) {
         return personRepository.findPersonByEmail(email);
     }
+
+    public Person getPersonByNickname(String nickname) { return personRepository.findPersonByNickname(nickname);}
 }

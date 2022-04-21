@@ -4,10 +4,7 @@ import com.example.backend.dto.EditorDto;
 import com.example.backend.dto.SignUpDto;
 import com.example.backend.dto.UserDto;
 import com.example.backend.entities.Person;
-import com.example.backend.services.CompanyService;
-import com.example.backend.services.EditorService;
-import com.example.backend.services.PersonService;
-import com.example.backend.services.UserService;
+import com.example.backend.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +24,20 @@ public class AuthController {
     @Autowired
     CompanyService companyService;
 
+    @Autowired
+    AdminService adminService;
 
     @PostMapping(path="/signUp")
     public void signUp(@RequestBody SignUpDto signUpDto) {
         String type = signUpDto.getType();
+
+        if(companyService.getCompanyByEmail(signUpDto.getEmail()) != null || personService.getPersonByEmail(signUpDto.getEmail()) != null ) {
+            throw new RuntimeException("Email has already been taken");
+        }
+        else if(personService.getPersonByNickname(signUpDto.getNickname()) != null) {
+            throw new RuntimeException("Nickname has already been taken");
+        }
+
         if(type.equals("User")) {
             UserDto userDto = new UserDto();
             userDto.setEmail(signUpDto.getEmail());
@@ -71,6 +78,8 @@ public class AuthController {
             return personService.login(email,password);
         else if(companyService.getCompanyByEmail(email) != null)
             return companyService.login(email, password);
+        else if(adminService.getAdminByEmail(email) != null)
+            return adminService.login(email, password);
         else
             return false;
     }

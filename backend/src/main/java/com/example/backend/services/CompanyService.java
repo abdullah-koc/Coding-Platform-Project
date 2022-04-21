@@ -25,11 +25,11 @@ public class CompanyService {
     }
 
     public Company getCompanyByEmail(String email) {
-        return companyRepository.findByEmail(email);
+        return companyRepository.findCompanyByEmail(email);
     }
 
     public boolean login(String email, String password) {
-        Company company = companyRepository.findByEmail(email);
+        Company company = companyRepository.findCompanyByEmail(email);
         if(company.getCompany_password().equals(password)) {
             return true;
         }
