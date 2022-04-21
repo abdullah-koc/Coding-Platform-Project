@@ -33,7 +33,7 @@ public class QuestionController {
    }
 
    @PostMapping("/insert")
-   public void insertQuestion(@RequestBody Question question) {
+   public void insertQuestion(@RequestBody QuestionDto question) {
       questionService.insertQuestion(question);
    }
 

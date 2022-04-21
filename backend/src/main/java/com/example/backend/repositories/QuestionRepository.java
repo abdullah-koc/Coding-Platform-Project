@@ -17,12 +17,18 @@ public class QuestionRepository {
    @Autowired
    private JdbcTemplate jdbcTemplate;
 
-   public void insertQuestion(Question question) {
-      String sql = "INSERT INTO questions (question_id, title, explanation, question_duration, difficulty, question_point, solution, max_try, like_count, dislike_count, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+   public void insertQuestion(QuestionDto question) {
+      String sql = "INSERT INTO questions (question_id, title, explanation, question_duration, difficulty, question_point, solution, max_try, like_count, dislike_count, creation_date, editor_id, company_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
       jdbcTemplate.update(sql, question.getQuestion_id(), question.getTitle(), question.getExplanation(),
             question.getQuestion_duration(), question.getDifficulty(), question.getQuestion_point(),
             question.getSolution(), question.getMax_try(), question.getLike_count(), question.getDislike_count(),
-            question.getCreation_date());
+            question.getCreation_date(), question.getEditor_id(), question.getCompany_id());
+
+      if (question.getQuestion_id().substring(0, 3).equals("NCQ")) {
+         // update type description
+         sql = "UPDATE questions SET type_description = ? WHERE question_id = ?";
+         jdbcTemplate.update(sql, question.getType_description(), question.getQuestion_id());
+      }
    }
 
    public List<Question> findAll() {

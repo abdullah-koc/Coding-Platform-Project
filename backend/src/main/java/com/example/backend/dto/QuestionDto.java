@@ -14,6 +14,8 @@ public class QuestionDto {
    private int like_count;
    private int dislike_count;
    private Date creation_date;
+   private String editor_id;
+   private String company_id;
    private String video_link;
    private int video_request_count;
    private String type_description;
@@ -129,5 +131,21 @@ public class QuestionDto {
 
    public void setType_description(String type_description) {
       this.type_description = type_description;
+   }
+
+   public String getEditor_id() {
+      return editor_id;
+   }
+
+   public void setEditor_id(String editor_id) {
+      this.editor_id = editor_id;
+   }
+
+   public String getCompany_id() {
+      return company_id;
+   }
+
+   public void setCompany_id(String company_id) {
+      this.company_id = company_id;
    }
 }

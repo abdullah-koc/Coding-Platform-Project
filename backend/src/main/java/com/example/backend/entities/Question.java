@@ -2,6 +2,8 @@ package com.example.backend.entities;
 
 import java.sql.Date;
 
+import javax.persistence.Entity;
+
 public class Question {
    private String question_id;
    private String title;

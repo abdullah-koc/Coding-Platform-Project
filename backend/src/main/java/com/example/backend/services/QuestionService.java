@@ -24,7 +24,7 @@ public class QuestionService {
       return questionRepository.findAll();
    }
 
-   public void insertQuestion(Question question) {
+   public void insertQuestion(QuestionDto question) {
       questionRepository.insertQuestion(question);
    }
 
