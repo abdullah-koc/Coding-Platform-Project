@@ -8,6 +8,7 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Colors from "../../utils/Colors";
+import axios from "axios";
 
 const Register = () => {
   const [isEditor, setIsEditor] = useState(false);
@@ -38,7 +39,21 @@ const Register = () => {
         "Password should be at least 8 characters long and contain at least one number and one capital letter"
       );
     } else {
-      //successfully registered
+      if (isEditor) {
+      } else {
+        axios.post(process.env.REACT_APP_URL + "/api/auth/signUp", {
+          full_name: fullName,
+          email: email,
+          nickname: nickName,
+          password: password,
+          company_phone: "",
+          birth_date: birthday,
+          company_address: "",
+          is_approved: true,
+          type: "Editor",
+          cv_url: "",
+        });
+      }
     }
   };
 
