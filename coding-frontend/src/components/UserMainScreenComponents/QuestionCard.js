@@ -25,7 +25,6 @@ const QuestionCard = ({
   questionPoint,
 }) => {
   const classes = useStyles();
-  const handleJoinContest = () => {};
   return (
     <div className={classes.root}>
       <Grid container>
