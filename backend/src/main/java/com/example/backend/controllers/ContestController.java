@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.persistence.PostPersist;
 
+import com.example.backend.dto.ContestDto;
+import com.example.backend.dto.QuestionDto;
+import com.example.backend.dto.UserDto;
 import com.example.backend.entities.Contest;
 import com.example.backend.entities.Question;
 import com.example.backend.entities.User;
@@ -25,22 +28,22 @@ public class ContestController {
    ContestService contestService;
 
    @GetMapping(path = "/{contest_id}")
-   public Contest getContestById(@PathVariable String contest_id) {
+   public ContestDto getContestById(@PathVariable String contest_id) {
       return contestService.getContestById(contest_id);
    }
 
    @GetMapping(path = "/all")
-   public List<Contest> getAllContests() {
+   public List<ContestDto> getAllContests() {
       return contestService.getAllContests();
    }
 
    @PostMapping(path = "/insert")
-   public void insertContest(@RequestBody Contest contest) {
+   public void insertContest(@RequestBody ContestDto contest) {
       contestService.insertContest(contest);
    }
 
    @PostMapping(path = "/update/{contest_id}")
-   public void updateContest(@PathVariable String contest_id, @RequestBody Contest contest) {
+   public void updateContest(@PathVariable String contest_id, @RequestBody ContestDto contest) {
       contestService.updateContest(contest_id, contest);
    }
 
@@ -50,17 +53,17 @@ public class ContestController {
    }
 
    @GetMapping(path = "/get/all/{person_id}")
-   public List<Contest> getAllContestsByPersonId(@PathVariable String person_id) {
+   public List<ContestDto> getAllContestsByPersonId(@PathVariable String person_id) {
       return contestService.getAllContestsByPersonId(person_id);
    }
 
    @GetMapping(path = "/all_contestants/{contest_id}")
-   public List<User> getAllContestants(@PathVariable String contest_id) {
+   public List<UserDto> getAllContestants(@PathVariable String contest_id) {
       return contestService.getAllContestants(contest_id);
    }
 
    @GetMapping(path = "/all_questions/{contest_id}")
-   public List<Question> getAllQuestions(@PathVariable String contest_id) {
+   public List<QuestionDto> getAllQuestions(@PathVariable String contest_id) {
       return contestService.getAllQuestions(contest_id);
    }
 

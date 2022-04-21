@@ -2,6 +2,9 @@ package com.example.backend.repositories;
 
 import java.util.List;
 
+import com.example.backend.dto.ContestDto;
+import com.example.backend.dto.QuestionDto;
+import com.example.backend.dto.UserDto;
 import com.example.backend.entities.Contest;
 import com.example.backend.entities.Question;
 import com.example.backend.entities.User;
@@ -16,10 +19,10 @@ public class ContestRepository {
    @Autowired
    private JdbcTemplate jdbcTemplate;
 
-   public List<Contest> findAll() {
+   public List<ContestDto> findAll() {
       String sql = "SELECT * FROM contests";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
-         Contest contest = new Contest();
+         ContestDto contest = new ContestDto();
          contest.setContest_id(rs.getString("contest_id"));
          contest.setContest_name(rs.getString("contest_name"));
          contest.setContest_photo(rs.getString("contest_photo"));
@@ -31,13 +34,13 @@ public class ContestRepository {
       });
    }
 
-   public void insertContest(Contest contest) {
+   public void insertContest(ContestDto contest) {
       String sql = "INSERT INTO contests (contest_id, contest_name, contest_photo, start_date, end_date, prize, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
       jdbcTemplate.update(sql, contest.getContest_id(), contest.getContest_name(), contest.getContest_photo(),
             contest.getStart_date(), contest.getEnd_date(), contest.getPrize(), contest.getCreation_time());
    }
 
-   public void updateContest(String contest_id, Contest contest) {
+   public void updateContest(String contest_id, ContestDto contest) {
       String sql = "UPDATE contests SET contest_name = ?, contest_photo = ?, start_date = ?, end_date = ?, prize = ?, creation_date = ? WHERE contest_id = ?";
       jdbcTemplate.update(sql, contest.getContest_name(), contest.getContest_photo(), contest.getStart_date(),
             contest.getEnd_date(), contest.getPrize(), contest.getCreation_time(), contest_id);
@@ -48,10 +51,10 @@ public class ContestRepository {
       jdbcTemplate.update(sql, contest_id);
    }
 
-   public List<Contest> getAllContestsByPersonId(String person_id) {
+   public List<ContestDto> getAllContestsByPersonId(String person_id) {
       String sql = "SELECT contest_id, contest_name, contest_photo, start_date, end_date, prize, creation_date FROM contests NATURAL JOIN user_contest WHERE person_id = ?";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
-         Contest contest = new Contest();
+         ContestDto contest = new ContestDto();
          contest.setContest_id(rs.getString("contest_id"));
          contest.setContest_name(rs.getString("contest_name"));
          contest.setContest_photo(rs.getString("contest_photo"));
@@ -63,10 +66,10 @@ public class ContestRepository {
       }, person_id);
    }
 
-   public List<Question> getAllQuestions(String contest_id) {
+   public List<QuestionDto> getAllQuestions(String contest_id) {
       String sql = "SELECT question_id, title, explanation, question_duration, difficulty, question_point, solution, max_try, like_count, dislike_count, creation_date FROM questions NATURAL JOIN question_contest WHERE contest_id = ?";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
-         Question question = new Question();
+         QuestionDto question = new QuestionDto();
          question.setQuestion_id(rs.getString("question_id"));
          question.setTitle(rs.getString("title"));
          question.setExplanation(rs.getString("explanation"));
@@ -82,10 +85,10 @@ public class ContestRepository {
       }, contest_id);
    }
 
-   public List<User> getAllContestants(String contest_id) {
+   public List<UserDto> getAllContestants(String contest_id) {
       String sql = "SELECT person_id, full_name, photo, email, phone FROM users NATURAL JOIN user_contest WHERE contest_id = ?";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
-         User user = new User();
+         UserDto user = new UserDto();
          user.setPerson_id(rs.getString("person_id"));
          user.setFull_name(rs.getString("full_name"));
          user.setPhoto(rs.getString("photo"));
@@ -95,10 +98,10 @@ public class ContestRepository {
       }, contest_id);
    }
 
-   public Contest getContestById(String contest_id) {
+   public ContestDto getContestById(String contest_id) {
       String sql = "SELECT * FROM contests WHERE contest_id = ?";
       return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
-         Contest contest = new Contest();
+         ContestDto contest = new ContestDto();
          contest.setContest_id(rs.getString("contest_id"));
          contest.setContest_name(rs.getString("contest_name"));
          contest.setContest_photo(rs.getString("contest_photo"));

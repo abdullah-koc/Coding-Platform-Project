@@ -1,10 +1,8 @@
-package com.example.backend.entities;
+package com.example.backend.dto;
 
 import java.sql.Date;
 
-import javax.persistence.Entity;
-
-public class Contest {
+public class ContestDto {
    private String contest_id;
    private String contest_name;
    private String contest_photo;
@@ -69,5 +67,4 @@ public class Contest {
    public void setCreation_time(Date creation_date) {
       this.creation_date = creation_date;
    }
-
 }

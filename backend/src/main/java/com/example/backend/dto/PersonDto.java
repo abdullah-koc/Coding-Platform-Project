@@ -4,13 +4,21 @@ import java.io.Serializable;
 
 public class PersonDto implements Serializable {
 
+    private String person_id;
     private String full_name;
     private String nickname;
     private String email;
+    private String photo;
     private String password;
+    private String phone;
     private String birth_date;
 
-    public PersonDto() {
+    public String getPerson_id() {
+        return person_id;
+    }
+
+    public void setPerson_id(String person_id) {
+        this.person_id = person_id;
     }
 
     public String getFull_name() {
@@ -51,5 +59,21 @@ public class PersonDto implements Serializable {
 
     public void setBirth_date(String birth_date) {
         this.birth_date = birth_date;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
