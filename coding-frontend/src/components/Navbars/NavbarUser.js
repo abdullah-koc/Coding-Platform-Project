@@ -36,14 +36,18 @@ const useStyles = makeStyles({
 const NavbarUser = () => {
   let navigate = useNavigate();
   const classes = useStyles();
-  const goToMainPage = () => {};
+  const goToMainPage = () => {
+    navigate("/problems");
+  };
   const goToAccountPage = (id) => {
     navigate("/profile/" + id);
   };
   const goToProblemsPage = () => {
     navigate("/problems");
   };
-  const goToContestPage = () => {};
+  const goToContestPage = () => {
+    navigate("/contests");
+  };
   const goToInterviewPage = () => {};
 
   const [personId, setPersonId] = React.useState("aa");

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Grid, MenuItem, Select, Pagination, Button } from "@mui/material";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import NavbarEditor from "../components/Navbars/NavbarEditor";
+import NavbarUser from "../components/Navbars/NavbarUser";
 import Colors from "../utils/Colors";
 import QuestionCard from "../components/UserMainScreenComponents/QuestionCard";
 import UserStatus from "../components/UserStatus";
@@ -171,7 +171,7 @@ const ProblemsScreen = () => {
 
   return (
     <div>
-      <NavbarEditor />
+      <NavbarUser />
       <div
         style={{
           paddingLeft: "40px",
