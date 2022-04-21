@@ -2,8 +2,6 @@ package com.example.backend.entities;
 
 import java.sql.Date;
 
-import javax.persistence.Entity;
-
 public class Contest {
    private String contest_id;
    private String contest_name;
