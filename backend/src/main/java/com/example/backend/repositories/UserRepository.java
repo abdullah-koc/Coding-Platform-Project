@@ -21,15 +21,23 @@ public class UserRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private int count = 0;
-
     public User signUp(User user) {
-        String user_id = "U" + count;
+        String last_user_id;
+        int user_id_count;
+        String last_user_id_sql = "SELECT user_id FROM users ORDER BY user_id DESC LIMIT 1";
+        try {
+            last_user_id = (String) jdbcTemplate.queryForObject(last_user_id_sql, String.class);
+            user_id_count = Integer.parseInt(last_user_id.substring(1));
+            user_id_count++;
+        } catch (EmptyResultDataAccessException e) {
+            user_id_count = 0;
+        }
+
+        String user_id = "U" + user_id_count;
         jdbcTemplate.update(
                 "INSERT INTO people (person_id, full_name, email, password, nickname, birth_date) VALUES (?, ?, ?, ?, ?, ?)",
                 user_id, user.getFull_name(), user.getEmail(), user.getPassword(), user.getNickname(), user.getBirth_date());
 
-        count++;
         return user;
     }
 

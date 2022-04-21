@@ -2,6 +2,7 @@ package com.example.backend.services;
 
 import com.example.backend.dto.AttemptDto;
 import com.example.backend.entities.Attempt;
+import com.example.backend.entities.TestCase;
 import com.example.backend.repositories.AttemptRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

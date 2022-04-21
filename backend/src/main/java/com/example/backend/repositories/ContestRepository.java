@@ -10,6 +10,7 @@ import com.example.backend.entities.Question;
 import com.example.backend.entities.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -35,6 +36,20 @@ public class ContestRepository {
    }
 
    public void insertContest(ContestDto contest) {
+      String last_contest_id;
+      int contest_id_count;
+      String last_contest_id_sql = "SELECT contest_id FROM contests ORDER BY contest_id DESC LIMIT 1";
+      try {
+         last_contest_id = (String) jdbcTemplate.queryForObject(last_contest_id_sql, String.class);
+         contest_id_count = Integer.parseInt(last_contest_id.substring(1));
+         contest_id_count++;
+      } catch (EmptyResultDataAccessException e) {
+         contest_id_count = 0;
+      }
+
+      String contest_id = "C" + contest_id_count;
+      contest.setContest_id(contest_id);
+
       String sql = "INSERT INTO contests (contest_id, contest_name, contest_photo, start_date, end_date, prize, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
       jdbcTemplate.update(sql, contest.getContest_id(), contest.getContest_name(), contest.getContest_photo(),
             contest.getStart_date(), contest.getEnd_date(), contest.getPrize(), contest.getCreation_time());

@@ -8,6 +8,7 @@ import com.example.backend.entities.NonCodingQuestion;
 import com.example.backend.entities.Question;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,7 @@ public class QuestionRepository {
    private JdbcTemplate jdbcTemplate;
 
    public void insertQuestion(QuestionDto question) {
+
       String sql = "INSERT INTO questions (question_id, title, explanation, question_duration, difficulty, question_point, solution, max_try, like_count, dislike_count, creation_date, editor_id, company_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
       jdbcTemplate.update(sql, question.getQuestion_id(), question.getTitle(), question.getExplanation(),
             question.getQuestion_duration(), question.getDifficulty(), question.getQuestion_point(),

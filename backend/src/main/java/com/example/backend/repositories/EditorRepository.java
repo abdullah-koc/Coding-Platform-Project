@@ -12,10 +12,19 @@ public class EditorRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private int count = 0;
-
     public Editor signUp(Editor editor) {
-        String editor_id = "E" + count;
+        String last_editor_id;
+        int editor_id_count;
+        String last_editor_id_sql = "SELECT editor_id FROM editors ORDER BY editor_id DESC LIMIT 1";
+        try {
+            last_editor_id = (String) jdbcTemplate.queryForObject(last_editor_id_sql, String.class);
+            editor_id_count = Integer.parseInt(last_editor_id.substring(1));
+            editor_id_count++;
+        } catch (EmptyResultDataAccessException e) {
+            editor_id_count = 0;
+        }
+
+        String editor_id = "E" + editor_id_count;
         jdbcTemplate.update(
                 "INSERT INTO people (person_id, full_name, email, password, nickname, birth_date) VALUES (?, ?, ?, ?, ?, ?)",
                 editor_id, editor.getFull_name(), editor.getEmail(), editor.getPassword(), editor.getNickname(), editor.getBirth_date());
@@ -23,7 +32,6 @@ public class EditorRepository {
         String update_cv = "UPDATE editors SET cv = ? WHERE editor_id = ?";
         jdbcTemplate.update(update_cv, editor.getCv_url(), editor.getEditor_id());
 
-        count++;
         return editor;
     }
 

@@ -14,15 +14,26 @@ public class CompanyRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private int count = 0;
-
     public Company signUp(Company company) {
 
-        String companyId = "C" + count;
+        String last_company_id;
+        int company_id_count;
+        String last_company_id_sql = "SELECT company_id FROM companies ORDER BY company_id DESC LIMIT 1";
+        try {
+            last_company_id = (String) jdbcTemplate.queryForObject(last_company_id_sql, String.class);
+            company_id_count = Integer.parseInt(last_company_id.substring(1));
+            company_id_count++;
+        } catch (EmptyResultDataAccessException e) {
+            company_id_count = 0;
+        }
+
+        String companyId = "C" + company_id_count;
+        company.setCompany_id(companyId);
+
         jdbcTemplate.update(
                 "INSERT INTO companies (company_id, company_name, company_email, company_password, company_address, company_phone) VALUES (?, ?, ?, ?, ?, ?)",
                 companyId, company.getCompany_name(), company.getCompany_email(), company.getCompany_password(), company.getCompany_address(), company.getCompany_phone());
-        count++;
+
         return company;
     }
 
