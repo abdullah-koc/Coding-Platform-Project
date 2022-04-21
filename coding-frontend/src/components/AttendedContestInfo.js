@@ -2,8 +2,8 @@ import React from "react";
 import { makeStyles } from "@mui/styles";
 import Colors from "../utils/Colors";
 import { Button, Grid } from "@mui/material";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import ExampleImage from "../images/loginregisterimage.jpg";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -16,7 +16,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ContestInfo = ({
+const AttendedContestInfo = ({
   contest_id,
   contest_name,
   contest_photo,
@@ -26,15 +26,20 @@ const ContestInfo = ({
   creation_date,
 }) => {
   const classes = useStyles();
-  const handleJoinContest = () => {
-    
+
+  let navigate = useNavigate();
+  const handleStartContest = () => {
+    navigate("/contest/" + contest_id);
   };
+
+  const handleCancelContest = () => {};
+
   return (
     <div className={classes.root}>
       <Grid container>
         <Grid
           item
-          xs={6}
+          xs={5}
           style={{ display: "flex", alignItems: "center", paddingLeft: "20px" }}
         >
           <img
@@ -49,21 +54,33 @@ const ContestInfo = ({
           />
           {contest_name}
         </Grid>
-        <Grid item xs={5} style={{ display: "flex", alignItems: "center" }}>
+        <Grid item xs={4} style={{ display: "flex", alignItems: "center" }}>
           {start_date} - {end_date}
         </Grid>
         <Grid item xs={1} style={{ display: "flex", alignItems: "center" }}>
-          <AddCircleIcon
-            onClick={() => handleJoinContest()}
+          <RemoveCircleIcon
+            onClick={() => handleCancelContest()}
             style={{
-              color: Colors.primary_color,
+              color: "red",
               cursor: "pointer",
             }}
           />
+        </Grid>
+        <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
+          <Button
+            onClick={() => handleStartContest()}
+            style={{
+              backgroundColor: Colors.primary_color,
+              cursor: "pointer",
+              color: "white",
+            }}
+          >
+            Start
+          </Button>
         </Grid>
       </Grid>
     </div>
   );
 };
 
-export default ContestInfo;
+export default AttendedContestInfo;

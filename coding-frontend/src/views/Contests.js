@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Grid, MenuItem, Select, Pagination } from "@mui/material";
 import NavbarUser from "../components/Navbars/NavbarUser";
 import ContestInfo from "../components/ContestInfo";
-import { useNavigate } from "react-router-dom";
+import AttendedContestInfo from "../components/AttendedContestInfo";
 
 export const Contests = () => {
-  let navigate = useNavigate();
+  
 
   const [upcomingPage, setUpcomingPage] = useState(1);
   const [attendedPage, setAttendedPage] = useState(1);
@@ -171,9 +171,18 @@ export const Contests = () => {
     setAttendedCurContests(attendedContests.slice((attendedPage - 1) * 5, 5 * attendedPage));
   }, [attendedPage]);
 
-  const handleGoToContest = (id) => {
-    navigate("/contest/" + id);
-  };
+
+  function sortAttendedContets() {
+    const sortedData = [...attendedContests].sort((a, b) => {
+      return new Date(b.end_date) - new Date(a.end_date) < 0 ? 1 : -1;
+    });
+    setAttendedContests(sortedData);
+    setAttendedCurContests(sortedData.slice((attendedPage - 1) * 5, 5 * attendedPage));
+  }
+
+  useEffect(() => {
+    sortAttendedContets();
+  }, [])
 
   return (
     <div>
@@ -188,7 +197,7 @@ export const Contests = () => {
         }}
       >
         <Grid container spacing={4}>
-          <Grid item xs={7}>
+          <Grid item xs={6}>
             <h1>Upcoming Contests</h1>
             {curUpcomingContests.map((contest, index) => (
               <div
@@ -216,15 +225,14 @@ export const Contests = () => {
             </div>
           </Grid>
 
-          <Grid item xs={5}>
+          <Grid item xs={6}>
             <h1>Attended Contests</h1>
             {curAttendedContests.map((contest, index) => (
               <div
                 key={index}
                 style={{ paddingRight: "40px", marginBottom: "10px" }}
-                onClick={() => handleGoToContest(contest.contest_id)}
               >
-                <ContestInfo
+                <AttendedContestInfo
                   contest_id={contest.contest_id}
                   contest_name={contest.contest_name}
                   contest_photo={contest.contest_photo}
