@@ -1,5 +1,6 @@
 package com.example.backend.repositories;
 
+import com.example.backend.entities.Attempt;
 import com.example.backend.entities.Person;
 import com.example.backend.entities.User;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Repository

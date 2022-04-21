@@ -1,6 +1,7 @@
 package com.example.backend.services;
 
 import com.example.backend.dto.UserDto;
+import com.example.backend.entities.Attempt;
 import com.example.backend.entities.Company;
 import com.example.backend.entities.Person;
 import com.example.backend.entities.User;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -54,4 +56,5 @@ public class UserService {
     public void changeCurrentCompany(String user_id, String cur_company){
        userRepository.updateCurrentCompany(user_id, cur_company);
     }
+
 }
