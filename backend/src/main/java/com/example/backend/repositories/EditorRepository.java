@@ -36,7 +36,7 @@ public class EditorRepository {
     }
 
     public Editor findByEmail(String email) {
-        String sql = "SELECT e.* FROM editors e, people p WHERE p.person_id = e.editor_id AND email = ?";
+        String sql = "SELECT * FROM editors e, people p WHERE p.person_id = e.editor_id AND email = ?";
         try {
             return (Editor) jdbcTemplate.queryForObject(sql, new Object[]{email}, new BeanPropertyRowMapper(Editor.class));
         } catch (EmptyResultDataAccessException e) {
