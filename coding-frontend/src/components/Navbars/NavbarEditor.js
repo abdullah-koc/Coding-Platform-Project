@@ -3,6 +3,7 @@ import { makeStyles } from "@mui/styles";
 import Colors from "../../utils/Colors";
 import { Grid } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   navbar: {
@@ -32,6 +33,7 @@ const useStyles = makeStyles({
 });
 
 const NavbarEditor = () => {
+  let navigate = useNavigate();
   const classes = useStyles();
   const goToMainPage = () => {};
   const goToAccountPage = () => {};
@@ -67,13 +69,13 @@ const NavbarEditor = () => {
             style={{ cursor: "pointer" }}
             onClick={() => goToCreateQuestionPage()}
           >
-            Create Question
+            Questions
           </div>
           <div
             style={{ cursor: "pointer" }}
             onClick={() => goToCreateContestPage()}
           >
-            Create Contest
+            Contests
           </div>
         </Grid>
         <Grid item xs={3}></Grid>
