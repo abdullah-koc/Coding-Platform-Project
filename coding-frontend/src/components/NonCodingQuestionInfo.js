@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import NonCodingQuestionText from "./NonCodingQuestionText";
 import CommunitySubmission from "./CommunitySubmission";
 
-const NonCodingQuestionInfo = () => {
+const NonCodingQuestionInfo = ({ isContest }) => {
   const [mode, setMode] = React.useState(0);
   const [difficulty, setDifficulty] = React.useState("Easy");
   const [previousAttempts, setPreviousAttempts] = React.useState([
@@ -29,6 +29,13 @@ const NonCodingQuestionInfo = () => {
     setIsSubmitted(childData);
   };
 
+  const getQuestionID = () => {
+    const url = window.location.href;
+    const urlParts = url.split("/");
+    const questionID = urlParts[urlParts.length - 1];
+    return questionID;
+  };
+
   return (
     <div>
       <NavbarUser />
@@ -44,7 +51,7 @@ const NonCodingQuestionInfo = () => {
           <Grid container>
             <Grid item xs={12}>
               <Grid container>
-                <Grid item xs={4}>
+                <Grid item xs={isContest ? 12 : 4}>
                   <Button
                     style={{
                       width: "100%",
@@ -57,22 +64,24 @@ const NonCodingQuestionInfo = () => {
                   </Button>
                 </Grid>
 
-                <Grid item xs={8}>
-                  <Button
-                    style={{
-                      width: "100%",
-                      backgroundColor: !isSubmitted
-                        ? "white"
-                        : Colors.secondary_color,
-                      color: !isSubmitted ? Colors.dark_color : "white",
-                    }}
-                    onClick={() => setMode(1)}
-                    variant="contained"
-                    disabled={!isSubmitted}
-                  >
-                    {!isSubmitted ? "🔒 " : ""} Community Submissions
-                  </Button>
-                </Grid>
+                {!isContest && (
+                  <Grid item xs={8}>
+                    <Button
+                      style={{
+                        width: "100%",
+                        backgroundColor: !isSubmitted
+                          ? "white"
+                          : Colors.secondary_color,
+                        color: !isSubmitted ? Colors.dark_color : "white",
+                      }}
+                      onClick={() => setMode(1)}
+                      variant="contained"
+                      disabled={!isSubmitted}
+                    >
+                      {!isSubmitted ? "🔒 " : ""} Community Submissions
+                    </Button>
+                  </Grid>
+                )}
               </Grid>
             </Grid>
             <Grid item xs={12}>
@@ -90,36 +99,44 @@ const NonCodingQuestionInfo = () => {
                     >
                       1.Median of Two Sorted Arrays
                     </Grid>
-                    <Grid item xs={1}>
-                      <YouTubeIcon
+                    {!isContest && (
+                      <Grid item xs={1}>
+                        <YouTubeIcon
+                          style={{
+                            fontSize: "200%",
+                            cursor: "pointer",
+                            color: "#FF0000",
+                          }}
+                        />
+                      </Grid>
+                    )}
+                    {!isContest && (
+                      <Grid
+                        item
+                        xs={2}
                         style={{
-                          fontSize: "200%",
-                          cursor: "pointer",
-                          color: "#FF0000",
+                          paddingTop: "0.7%",
+                          paddingLeft: "0.001%",
+                          display: "flex",
+                          justifyContent: "center",
+                          fontWeight: "bolder",
                         }}
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={2}
-                      style={{
-                        paddingTop: "0.7%",
-                        paddingLeft: "0.001%",
-                        display: "flex",
-                        justifyContent: "center",
-                        fontWeight: "bolder",
-                      }}
-                    >
-                      {difficulty}
-                    </Grid>
-                    <Grid item xs={1}>
-                      <ThumbUpIcon style={{ paddingTop: "5%" }}></ThumbUpIcon>
-                    </Grid>
-                    <Grid item xs={1}>
-                      <ThumbDownAltIcon
-                        style={{ paddingTop: "5%" }}
-                      ></ThumbDownAltIcon>
-                    </Grid>
+                      >
+                        {difficulty}
+                      </Grid>
+                    )}
+                    {!isContest && (
+                      <Grid item xs={1}>
+                        <ThumbUpIcon style={{ paddingTop: "5%" }}></ThumbUpIcon>
+                      </Grid>
+                    )}
+                    {!isContest && (
+                      <Grid item xs={1}>
+                        <ThumbDownAltIcon
+                          style={{ paddingTop: "5%" }}
+                        ></ThumbDownAltIcon>
+                      </Grid>
+                    )}
                   </Grid>
                   <Grid
                     style={{

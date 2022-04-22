@@ -10,7 +10,7 @@ import Colors from "../utils/Colors";
 import Box from "@mui/material/Box";
 import CodingQuestionText from "./CodingQuestionText";
 
-const CodingQuestionInfo = () => {
+const CodingQuestionInfo = ({ isContest }) => {
   const [mode, setMode] = React.useState(0);
   const [difficulty, setDifficulty] = React.useState("Easy");
   const [previousAttempts, setPreviousAttempts] = React.useState([
@@ -43,7 +43,7 @@ const CodingQuestionInfo = () => {
           <Grid container>
             <Grid item xs={12}>
               <Grid container>
-                <Grid item xs={4}>
+                <Grid item xs={isContest ? 12 : 4}>
                   <Button
                     style={{
                       width: "100%",
@@ -55,34 +55,38 @@ const CodingQuestionInfo = () => {
                     Description
                   </Button>
                 </Grid>
-                <Grid item xs={3}>
-                  <Button
-                    style={{
-                      width: "100%",
-                      backgroundColor: isSolutionDisabled
-                        ? "white"
-                        : Colors.secondary_color,
-                      color: isSolutionDisabled ? Colors.dark_color : "white",
-                    }}
-                    variant="contained"
-                    onClick={() => setMode(1)}
-                    disabled={isSolutionDisabled}
-                  >
-                    Solution
-                  </Button>
-                </Grid>
-                <Grid item xs={5}>
-                  <Button
-                    style={{
-                      width: "100%",
-                      backgroundColor: Colors.secondary_color,
-                    }}
-                    onClick={() => setMode(2)}
-                    variant="contained"
-                  >
-                    Last Submissions
-                  </Button>
-                </Grid>
+                {!isContest && (
+                  <Grid item xs={3}>
+                    <Button
+                      style={{
+                        width: "100%",
+                        backgroundColor: isSolutionDisabled
+                          ? "white"
+                          : Colors.secondary_color,
+                        color: isSolutionDisabled ? Colors.dark_color : "white",
+                      }}
+                      variant="contained"
+                      onClick={() => setMode(1)}
+                      disabled={isSolutionDisabled}
+                    >
+                      Solution
+                    </Button>
+                  </Grid>
+                )}
+                {!isContest && (
+                  <Grid item xs={5}>
+                    <Button
+                      style={{
+                        width: "100%",
+                        backgroundColor: Colors.secondary_color,
+                      }}
+                      onClick={() => setMode(2)}
+                      variant="contained"
+                    >
+                      Last Submissions
+                    </Button>
+                  </Grid>
+                )}
               </Grid>
             </Grid>
             <Grid item xs={12}>
@@ -100,36 +104,44 @@ const CodingQuestionInfo = () => {
                     >
                       1.Median of Two Sorted Arrays
                     </Grid>
-                    <Grid item xs={1}>
-                      <YouTubeIcon
+                    {!isContest && (
+                      <Grid item xs={1}>
+                        <YouTubeIcon
+                          style={{
+                            fontSize: "200%",
+                            cursor: "pointer",
+                            color: "#FF0000",
+                          }}
+                        />
+                      </Grid>
+                    )}
+                    {!isContest && (
+                      <Grid
+                        item
+                        xs={2}
                         style={{
-                          fontSize: "200%",
-                          cursor: "pointer",
-                          color: "#FF0000",
+                          paddingTop: "0.7%",
+                          paddingLeft: "0.001%",
+                          display: "flex",
+                          justifyContent: "center",
+                          fontWeight: "bolder",
                         }}
-                      />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={2}
-                      style={{
-                        paddingTop: "0.7%",
-                        paddingLeft: "0.001%",
-                        display: "flex",
-                        justifyContent: "center",
-                        fontWeight: "bolder",
-                      }}
-                    >
-                      {difficulty}
-                    </Grid>
-                    <Grid item xs={1}>
-                      <ThumbUpIcon style={{ paddingTop: "5%" }}></ThumbUpIcon>
-                    </Grid>
-                    <Grid item xs={1}>
-                      <ThumbDownAltIcon
-                        style={{ paddingTop: "5%" }}
-                      ></ThumbDownAltIcon>
-                    </Grid>
+                      >
+                        {difficulty}
+                      </Grid>
+                    )}
+                    {!isContest && (
+                      <Grid item xs={1}>
+                        <ThumbUpIcon style={{ paddingTop: "5%" }}></ThumbUpIcon>
+                      </Grid>
+                    )}
+                    {!isContest && (
+                      <Grid item xs={1}>
+                        <ThumbDownAltIcon
+                          style={{ paddingTop: "5%" }}
+                        ></ThumbDownAltIcon>
+                      </Grid>
+                    )}
                   </Grid>
                   <Grid
                     style={{
@@ -285,7 +297,10 @@ const CodingQuestionInfo = () => {
             </Grid>
           </Grid>
         </Box>
-        <CodingQuestionText parentSubmitCallback={handleSubmitCallback} />
+        <CodingQuestionText
+          isContest={isContest}
+          parentSubmitCallback={handleSubmitCallback}
+        />
       </div>
     </div>
   );

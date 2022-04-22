@@ -3,7 +3,7 @@ import { TextField, Grid, MenuItem, Select, Button } from "@mui/material";
 import Colors from "../utils/Colors";
 import TestCases from "./TestCases";
 
-const CodingQuestionText = ({ parentSubmitCallback }) => {
+const CodingQuestionText = ({ parentSubmitCallback, isContest }) => {
   const [questionText, setQuestionText] = useState("");
   const [programmingLanguage, setProgrammingLanguage] = useState("Java 8");
   const [remainingAttempts, setRemainingAttempts] = useState(3);
@@ -13,7 +13,9 @@ const CodingQuestionText = ({ parentSubmitCallback }) => {
   const handleSubmitButtonPress = () => {
     setIsTestCasesShown(true);
     if (remainingAttempts === 1) {
-      setIsSubmitButtonDisabled(true);
+      if (!isContest) {
+        setIsSubmitButtonDisabled(true);
+      }
       parentSubmitCallback(true);
     }
     setRemainingAttempts(remainingAttempts - 1);
@@ -67,17 +69,21 @@ const CodingQuestionText = ({ parentSubmitCallback }) => {
             marginTop: "10px",
           }}
         >
-          <Button
-            variant="contained"
-            style={{ backgroundColor: Colors.dark_color }}
-            onClick={handleVideoRequestButtonPress}
-          >
-            Request Video
-          </Button>
+          {!isContest && (
+            <Button
+              variant="contained"
+              style={{ backgroundColor: Colors.dark_color }}
+              onClick={handleVideoRequestButtonPress}
+            >
+              Request Video
+            </Button>
+          )}
           <div style={{ display: "flex" }}>
-            <div style={{ fontSize: "140%", marginRight: "20px" }}>
-              Remaining attempts: {remainingAttempts}
-            </div>
+            {!isContest && (
+              <div style={{ fontSize: "140%", marginRight: "20px" }}>
+                Remaining attempts: {remainingAttempts}
+              </div>
+            )}
             <Button
               disabled={isSubmitButtonDisabled}
               variant="contained"
