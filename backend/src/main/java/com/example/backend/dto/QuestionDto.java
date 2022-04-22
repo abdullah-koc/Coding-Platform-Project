@@ -19,6 +19,7 @@ public class QuestionDto {
    private String video_link;
    private int video_request_count;
    private String type_description;
+   private String question_type;
 
    // getter and setter functions
    public String getQuestion_id() {
@@ -147,5 +148,13 @@ public class QuestionDto {
 
    public void setCompany_id(String company_id) {
       this.company_id = company_id;
+   }
+
+   public String getQuestion_type() {
+      return question_type;
+   }
+
+   public void setQuestion_type(String question_type) {
+      this.question_type = question_type;
    }
 }

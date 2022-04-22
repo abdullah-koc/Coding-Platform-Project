@@ -22,13 +22,13 @@ public class QuestionController {
    @Autowired
    QuestionService questionService;
 
-   @RequestMapping("/get/{question_id}")
-   public Question getQuestion(@PathVariable String question_id) {
+   @RequestMapping("/{question_id}")
+   public QuestionDto getQuestion(@PathVariable String question_id) {
       return questionService.getQuestion(question_id);
    }
 
-   @RequestMapping("/get/all")
-   public List<Question> getAllQuestions() {
+   @RequestMapping("/all")
+   public List<QuestionDto> getAllQuestions() {
       return questionService.getAllQuestions();
    }
 

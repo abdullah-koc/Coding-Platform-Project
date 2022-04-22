@@ -16,11 +16,11 @@ public class QuestionService {
    @Autowired
    QuestionRepository questionRepository;
 
-   public Question getQuestion(String question_id) {
+   public QuestionDto getQuestion(String question_id) {
       return questionRepository.findById(question_id);
    }
 
-   public List<Question> getAllQuestions() {
+   public List<QuestionDto> getAllQuestions() {
       return questionRepository.findAll();
    }
 
