@@ -6,6 +6,15 @@ import NavbarUser from "./Navbars/NavbarUser";
 
 const UserStatus = () => {
   const [successRate, setSuccessRate] = React.useState(80);
+  const [nickname, setNickname] = React.useState("");
+  React.useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("session"));
+    try {
+      setNickname(user.nickname);
+    } catch {
+      setNickname("");
+    }
+  }, []);
 
   return (
     <Box
@@ -25,7 +34,7 @@ const UserStatus = () => {
                 item
                 style={{ float: "left", color: Colors.statistics_color }}
               >
-                @clapton
+                @{nickname}
               </Grid>
             </Grid>
             <Grid item xs={7} style={{ marginTop: "18%" }}>

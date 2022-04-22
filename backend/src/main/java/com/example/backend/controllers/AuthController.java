@@ -69,7 +69,6 @@ public class AuthController {
         else {
             // exception
         }
-
     }
 
     @PutMapping("/login/{email}/{password}")

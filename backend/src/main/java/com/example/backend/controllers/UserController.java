@@ -19,16 +19,16 @@ public class UserController {
         return userService.getUserByEmail(email);
     }
 
-    @PostMapping("/change/school/{user_id}")
-    public void changeSchool(@PathVariable String user_id, @RequestBody String school){
+    @PostMapping("/change/school/{user_id}/{school}")
+    public void changeSchool(@PathVariable String user_id, @PathVariable String school){
         userService.changeSchool(user_id, school);
     }
-    @PostMapping("/change/department/{user_id}")
-    public void changeDepartment(@PathVariable String user_id, @RequestBody String department){
+    @PostMapping("/change/department/{user_id}/{department}")
+    public void changeDepartment(@PathVariable String user_id, @PathVariable String department){
         userService.changeDepartment(user_id, department);
     }
-    @PostMapping("/change/current_company/{user_id}")
-    public void changeCurrentCompany(@PathVariable String user_id, @RequestBody String cur_company){
+    @PostMapping("/change/current_company/{user_id}/{cur_company}")
+    public void changeCurrentCompany(@PathVariable String user_id, @PathVariable String cur_company){
         userService.changeCurrentCompany(user_id, cur_company);
     }
 }

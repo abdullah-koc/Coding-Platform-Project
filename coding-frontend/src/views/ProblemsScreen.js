@@ -11,6 +11,12 @@ import { useNavigate } from "react-router-dom";
 const ProblemsScreen = () => {
   let navigate = useNavigate();
 
+  useEffect(() => {
+    if (localStorage.getItem("session") === null) {
+      navigate("/");
+    }
+  }, []);
+
   const [questionType, setQuestionType] = useState("All");
   const [difficulty, setDifficulty] = useState("All");
   const [category, setCategory] = useState("All");

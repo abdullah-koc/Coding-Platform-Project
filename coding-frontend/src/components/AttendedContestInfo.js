@@ -29,7 +29,7 @@ const AttendedContestInfo = ({
 
   let navigate = useNavigate();
   const handleStartContest = () => {
-    navigate("/contest/" + contest_id);
+    navigate("/contests/" + contest_id);
   };
 
   const handleCancelContest = () => {};

@@ -8,9 +8,11 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Colors from "../../utils/Colors";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Register = () => {
+  let navigate = useNavigate();
   const [isEditor, setIsEditor] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,18 +43,35 @@ const Register = () => {
     } else {
       if (isEditor) {
       } else {
-        axios.post(process.env.REACT_APP_URL + "/api/auth/signUp", {
-          full_name: fullName,
-          email: email,
-          nickname: nickName,
-          password: password,
-          company_phone: "",
-          birth_date: birthday,
-          company_address: "",
-          is_approved: true,
-          type: "Editor",
-          cv_url: "",
-        });
+        axios
+          .post(process.env.REACT_APP_URL + "api/auth/signUp", {
+            full_name: fullName,
+            email: email,
+            nickname: nickName,
+            password: password,
+            company_phone: "",
+            birth_date: birthday,
+            company_address: "",
+            type: "User",
+            cv_url: "",
+          })
+          .then((response) => {
+            console.log(response);
+            alert("Successfully registered");
+            //get user details from axios
+            var details;
+            axios
+              .get(process.env.REACT_APP_URL + "api/user/" + email)
+              .then((response) => {
+                details = response.data;
+                console.log(details);
+                localStorage.setItem("session", JSON.stringify(details));
+                navigate("/problems");
+              });
+          })
+          .catch((error) => {
+            alert("A user with this email/nickname already exists");
+          });
       }
     }
   };
@@ -64,7 +83,6 @@ const Register = () => {
         marginLeft: "13%",
       }}
     >
-      {console.log(testData)}
       <Grid
         item
         xs={12}

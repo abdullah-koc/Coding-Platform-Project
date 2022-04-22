@@ -39,8 +39,8 @@ const NavbarUser = () => {
   const goToMainPage = () => {
     navigate("/problems");
   };
-  const goToAccountPage = (id) => {
-    navigate("/profile/" + id);
+  const goToAccountPage = () => {
+    navigate("/profile/");
   };
   const goToProblemsPage = () => {
     navigate("/problems");
@@ -94,7 +94,7 @@ const NavbarUser = () => {
         >
           <div
             className={classes.accountIcon}
-            onClick={() => goToAccountPage(personId)}
+            onClick={() => goToAccountPage()}
           >
             <AccountCircle />
           </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import { Grid, Button } from "@mui/material";
 import LogRegImage from "../../images/loginregisterimage.jpg";
@@ -6,6 +6,7 @@ import Colors from "../../utils/Colors";
 import Login from "./Login";
 import Register from "./Register";
 import RegisterCompany from "./RegisterCompany";
+import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles({
   root: {
     backgroundColor: "white",
@@ -27,8 +28,16 @@ const useStyles = makeStyles({
 });
 
 const LoginRegister = () => {
+  let navigate = useNavigate();
   const classes = useStyles();
   const [regType, setRegType] = useState("Login");
+
+  useEffect(() => {
+    //if local storage has a user, then redirect to home
+    if (localStorage.getItem("session")) {
+      navigate("/problems");
+    }
+  }, []);
 
   return (
     <div className={classes.root}>

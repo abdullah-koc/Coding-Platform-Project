@@ -1,36 +1,162 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavbarUser from "../components/Navbars/NavbarUser";
 import { Grid, TextField, Button } from "@mui/material";
 import sampleProfile from "../images/sampleProfile.png";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const UserProfileScreen = ({
-  name,
-  nickname,
-  email,
-  phone,
-  birthDate,
-  photo,
-  school,
-  department,
-  currentCompany,
-}) => {
-  const [newPhone, setNewPhone] = useState(phone);
-  const [newSchool, setNewSchool] = useState(school);
-  const [newDepartment, setNewDepartment] = useState(department);
-  const [newCurrentCompany, setNewCurrentCompany] = useState(currentCompany);
+const UserProfileScreen = () => {
+  let navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [email, setEmail] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [photo, setPhoto] = useState("");
+  const [phone, setPhone] = useState("");
+  const [newPhone, setNewPhone] = useState("");
+  const [school, setSchool] = useState("");
+  const [newSchool, setNewSchool] = useState("");
+  const [department, setDepartment] = useState("");
+  const [newDepartment, setNewDepartment] = useState("");
+  const [currentCompany, setCurrentCompany] = useState("");
+  const [newCompany, setNewCompany] = useState("");
 
-  const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [user, setUser] = useState({});
 
-  const getBirthdate = () => {
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("session"));
+    setUser(user);
     try {
-      return birthDate.toLocaleDateString("en-US");
-    } catch (error) {
-      return "";
+      setName(user.full_name);
+      setNickname(user.nickname);
+      setEmail(user.email);
+      setBirthDate(user.birth_date);
+      setPhoto(user.photo === undefined ? sampleProfile : user.photo);
+      setPhone(user.phone === undefined ? "" : user.phone);
+      setSchool(user.school === undefined ? "" : user.school);
+      setDepartment(user.department === undefined ? "" : user.department);
+      setCurrentCompany(user.cur_company === undefined ? "" : user.cur_company);
+    } catch (err) {
+      navigate("/");
     }
+  }, []);
+
+  const handlePhoneChange = () => {
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/person/change/phone/" +
+          user.person_id +
+          "/" +
+          newPhone
+      )
+      .then((res) => {
+        alert("Phone number changed successfully");
+        localStorage.setItem(
+          "session",
+          JSON.stringify({ ...user, phone: newPhone })
+        );
+        setPhone(newPhone);
+      })
+      .catch((err) => {
+        alert("Phone number change failed");
+      });
   };
 
+  const handleSchoolChange = () => {
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/user/change/school/" +
+          user.person_id +
+          "/" +
+          newSchool
+      )
+      .then((res) => {
+        alert("School changed successfully");
+        localStorage.setItem(
+          "session",
+          JSON.stringify({ ...user, school: newSchool })
+        );
+        setSchool(newSchool);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("School change failed");
+      });
+  };
+  const handleDepartmentChange = () => {
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/user/change/department/" +
+          user.person_id +
+          "/" +
+          newDepartment
+      )
+      .then((res) => {
+        alert("Department changed successfully");
+        localStorage.setItem(
+          "session",
+          JSON.stringify({ ...user, department: newDepartment })
+        );
+        setDepartment(newDepartment);
+      })
+      .catch((err) => {
+        alert("Department change failed");
+      });
+  };
+  const handleCompanyChange = () => {
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/user/change/current_company/" +
+          user.person_id +
+          "/" +
+          newCompany
+      )
+      .then((res) => {
+        alert("Company changed successfully");
+        localStorage.setItem(
+          "session",
+          JSON.stringify({ ...user, cur_company: newCompany })
+        );
+        setCurrentCompany(newCompany);
+      })
+      .catch((err) => {
+        alert("Company change failed");
+      });
+  };
+
+  const isPasswordValid = (password) => {
+    const regex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    return regex.test(password);
+  };
+  const handlePasswordChange = () => {
+    if (!isPasswordValid(newPassword)) {
+      alert(
+        "Password must contain at least 8 characters, one uppercase letter and one number"
+      );
+      return;
+    }
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/person/change/password/" +
+          user.person_id +
+          "/" +
+          newPassword
+      )
+      .then((res) => {
+        alert("Password changed successfully");
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert("Password change failed");
+      });
+  };
   return (
     <div>
       <NavbarUser />
@@ -111,7 +237,7 @@ const UserProfileScreen = ({
                 }}
               >
                 <span style={{ fontWeight: "bold" }}>Birth Date: </span>
-                {"  "} {getBirthdate()}
+                {"  "} {new Date(birthDate).toLocaleDateString()}
               </Grid>
             </Grid>
           </Grid>
@@ -134,18 +260,34 @@ const UserProfileScreen = ({
                   }}
                 >
                   <span style={{ fontWeight: "bold" }}>Phone: </span>
-                  {"  "} {phone === "" ? "Not provided" : phone}
+                  {"  "}{" "}
+                  {phone === null
+                    ? "Not set"
+                    : phone === undefined
+                    ? "Not set"
+                    : phone}
                 </div>
                 <TextField
                   size="small"
                   placeholder="New number"
-                  value={newPhone}
+                  value={
+                    newPhone === undefined
+                      ? ""
+                      : newPhone === null
+                      ? ""
+                      : newPhone
+                  }
                   color="success"
                   onChange={(e) => setNewPhone(e.target.value)}
                 />
                 <Button
                   color="success"
-                  disabled={phone === newPhone || newPhone === ""}
+                  disabled={
+                    newPhone === "" ||
+                    newPhone === undefined ||
+                    newPhone === null
+                  }
+                  onClick={handlePhoneChange}
                 >
                   Save
                 </Button>
@@ -167,18 +309,34 @@ const UserProfileScreen = ({
                   }}
                 >
                   <span style={{ fontWeight: "bold" }}>School: </span>
-                  {"  "} {school === "" ? "Not provided" : school}
+                  {"  "}{" "}
+                  {school === null
+                    ? "Not set"
+                    : school === undefined
+                    ? "Not set"
+                    : school}
                 </div>
                 <TextField
                   size="small"
                   placeholder="New school"
-                  value={newSchool}
+                  value={
+                    newSchool === undefined
+                      ? ""
+                      : newSchool === null
+                      ? ""
+                      : newSchool
+                  }
                   color="success"
                   onChange={(e) => setNewSchool(e.target.value)}
                 />
                 <Button
                   color="success"
-                  disabled={school === newSchool || newSchool === ""}
+                  onClick={handleSchoolChange}
+                  disabled={
+                    newSchool === "" ||
+                    newSchool === undefined ||
+                    newSchool === null
+                  }
                 >
                   Save
                 </Button>
@@ -200,19 +358,33 @@ const UserProfileScreen = ({
                   }}
                 >
                   <span style={{ fontWeight: "bold" }}>Department: </span>
-                  {"  "} {department === "" ? "Not provided" : department}
+                  {"  "}{" "}
+                  {department === null
+                    ? "Not set"
+                    : department === undefined
+                    ? "Not set"
+                    : department}
                 </div>
                 <TextField
                   size="small"
                   placeholder="New department"
-                  value={newDepartment}
+                  value={
+                    newDepartment === undefined
+                      ? ""
+                      : newDepartment === null
+                      ? ""
+                      : newDepartment
+                  }
                   color="success"
                   onChange={(e) => setNewDepartment(e.target.value)}
                 />
                 <Button
                   color="success"
+                  onClick={handleDepartmentChange}
                   disabled={
-                    department === newDepartment || newDepartment === ""
+                    newDepartment === "" ||
+                    newDepartment === undefined ||
+                    newDepartment === null
                   }
                 >
                   Save
@@ -236,20 +408,32 @@ const UserProfileScreen = ({
                 >
                   <span style={{ fontWeight: "bold" }}>Current Company: </span>
                   {"  "}
-                  {currentCompany === "" ? "Not provided" : currentCompany}
+                  {currentCompany === null
+                    ? "Not set"
+                    : currentCompany === undefined
+                    ? "Not set"
+                    : currentCompany}
                 </div>
                 <TextField
                   size="small"
                   placeholder="New company"
-                  value={newCurrentCompany}
+                  value={
+                    newCompany === undefined
+                      ? ""
+                      : newCompany === null
+                      ? ""
+                      : newCompany
+                  }
                   color="success"
-                  onChange={(e) => setNewCurrentCompany(e.target.value)}
+                  onChange={(e) => setNewCompany(e.target.value)}
                 />
                 <Button
                   color="success"
+                  onClick={handleCompanyChange}
                   disabled={
-                    currentCompany === newCurrentCompany ||
-                    newCurrentCompany === ""
+                    newCompany === undefined ||
+                    newCompany === "" ||
+                    newCompany === null
                   }
                 >
                   Save
@@ -265,24 +449,6 @@ const UserProfileScreen = ({
                 }}
               >
                 <h3>Change Password</h3>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginBottom: "20px",
-                }}
-              >
-                <TextField
-                  size="small"
-                  placeholder="Old password"
-                  value={oldPassword}
-                  type="password"
-                  color="success"
-                  onChange={(e) => setOldPassword(e.target.value)}
-                />
               </Grid>
 
               <Grid
@@ -332,8 +498,8 @@ const UserProfileScreen = ({
               >
                 <Button
                   color="success"
+                  onClick={handlePasswordChange}
                   disabled={
-                    oldPassword === "" ||
                     newPassword === "" ||
                     confirmPassword === "" ||
                     newPassword !== confirmPassword

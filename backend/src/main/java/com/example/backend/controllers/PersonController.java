@@ -12,18 +12,18 @@ public class PersonController {
     @Autowired
     PersonService personService;
 
-    @PostMapping("/change/password/{person_id}")
-    public void changePassword(@PathVariable String person_id, @RequestBody String password){
+    @PostMapping("/change/password/{person_id}/{password}")
+    public void changePassword(@PathVariable String person_id, @PathVariable String password){
         personService.changePassword(person_id, password);
     }
 
-    @PostMapping("/change/phone/{person_id}")
-    public void changePhone(@PathVariable String person_id, @RequestBody String phone){
+    @PostMapping("/change/phone/{person_id}/{phone}")
+    public void changePhone(@PathVariable String person_id, @PathVariable String phone){
         personService.changePhone(person_id, phone);
     }
 
-    @PostMapping("/change/photo/{person_id}")
-    public void changePhoto(@PathVariable String person_id, @RequestBody String photo){
+    @PostMapping("/change/photo/{person_id}/{photo}")
+    public void changePhoto(@PathVariable String person_id, @PathVariable String photo){
         personService.changePhoto(person_id, photo);
     }
 

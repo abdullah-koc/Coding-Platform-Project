@@ -37,7 +37,7 @@ const App = () => {
           <Route path="/contests" element={<Contests />} />
           <Route path="/cquestion/:id" element={<CodingQuestionInfo />} />
           <Route path="/ncquestion/:id" element={<NonCodingQuestionInfo />} />
-          <Route path="/profile/:id" element={<UserProfileScreen />} />
+          <Route path="/profile" element={<UserProfileScreen />} />
           <Route path="/admin/:id" element={<AdminScreen />} />
         </Routes>
       </div>
