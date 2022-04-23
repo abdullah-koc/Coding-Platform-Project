@@ -17,7 +17,7 @@ public class CompanyRepository {
 
         String last_company_id;
         int company_id_count;
-        String last_company_id_sql = "SELECT company_id FROM companies ORDER BY company_id DESC LIMIT 1";
+        String last_company_id_sql = "SELECT company_id FROM companies WHERE LENGTH(company_id) >= ALL(SELECT LENGTH(company_id) FROM companies) ORDER BY company_id DESC LIMIT 1";
         try {
             last_company_id = (String) jdbcTemplate.queryForObject(last_company_id_sql, String.class);
             company_id_count = Integer.parseInt(last_company_id.substring(1));

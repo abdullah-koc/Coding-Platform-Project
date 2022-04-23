@@ -38,7 +38,7 @@ public class ContestRepository {
    public void insertContest(ContestDto contest) {
       String last_contest_id;
       int contest_id_count;
-      String last_contest_id_sql = "SELECT contest_id FROM contests ORDER BY contest_id DESC LIMIT 1";
+      String last_contest_id_sql = "SELECT contest_id FROM contests WHERE LENGTH(contest_id) >= ALL(SELECT LENGTH(contest_id) FROM contests) ORDER BY contest_id DESC LIMIT 1";
       try {
          last_contest_id = (String) jdbcTemplate.queryForObject(last_contest_id_sql, String.class);
          contest_id_count = Integer.parseInt(last_contest_id.substring(1));

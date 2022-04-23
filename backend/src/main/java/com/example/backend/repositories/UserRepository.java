@@ -24,7 +24,7 @@ public class UserRepository {
     public User signUp(User user) {
         String last_user_id;
         int user_id_count;
-        String last_user_id_sql = "SELECT user_id FROM users ORDER BY user_id DESC LIMIT 1";
+        String last_user_id_sql = "SELECT user_id FROM users WHERE LENGTH(user_id) >= ALL(SELECT LENGTH(user_id) FROM users) ORDER BY user_id DESC LIMIT 1";
         try {
             last_user_id = (String) jdbcTemplate.queryForObject(last_user_id_sql, String.class);
             user_id_count = Integer.parseInt(last_user_id.substring(1));

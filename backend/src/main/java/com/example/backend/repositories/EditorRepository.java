@@ -15,7 +15,7 @@ public class EditorRepository {
     public Editor signUp(Editor editor) {
         String last_editor_id;
         int editor_id_count;
-        String last_editor_id_sql = "SELECT editor_id FROM editors ORDER BY editor_id DESC LIMIT 1";
+        String last_editor_id_sql = "SELECT editor_id FROM editors WHERE LENGTH(editor_id) >= ALL(SELECT LENGTH(editor_id) FROM editors) ORDER BY editor_id DESC LIMIT 1";
         try {
             last_editor_id = (String) jdbcTemplate.queryForObject(last_editor_id_sql, String.class);
             editor_id_count = Integer.parseInt(last_editor_id.substring(1));

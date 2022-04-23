@@ -23,7 +23,7 @@ public class AttemptRepository {
     public void insertAttempt(Attempt attempt) {
         String last_attempt_id;
         int attempt_id_count;
-        String last_attempt_id_sql = "SELECT attempt_id FROM attempts ORDER BY attempt_id DESC LIMIT 1";
+        String last_attempt_id_sql = "SELECT attempt_id FROM attempts WHERE LENGTH(attempt_id) >= ALL(SELECT LENGTH(attempt_id) FROM attempts) ORDER BY attempt_id DESC LIMIT 1";
         try {
             last_attempt_id = (String) jdbcTemplate.queryForObject(last_attempt_id_sql, String.class);
             attempt_id_count = Integer.parseInt(last_attempt_id.substring(1));
