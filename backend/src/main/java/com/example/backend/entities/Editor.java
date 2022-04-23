@@ -6,6 +6,8 @@ public class Editor extends Person {
     private String cv_url;
     private String editor_id;
 
+    private boolean is_approved;
+
     public Editor() {
         super();
     }
@@ -54,5 +56,13 @@ public class Editor extends Person {
 
     public void setCv_url(String cv_url) {
         this.cv_url = cv_url;
+    }
+
+    public boolean isIs_approved() {
+        return is_approved;
+    }
+
+    public void setIs_approved(boolean is_approved) {
+        this.is_approved = is_approved;
     }
 }

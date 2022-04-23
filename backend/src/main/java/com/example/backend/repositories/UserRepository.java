@@ -52,7 +52,7 @@ public class UserRepository {
     }
 
     public User findByNickname(String nickname) {
-        String sql = "SELECT u.* FROM users u, people p WHERE p.person_id = u.user_id and p.nickname = ?";
+        String sql = "SELECT * FROM users u, people p WHERE p.person_id = u.user_id and p.nickname = ?";
         try {
             return (User) jdbcTemplate.queryForObject(sql, new Object[]{nickname}, new BeanPropertyRowMapper(User.class));
         } catch (EmptyResultDataAccessException e) {

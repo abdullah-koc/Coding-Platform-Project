@@ -1,7 +1,5 @@
 package com.example.backend.entities;
-import javax.persistence.Entity;
 
-@Entity
 public class User extends Person {
     private String school;
     private String department;

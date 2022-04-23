@@ -3,7 +3,6 @@ import com.example.backend.dto.CompanyDto;
 import com.example.backend.dto.EditorDto;
 import com.example.backend.dto.SignUpDto;
 import com.example.backend.dto.UserDto;
-import com.example.backend.entities.Person;
 import com.example.backend.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

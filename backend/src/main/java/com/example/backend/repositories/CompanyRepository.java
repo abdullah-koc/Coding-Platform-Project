@@ -1,7 +1,6 @@
 package com.example.backend.repositories;
 
 import com.example.backend.entities.Company;
-import com.example.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -44,5 +43,34 @@ public class CompanyRepository {
         } catch(EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    public Company findCompanyById(String company_id) {
+        String sql = "SELECT * FROM companies WHERE company_id = ?";
+        try {
+            return (Company) jdbcTemplate.queryForObject(sql, new Object[]{company_id}, new BeanPropertyRowMapper(Company.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public void updatePhoto(String company_id, String photo) {
+        String sql = "UPDATE companies SET company_photo = ? WHERE company_id = ?";
+        jdbcTemplate.update(sql, photo, company_id);
+    }
+
+    public void updatePassword(String company_id, String password) {
+        String sql = "UPDATE companies SET company_password = ? WHERE company_id = ?";
+        jdbcTemplate.update(sql, password, company_id);
+    }
+
+    public void updatePhone(String company_id, String phone) {
+        String sql = "UPDATE companies SET company_phone = ? WHERE company_id = ?";
+        jdbcTemplate.update(sql, phone, company_id);
+    }
+
+    public void updateAddress(String company_id, String address) {
+        String sql = "UPDATE companies SET company_address = ? WHERE company_id = ?";
+        jdbcTemplate.update(sql, address, company_id);
     }
 }

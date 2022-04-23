@@ -1,9 +1,7 @@
 package com.example.backend.entities;
 
-import javax.persistence.Id;
-
 public class Admin {
-    @Id
+
     private String admin_id;
     private String admin_name;
     private String admin_email;

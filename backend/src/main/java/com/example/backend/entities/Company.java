@@ -1,12 +1,7 @@
 package com.example.backend.entities;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-//@Entity
-//@Table(name = "companies")
 public class Company {
-    @Id
+
     private String company_id;
     private String company_name;
     private String company_photo;

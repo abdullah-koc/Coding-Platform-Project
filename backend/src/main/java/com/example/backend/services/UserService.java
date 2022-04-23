@@ -38,10 +38,10 @@ public class UserService {
 
     public boolean loginUser(String email, String password) {
         Person user = userRepository.findByEmail(email);
-        if(user.getPassword() != password) {
-            return false;
+        if(user.getPassword().equals(password) && user.getIs_confirmed()) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     public void changeSchool(String user_id, String school){

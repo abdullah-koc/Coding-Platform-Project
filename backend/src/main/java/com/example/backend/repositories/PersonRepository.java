@@ -1,7 +1,6 @@
 package com.example.backend.repositories;
 
 import com.example.backend.entities.Person;
-import com.example.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -31,7 +30,7 @@ public class PersonRepository {
     }
 
     public Person findById(String person_id) {
-        String sql = "SELECT * FROM PEOPLE WHERE person_id = ?";
+        String sql = "SELECT * FROM people WHERE person_id = ?";
         try {
             return (Person) jdbcTemplate.queryForObject(sql, new Object[]{person_id}, new BeanPropertyRowMapper(Person.class));
         } catch (EmptyResultDataAccessException e) {

@@ -1,13 +1,8 @@
 package com.example.backend.entities;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Entity
 public class Person {
 
-    @Id
+
     private String person_id;
     private String full_name;
     private String email;

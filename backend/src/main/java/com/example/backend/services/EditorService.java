@@ -31,10 +31,10 @@ public class EditorService {
 
     public boolean loginEditor(String email, String password) {
        Editor editor = editorRepository.findByEmail(email);
-        if(editor.getPassword() != password) {
-            return false;
+        if(editor.getPassword().equals(password) && editor.isIs_approved() && editor.getIs_confirmed()) {
+            return true;
         }
-        return true;
+        return false;
     }
 
 }

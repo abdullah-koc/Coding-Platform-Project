@@ -1,12 +1,7 @@
 package com.example.backend.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
 public class Attempt {
 
-    @Id
     private String attempt_id;
     private String user_answer;
     private int try_count;
