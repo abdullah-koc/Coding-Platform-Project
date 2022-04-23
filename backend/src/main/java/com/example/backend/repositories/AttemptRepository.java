@@ -1,6 +1,7 @@
 package com.example.backend.repositories;
 
 import com.example.backend.entities.Attempt;
+import com.example.backend.entities.TestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @Repository
 public class AttemptRepository {
@@ -36,12 +39,26 @@ public class AttemptRepository {
         jdbcTemplate.update(sql, attemptId, attempt.getUser_answer(), 1, true, attempt.getUser_id(), attempt.getQuestion_id(), attempt.getProgramming_language());
     }
 
+    public void insertAttemptTestCase(Attempt attempt, TestCase testCase) {
+        String sql = "INSERT INTO attempt_test_case(attempt_id, test_case_id, is_passed) VALUES(?, ?, ?)";
+        jdbcTemplate.update(sql, attempt.getAttempt_id(), testCase.getTest_case_id(), new Random().nextBoolean());
+
+        String attempt_test_case_sql = "SELECT * FROM attempt_test_case WHERE attempt_id = ? AND test_case_id = ? AND is_passed = ?";
+        try {
+            if(jdbcTemplate.queryForMap(attempt_test_case_sql, new Object[]{attempt.getAttempt_id(), testCase.getTest_case_id(), false}) != null) {
+                String update_is_solved = "UPDATE attempts SET is_solved = ? WHERE attempt_id = ?";
+                jdbcTemplate.update(update_is_solved, false, attempt.getAttempt_id());
+                attempt.setIs_solved(false);
+            }
+        } catch(EmptyResultDataAccessException e) {
+
+        }
+    }
+
     public List<Attempt> findAllAttemptsOnQuestion(String question_id) {
         String sql = "SELECT * FROM attempts WHERE question_id = ?";
 
         try {
-            List<Attempt> list = (ArrayList<Attempt>) jdbcTemplate.query(sql, new Object[]{question_id},  new BeanPropertyRowMapper(Attempt.class));
-            System.out.println(list.get(0));
             return (ArrayList<Attempt>) jdbcTemplate.query(sql, new Object[]{question_id},  new BeanPropertyRowMapper(Attempt.class));
         } catch(EmptyResultDataAccessException e) {
             return null;

@@ -4,6 +4,7 @@ import com.example.backend.dto.AttemptDto;
 import com.example.backend.entities.Attempt;
 import com.example.backend.entities.TestCase;
 import com.example.backend.repositories.AttemptRepository;
+import com.example.backend.repositories.TestCaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ public class AttemptService {
     @Autowired
     AttemptRepository attemptRepository;
 
+    @Autowired
+    TestCaseRepository testCaseRepository;
+
     public void makeAttempt(AttemptDto attemptDto) {
         Attempt attempt = new Attempt();
         attempt.setUser_id(attemptDto.getUser_id());
@@ -21,6 +25,12 @@ public class AttemptService {
         attempt.setUser_answer(attemptDto.getUser_answer());
         attempt.setProgramming_language(attemptDto.getProgramming_language());
         attemptRepository.insertAttempt(attempt);
+
+        if(attempt.getQuestion_id().charAt(0) == 'C') {
+            List<TestCase> testCases = testCaseRepository.findTestCases(attempt.getQuestion_id());
+            for(int i = 0; i < testCases.size(); i++)
+                attemptRepository.insertAttemptTestCase(attempt, testCases.get(i));
+        }
     }
 
     public List<Attempt> getUserOwnAttempts(String user_id, String question_id) {
