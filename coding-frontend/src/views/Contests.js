@@ -3,10 +3,11 @@ import { Grid, MenuItem, Select, Pagination } from "@mui/material";
 import NavbarUser from "../components/Navbars/NavbarUser";
 import ContestInfo from "../components/ContestInfo";
 import AttendedContestInfo from "../components/AttendedContestInfo";
+import { useNavigate } from "react-router-dom";
+
 
 export const Contests = () => {
   
-
   const [upcomingPage, setUpcomingPage] = useState(1);
   const [attendedPage, setAttendedPage] = useState(1);
   const [totalPagesUpcoming, setTotalPagesUpcoming] = useState(1);
@@ -153,6 +154,11 @@ export const Contests = () => {
     },
   ]);
 
+  let navigate = useNavigate();
+  const handleStartContest = (contest_id) => {
+    navigate("/contests/" + contest_id);
+  };
+
   useEffect(() => {
     setTotalPagesUpcoming(Math.ceil(upcomingContests.length / 5));
     setUpcomingCurContests(upcomingContests.slice(0, 5));
@@ -231,6 +237,7 @@ export const Contests = () => {
               <div
                 key={index}
                 style={{ paddingRight: "40px", marginBottom: "10px" }}
+                onClick={() => handleStartContest(contest.contest_id)}
               >
                 <AttendedContestInfo
                   contest_id={contest.contest_id}
