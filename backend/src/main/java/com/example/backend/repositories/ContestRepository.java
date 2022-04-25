@@ -5,9 +5,6 @@ import java.util.List;
 import com.example.backend.dto.ContestDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.dto.UserDto;
-import com.example.backend.entities.Contest;
-import com.example.backend.entities.Question;
-import com.example.backend.entities.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -135,6 +132,16 @@ public class ContestRepository {
 
    public void insertContestant(String contest_id, String user_id) {
       String sql = "INSERT INTO user_contest (contest_id, person_id) VALUES (?, ?)";
+      jdbcTemplate.update(sql, contest_id, user_id);
+   }
+
+   public void deleteQuestion(String contest_id, String question_id) {
+      String sql = "DELETE FROM question_contest WHERE contest_id = ? AND question_id = ?";
+      jdbcTemplate.update(sql, contest_id, question_id);
+   }
+
+   public void deleteContestant(String contest_id, String user_id) {
+      String sql = "DELETE FROM user_contest WHERE contest_id = ? AND person_id = ?";
       jdbcTemplate.update(sql, contest_id, user_id);
    }
 

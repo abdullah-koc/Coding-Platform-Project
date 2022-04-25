@@ -1,10 +1,8 @@
 package com.example.backend.controllers;
 
-import java.sql.Date;
 import java.util.List;
 
 import com.example.backend.dto.QuestionDto;
-import com.example.backend.entities.Question;
 import com.example.backend.services.QuestionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,4 +44,30 @@ public class QuestionController {
    public void deleteQuestion(@PathVariable String question_id) {
       questionService.deleteQuestion(question_id);
    }
+
+   @GetMapping("/add_category/{question_id}/{category_id}")
+   public void addCategory(@PathVariable String question_id, @PathVariable String category_id) {
+      questionService.addCategory(question_id, category_id);
+   }
+
+   @GetMapping("/remove_category/{question_id}/{category_id}")
+   public void removeCategory(@PathVariable String question_id, @PathVariable String category_id) {
+      questionService.removeCategory(question_id, category_id);
+   }
+
+   @GetMapping("/user_request/{question_id}/{user_id}")
+   public void userRequest(@PathVariable String question_id, @PathVariable String user_id) {
+      questionService.userRequest(question_id, user_id);
+   }
+
+   @GetMapping("/user_cancel_request/{question_id}/{user_id}")
+   public void userCancelRequest(@PathVariable String question_id, @PathVariable String user_id) {
+      questionService.userCancelRequest(question_id, user_id);
+   }
+
+   @PostMapping("/editor_request/{question_id}")
+   public void editorRequest(@PathVariable String question_id, @RequestBody String video_link) {
+      questionService.editorRequest(question_id, video_link);
+   }
+
 }

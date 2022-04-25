@@ -2,12 +2,10 @@ package com.example.backend.services;
 
 import java.util.List;
 
-import com.example.backend.entities.Question;
 import com.example.backend.dto.ContestDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.dto.UserDto;
-import com.example.backend.entities.Contest;
-import com.example.backend.entities.User;
+
 import com.example.backend.repositories.ContestRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +55,14 @@ public class ContestService {
 
    public void insertContestant(String contest_id, String user_id) {
       contestRepository.insertContestant(contest_id, user_id);
+   }
+
+   public void deleteQuestion(String contest_id, String question_id) {
+      contestRepository.deleteQuestion(contest_id, question_id);
+   }
+
+   public void deleteContestant(String contest_id, String user_id) {
+      contestRepository.deleteContestant(contest_id, user_id);
    }
 
 }

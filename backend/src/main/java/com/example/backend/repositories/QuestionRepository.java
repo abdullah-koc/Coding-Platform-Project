@@ -3,9 +3,6 @@ package com.example.backend.repositories;
 import java.util.List;
 
 import com.example.backend.dto.QuestionDto;
-import com.example.backend.entities.CodingQuestion;
-import com.example.backend.entities.NonCodingQuestion;
-import com.example.backend.entities.Question;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -169,6 +166,52 @@ public class QuestionRepository {
       }
       String sql = "DELETE FROM questions WHERE question_id = ?";
       jdbcTemplate.update(sql, question_id);
+   }
+
+   public void addCategory(String question_id, String category_id) {
+      if (question_id == null || category_id == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "INSERT INTO question_category (question_id, category_id) VALUES (?, ?)";
+      jdbcTemplate.update(sql, question_id, category_id);
+   }
+
+   public void removeCategory(String question_id, String category_id) {
+      if (question_id == null || category_id == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "DELETE FROM question_category WHERE question_id = ? AND category_id = ?";
+      jdbcTemplate.update(sql, question_id, category_id);
+   }
+
+   public void userRequest(String question_id, String user_id) {
+      if (question_id == null || user_id == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "INSERT INTO user_question (coding_question_id, user_id) VALUES (?, ?)";
+      jdbcTemplate.update(sql, question_id, user_id);
+
+      sql = "UPDATE coding_questions SET video_request_count = video_request_count + 1 WHERE coding_question_id = ?";
+      jdbcTemplate.update(sql, question_id);
+   }
+
+   public void userCancelRequest(String question_id, String user_id) {
+      if (question_id == null || user_id == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "DELETE FROM user_question WHERE coding_question_id = ? AND user_id = ?";
+      jdbcTemplate.update(sql, question_id, user_id);
+
+      sql = "UPDATE coding_questions SET video_request_count = video_request_count - 1 WHERE coding_question_id = ?";
+      jdbcTemplate.update(sql, question_id);
+   }
+
+   public void editorRequest(String question_id, String video_link) {
+      if (question_id == null || video_link == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "UPDATE coding_questions SET video_link = ? WHERE coding_question_id = ?";
+      jdbcTemplate.update(sql, video_link, question_id);
    }
 
 }

@@ -2,14 +2,10 @@ package com.example.backend.controllers;
 
 import java.util.List;
 
-import javax.persistence.PostPersist;
 
 import com.example.backend.dto.ContestDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.dto.UserDto;
-import com.example.backend.entities.Contest;
-import com.example.backend.entities.Question;
-import com.example.backend.entities.User;
 import com.example.backend.services.ContestService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +71,16 @@ public class ContestController {
    @GetMapping(path = "/insert_contestant/{contest_id}/{person_id}")
    public void insertContestant(@PathVariable String contest_id, @PathVariable String user_id) {
       contestService.insertContestant(contest_id, user_id);
+   }
+
+   @GetMapping(path = "/delete_question/{contest_id}/{question_id}")
+   public void deleteQuestion(@PathVariable String contest_id, @PathVariable String question_id) {
+      contestService.deleteQuestion(contest_id, question_id);
+   }
+
+   @GetMapping(path = "/delete_contestant/{contest_id}/{person_id}")
+   public void deleteContestant(@PathVariable String contest_id, @PathVariable String user_id) {
+      contestService.deleteContestant(contest_id, user_id);
    }
 
 }
