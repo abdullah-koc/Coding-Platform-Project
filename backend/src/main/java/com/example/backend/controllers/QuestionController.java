@@ -35,11 +35,6 @@ public class QuestionController {
       questionService.insertQuestion(question);
    }
 
-   @PostMapping("/update/{question_id}")
-   public void updateQuestion(@PathVariable String question_id, @RequestBody QuestionDto question) {
-      questionService.updateQuestion(question_id, question);
-   }
-
    @GetMapping("/delete/{question_id}")
    public void deleteQuestion(@PathVariable String question_id) {
       questionService.deleteQuestion(question_id);
@@ -68,6 +63,61 @@ public class QuestionController {
    @PostMapping("/editor_request/{question_id}")
    public void editorRequest(@PathVariable String question_id, @RequestBody String video_link) {
       questionService.editorRequest(question_id, video_link);
+   }
+
+   @PostMapping("/update_title/{question_id}")
+   public void updateTitle(@PathVariable String question_id, @RequestBody String title) {
+      questionService.updateTitle(question_id, title);
+   }
+
+   @PostMapping("/update_explanation/{question_id}")
+   public void updateExplanation(@PathVariable String question_id, @RequestBody String explanation) {
+      questionService.updateExplanation(question_id, explanation);
+   }
+
+   @PostMapping("/update_duration/{question_id}")
+   public void updateDuration(@PathVariable String question_id, @RequestBody int duration) {
+      questionService.updateDuration(question_id, duration);
+   }
+
+   @PostMapping("/update_difficulty/{question_id}")
+   public void updateDifficulty(@PathVariable String question_id, @RequestBody String difficulty) {
+      questionService.updateDifficulty(question_id, difficulty);
+   }
+
+   @PostMapping("/update_point/{question_id}")
+   public void updatePoint(@PathVariable String question_id, @RequestBody int point) {
+      questionService.updatePoint(question_id, point);
+   }
+
+   @PostMapping("/update_solution/{question_id}")
+   public void updateSolution(@PathVariable String question_id, @RequestBody String solution) {
+      questionService.updateSolution(question_id, solution);
+   }
+
+   @PostMapping("/update_max_try/{question_id}")
+   public void updateMaxTry(@PathVariable String question_id, @RequestBody int max_try) {
+      questionService.updateMaxTry(question_id, max_try);
+   }
+
+   @GetMapping("like/{question_id}")
+   public void like(@PathVariable String question_id) {
+      questionService.like(question_id);
+   }
+
+   @GetMapping("dislike/{question_id}")
+   public void dislike(@PathVariable String question_id) {
+      questionService.dislike(question_id);
+   }
+
+   @GetMapping("/unlike/{question_id}")
+   public void unlike(@PathVariable String question_id) {
+      questionService.unlike(question_id);
+   }
+
+   @GetMapping("/undislike/{question_id}")
+   public void undislike(@PathVariable String question_id) {
+      questionService.undislike(question_id);
    }
 
 }

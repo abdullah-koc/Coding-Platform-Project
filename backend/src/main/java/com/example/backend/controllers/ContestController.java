@@ -1,7 +1,7 @@
 package com.example.backend.controllers;
 
+import java.sql.Date;
 import java.util.List;
-
 
 import com.example.backend.dto.ContestDto;
 import com.example.backend.dto.QuestionDto;
@@ -36,11 +36,6 @@ public class ContestController {
    @PostMapping(path = "/insert")
    public void insertContest(@RequestBody ContestDto contest) {
       contestService.insertContest(contest);
-   }
-
-   @PostMapping(path = "/update/{contest_id}")
-   public void updateContest(@PathVariable String contest_id, @RequestBody ContestDto contest) {
-      contestService.updateContest(contest_id, contest);
    }
 
    @PostMapping(path = "/delete/{contest_id}")
@@ -81,6 +76,31 @@ public class ContestController {
    @GetMapping(path = "/delete_contestant/{contest_id}/{person_id}")
    public void deleteContestant(@PathVariable String contest_id, @PathVariable String user_id) {
       contestService.deleteContestant(contest_id, user_id);
+   }
+
+   @PostMapping(path = "/update_contest_name/{contest_id}")
+   public void updateContestName(@PathVariable String contest_id, @RequestBody String contest_name) {
+      contestService.updateContestName(contest_id, contest_name);
+   }
+
+   @PostMapping(path = "/update_contest_photo/{contest_id}")
+   public void updateContestPhoto(@PathVariable String contest_id, @RequestBody String contest_photo) {
+      contestService.updateContestPhoto(contest_id, contest_photo);
+   }
+
+   @PostMapping(path = "/update_contest_start_date/{contest_id}")
+   public void updateContestStartDate(@PathVariable String contest_id, @RequestBody Date contest_start_date) {
+      contestService.updateContestStartDate(contest_id, contest_start_date);
+   }
+
+   @PostMapping(path = "/update_contest_end_date/{contest_id}")
+   public void updateContestEndDate(@PathVariable String contest_id, @RequestBody Date contest_end_date) {
+      contestService.updateContestEndDate(contest_id, contest_end_date);
+   }
+
+   @PostMapping(path = "/update_contest_prize/{contest_id}")
+   public void updateContestPrize(@PathVariable String contest_id, @RequestBody String contest_prize) {
+      contestService.updateContestPrize(contest_id, contest_prize);
    }
 
 }

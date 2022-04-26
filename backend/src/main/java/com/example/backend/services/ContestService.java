@@ -1,5 +1,6 @@
 package com.example.backend.services;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.example.backend.dto.ContestDto;
@@ -23,10 +24,6 @@ public class ContestService {
 
    public void insertContest(ContestDto contest) {
       contestRepository.insertContest(contest);
-   }
-
-   public void updateContest(String contest_id, ContestDto contest) {
-      contestRepository.updateContest(contest_id, contest);
    }
 
    public void deleteContest(String contest_id) {
@@ -63,6 +60,26 @@ public class ContestService {
 
    public void deleteContestant(String contest_id, String user_id) {
       contestRepository.deleteContestant(contest_id, user_id);
+   }
+
+   public void updateContestName(String contest_id, String contest_name) {
+      contestRepository.updateContestName(contest_id, contest_name);
+   }
+
+   public void updateContestPhoto(String contest_id, String contest_photo) {
+      contestRepository.updateContestPhoto(contest_id, contest_photo);
+   }
+
+   public void updateContestStartDate(String contest_id, Date contest_start_date) {
+      contestRepository.updateContestStartDate(contest_id, contest_start_date);
+   }
+
+   public void updateContestEndDate(String contest_id, Date contest_end_date) {
+      contestRepository.updateContestEndDate(contest_id, contest_end_date);
+   }
+
+   public void updateContestPrize(String contest_id, String contest_prize) {
+      contestRepository.updateContestPrize(contest_id, contest_prize);
    }
 
 }

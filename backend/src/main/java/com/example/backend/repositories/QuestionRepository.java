@@ -139,27 +139,6 @@ public class QuestionRepository {
 
    }
 
-   public void updateQuestion(String question_id, QuestionDto question) {
-      if (question_id == null) {
-         throw new IllegalArgumentException("Question does not exist");
-      }
-      String sql;
-      if (question_id.substring(0, 2).equals("CQ")) {
-         sql = "UPDATE questions NATURAL JOIN coding_questions SET title = ?, explanation = ?, question_duration = ?, difficulty = ?, question_point = ?, solution = ?, max_try = ?, like_count = ?, dislike_count = ?, creation_date = ?, video_link = ?, video_request_count = ? WHERE question_id = ?";
-         jdbcTemplate.update(sql, question.getTitle(), question.getExplanation(), question.getQuestion_duration(),
-               question.getDifficulty(), question.getQuestion_point(), question.getSolution(), question.getMax_try(),
-               question.getLike_count(), question.getDislike_count(), question.getCreation_date(),
-               question.getVideo_link(), question.getVideo_request_count(), question_id);
-
-      } else {
-         sql = "UPDATE questions NATURAL JOIN non_coding_questions SET title = ?, explanation = ?, question_duration = ?, difficulty = ?, question_point = ?, solution = ?, max_try = ?, like_count = ?, dislike_count = ?, creation_date = ?, type_description = ? WHERE question_id = ?";
-         jdbcTemplate.update(sql, question.getTitle(), question.getExplanation(), question.getQuestion_duration(),
-               question.getDifficulty(), question.getQuestion_point(), question.getSolution(), question.getMax_try(),
-               question.getLike_count(), question.getDislike_count(), question.getCreation_date(),
-               question.getType_description(), question_id);
-      }
-   }
-
    public void deleteQuestion(String question_id) {
       if (question_id == null) {
          throw new IllegalArgumentException("Question does not exist!");
@@ -212,6 +191,94 @@ public class QuestionRepository {
       }
       String sql = "UPDATE coding_questions SET video_link = ? WHERE coding_question_id = ?";
       jdbcTemplate.update(sql, video_link, question_id);
+   }
+
+   public void updateTitle(String question_id, String title) {
+      if (question_id == null || title == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "UPDATE questions SET title = ? WHERE question_id = ?";
+      jdbcTemplate.update(sql, title, question_id);
+   }
+
+   public void updateExplanation(String question_id, String explanation) {
+      if (question_id == null || explanation == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "UPDATE questions SET explanation = ? WHERE question_id = ?";
+      jdbcTemplate.update(sql, explanation, question_id);
+   }
+
+   public void updateDuration(String question_id, int duration) {
+      if (question_id == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "UPDATE questions SET question_duration = ? WHERE question_id = ?";
+      jdbcTemplate.update(sql, duration, question_id);
+   }
+
+   public void updateDifficulty(String question_id, String difficulty) {
+      if (question_id == null || difficulty == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "UPDATE questions SET difficulty = ? WHERE question_id = ?";
+      jdbcTemplate.update(sql, difficulty, question_id);
+   }
+
+   public void updatePoint(String question_id, int point) {
+      if (question_id == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "UPDATE questions SET question_point = ? WHERE question_id = ?";
+      jdbcTemplate.update(sql, point, question_id);
+   }
+
+   public void updateSolution(String question_id, String solution) {
+      if (question_id == null || solution == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "UPDATE questions SET solution = ? WHERE question_id = ?";
+      jdbcTemplate.update(sql, solution, question_id);
+   }
+
+   public void updateMaxTry(String question_id, int max_try) {
+      if (question_id == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "UPDATE questions SET max_try = ? WHERE question_id = ?";
+      jdbcTemplate.update(sql, max_try, question_id);
+   }
+
+   public void like(String question_id) {
+      if (question_id == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "UPDATE questions SET like_count = like_count + 1 WHERE question_id = ?";
+      jdbcTemplate.update(sql, question_id);
+   }
+
+   public void dislike(String question_id) {
+      if (question_id == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "UPDATE questions SET dislike_count = dislike_count + 1 WHERE question_id = ?";
+      jdbcTemplate.update(sql, question_id);
+   }
+
+   public void unlike(String question_id) {
+      if (question_id == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "UPDATE questions SET like_count = like_count - 1 WHERE question_id = ?";
+      jdbcTemplate.update(sql, question_id);
+   }
+
+   public void undislike(String question_id) {
+      if (question_id == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "UPDATE questions SET dislike_count = dislike_count - 1 WHERE question_id = ?";
+      jdbcTemplate.update(sql, question_id);
    }
 
 }

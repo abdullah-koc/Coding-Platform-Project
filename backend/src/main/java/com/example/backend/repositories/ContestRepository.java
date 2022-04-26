@@ -1,5 +1,6 @@
 package com.example.backend.repositories;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.example.backend.dto.ContestDto;
@@ -50,12 +51,6 @@ public class ContestRepository {
       String sql = "INSERT INTO contests (contest_id, contest_name, contest_photo, start_date, end_date, prize, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
       jdbcTemplate.update(sql, contest.getContest_id(), contest.getContest_name(), contest.getContest_photo(),
             contest.getStart_date(), contest.getEnd_date(), contest.getPrize(), contest.getCreation_time());
-   }
-
-   public void updateContest(String contest_id, ContestDto contest) {
-      String sql = "UPDATE contests SET contest_name = ?, contest_photo = ?, start_date = ?, end_date = ?, prize = ?, creation_date = ? WHERE contest_id = ?";
-      jdbcTemplate.update(sql, contest.getContest_name(), contest.getContest_photo(), contest.getStart_date(),
-            contest.getEnd_date(), contest.getPrize(), contest.getCreation_time(), contest_id);
    }
 
    public void deleteContest(String contest_id) {
@@ -143,6 +138,31 @@ public class ContestRepository {
    public void deleteContestant(String contest_id, String user_id) {
       String sql = "DELETE FROM user_contest WHERE contest_id = ? AND person_id = ?";
       jdbcTemplate.update(sql, contest_id, user_id);
+   }
+
+   public void updateContestName(String contest_id, String contest_name) {
+      String sql = "UPDATE contests SET contest_name = ? WHERE contest_id = ?";
+      jdbcTemplate.update(sql, contest_name, contest_id);
+   }
+
+   public void updateContestPhoto(String contest_id, String contest_photo) {
+      String sql = "UPDATE contests SET contest_photo = ? WHERE contest_id = ?";
+      jdbcTemplate.update(sql, contest_photo, contest_id);
+   }
+
+   public void updateContestStartDate(String contest_id, Date contest_start_date) {
+      String sql = "UPDATE contests SET start_date = ? WHERE contest_id = ?";
+      jdbcTemplate.update(sql, contest_start_date, contest_id);
+   }
+
+   public void updateContestEndDate(String contest_id, Date contest_end_date) {
+      String sql = "UPDATE contests SET end_date = ? WHERE contest_id = ?";
+      jdbcTemplate.update(sql, contest_end_date, contest_id);
+   }
+
+   public void updateContestPrize(String contest_id, String contest_prize) {
+      String sql = "UPDATE contests SET prize = ? WHERE contest_id = ?";
+      jdbcTemplate.update(sql, contest_prize, contest_id);
    }
 
 }
