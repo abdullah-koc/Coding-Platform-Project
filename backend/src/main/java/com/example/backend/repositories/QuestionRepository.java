@@ -191,6 +191,9 @@ public class QuestionRepository {
       }
       String sql = "UPDATE coding_questions SET video_link = ? WHERE coding_question_id = ?";
       jdbcTemplate.update(sql, video_link, question_id);
+
+      sql = "UPDATE user_question SET is_resolved = 1 WHERE coding_question_id = ?";
+      jdbcTemplate.update(sql, question_id);
    }
 
    public void updateTitle(String question_id, String title) {
