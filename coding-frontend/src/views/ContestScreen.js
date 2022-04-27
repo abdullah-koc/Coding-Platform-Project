@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import NavbarUser from "../components/Navbars/NavbarUser";
-import { Grid, MenuItem, Select, Pagination, Button } from "@mui/material";
+import { Grid, Button } from "@mui/material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import ContestQuestionCard from "../components/UserMainScreenComponents/ContestQuestionCard";
 import { useNavigate } from "react-router-dom";
+import RanksTable from "../components/RanksTable";
 
 export const ContestScreen = () => {
   const [contestInfo, setContestInfo] = useState({
@@ -116,13 +117,25 @@ export const ContestScreen = () => {
       questionPoint: 22,
     },
   ]);
+  
+  const [isContestEnded, setIsContestEnded] = useState(
+    // Date.now() > Date(contestInfo.end_date)
+    false
+  );
   const [isTermsAccepted, setisTermsAccepted] = useState(false);
+  const handleSubmission = () => {
+    if (isTermsAccepted) {
+      alert("Contest Submitted");
+    } else {
+      alert("Please accept the terms and conditions");
+    }
+  };
   const handleChange = (event) => {
     setisTermsAccepted(event.target.value);
   };
   let navigate = useNavigate();
   const handleGoToQuestion = (id) => {
-    if (isTermsAccepted) {
+    if (isTermsAccepted || isContestEnded) {
       if (id.startsWith("CQ")) {
         navigate("/cquestion/" + id);
       } else {
@@ -192,87 +205,111 @@ export const ContestScreen = () => {
                 &nbsp;{contestInfo.prize}
               </Grid>
             </Grid>
-            <h3>Contest Rules</h3>
-            <Grid
-              container
-              style={{
-                height: "300px",
-                overflowX: "auto",
-                overflowY: "auto",
-                paddingTop: "10px",
-              }}
-            >
-              <ul>
-                <li>
-                  Morbi in sem quis dui placerat ornare. Pellentesque odio nisi,
-                  euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras
-                  consequat.
-                </li>
-                <li>
-                  Praesent dapibus, neque id cursus faucibus, tortor neque
-                  egestas augue, eu vulputate magna eros eu erat. Aliquam erat
-                  volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
-                  facilisis luctus, metus.
-                </li>
-                <li>
-                  Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                  consectetuer ligula vulputate sem tristique cursus. Nam nulla
-                  quam, gravida non, commodo a, sodales sit amet, nisi.
-                </li>
-                <li>
-                  Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                  auctor, ultrices ut, elementum vulputate, nunc.
-                </li>
-                <li>
-                  Morbi in sem quis dui placerat ornare. Pellentesque odio nisi,
-                  euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras
-                  consequat.
-                </li>
-                <li>
-                  Praesent dapibus, neque id cursus faucibus, tortor neque
-                  egestas augue, eu vulputate magna eros eu erat. Aliquam erat
-                  volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
-                  facilisis luctus, metus.
-                </li>
-                <li>
-                  Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                  consectetuer ligula vulputate sem tristique cursus. Nam nulla
-                  quam, gravida non, commodo a, sodales sit amet, nisi.
-                </li>
-                <li>
-                  Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                  auctor, ultrices ut, elementum vulputate, nunc.
-                </li>
-                <li>
-                  Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                  consectetuer ligula vulputate sem tristique cursus. Nam nulla
-                  quam, gravida non, commodo a, sodales sit amet, nisi.
-                </li>
-                <li>
-                  Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                  auctor, ultrices ut, elementum vulputate, nunc.
-                </li>
-                <li>
-                  Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                  consectetuer ligula vulputate sem tristique cursus. Nam nulla
-                  quam, gravida non, commodo a, sodales sit amet, nisi.
-                </li>
-                <li>
-                  Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                  auctor, ultrices ut, elementum vulputate, nunc.
-                </li>
-              </ul>
-              <br />
-              <div style={{ paddingLeft: "20px" }}>
-                <input
-                  type="radio"
-                  value="accepted"
-                  name="conditions"
-                  onChange={handleChange}
-                />
-                I accept the terms and conditions
+            {isContestEnded === false && (
+              <div>
+                <h3>Contest Rules</h3>
+                <Grid
+                  container
+                  style={{
+                    height: "300px",
+                    overflowX: "auto",
+                    overflowY: "auto",
+                    paddingTop: "10px",
+                  }}
+                >
+                  <ul>
+                    <li>
+                      Morbi in sem quis dui placerat ornare. Pellentesque odio
+                      nisi, euismod in, pharetra a, ultricies in, diam. Sed
+                      arcu. Cras consequat.
+                    </li>
+                    <li>
+                      Praesent dapibus, neque id cursus faucibus, tortor neque
+                      egestas augue, eu vulputate magna eros eu erat. Aliquam
+                      erat volutpat. Nam dui mi, tincidunt quis, accumsan
+                      porttitor, facilisis luctus, metus.
+                    </li>
+                    <li>
+                      Phasellus ultrices nulla quis nibh. Quisque a lectus.
+                      Donec consectetuer ligula vulputate sem tristique cursus.
+                      Nam nulla quam, gravida non, commodo a, sodales sit amet,
+                      nisi.
+                    </li>
+                    <li>
+                      Pellentesque fermentum dolor. Aliquam quam lectus,
+                      facilisis auctor, ultrices ut, elementum vulputate, nunc.
+                    </li>
+                    <li>
+                      Morbi in sem quis dui placerat ornare. Pellentesque odio
+                      nisi, euismod in, pharetra a, ultricies in, diam. Sed
+                      arcu. Cras consequat.
+                    </li>
+                    <li>
+                      Praesent dapibus, neque id cursus faucibus, tortor neque
+                      egestas augue, eu vulputate magna eros eu erat. Aliquam
+                      erat volutpat. Nam dui mi, tincidunt quis, accumsan
+                      porttitor, facilisis luctus, metus.
+                    </li>
+                    <li>
+                      Phasellus ultrices nulla quis nibh. Quisque a lectus.
+                      Donec consectetuer ligula vulputate sem tristique cursus.
+                      Nam nulla quam, gravida non, commodo a, sodales sit amet,
+                      nisi.
+                    </li>
+                    <li>
+                      Pellentesque fermentum dolor. Aliquam quam lectus,
+                      facilisis auctor, ultrices ut, elementum vulputate, nunc.
+                    </li>
+                    <li>
+                      Phasellus ultrices nulla quis nibh. Quisque a lectus.
+                      Donec consectetuer ligula vulputate sem tristique cursus.
+                      Nam nulla quam, gravida non, commodo a, sodales sit amet,
+                      nisi.
+                    </li>
+                    <li>
+                      Pellentesque fermentum dolor. Aliquam quam lectus,
+                      facilisis auctor, ultrices ut, elementum vulputate, nunc.
+                    </li>
+                    <li>
+                      Phasellus ultrices nulla quis nibh. Quisque a lectus.
+                      Donec consectetuer ligula vulputate sem tristique cursus.
+                      Nam nulla quam, gravida non, commodo a, sodales sit amet,
+                      nisi.
+                    </li>
+                    <li>
+                      Pellentesque fermentum dolor. Aliquam quam lectus,
+                      facilisis auctor, ultrices ut, elementum vulputate, nunc.
+                    </li>
+                  </ul>
+                  <br />
+                  <div style={{ paddingLeft: "20px" }}>
+                    <input
+                      type="radio"
+                      value="accepted"
+                      name="conditions"
+                      onChange={handleChange}
+                    />
+                    I accept the terms and conditions
+                  </div>
+                </Grid>
               </div>
-            </Grid>
+            )}
+            {isContestEnded === true && (
+              <div>
+                <h3>Rankings</h3>
+                <Grid
+                  container
+                  style={{
+                    height: "300px",
+                    overflowX: "auto",
+                    overflowY: "auto",
+                    paddingTop: "10px",
+                  }}
+                >
+                 <RanksTable />
+                </Grid>
+              </div>
+            )}
           </Grid>
           <Grid
             item
@@ -282,33 +319,96 @@ export const ContestScreen = () => {
               paddingTop: "10px",
             }}
           >
-            <h1>Questions</h1>
-            <Grid
-              style={{ height: "550px", overflowX: "auto", overflowY: "auto" }}
-            >
-              {questions.map((question, index) => (
-                <div
-                  key={index}
-                  style={{ paddingRight: "40px", marginBottom: "10px" }}
-                  onClick={() => handleGoToQuestion(question.id)}
+            {isContestEnded === true && (
+              <div>
+                <h1>Questions</h1>
+                <Grid
+                  style={{
+                    height: "550px",
+                    overflowX: "auto",
+                    overflowY: "auto",
+                  }}
                 >
-                  <ContestQuestionCard
-                    isCoding={question.isCoding}
-                    question={question.question}
-                    difficulty={question.difficulty}
-                    likeRate={question.likeRate}
-                    isSolved={question.isSolved}
-                    questionPoint={question.questionPoint}
-                    style={{ marginTop: "20px" }}
-                  />
-                </div>
-              ))}
-            </Grid>
-            <Grid style={{paddingTop: "20px", display: "flex", justifyContent: "flex-end", paddingRight: "50px"}}>
-              <Button style={{ backgroundColor: "#64DD17", color: "white" }}>
-                Finish Contest
-              </Button>
-            </Grid>
+                  {questions.map((question, index) => (
+                    <div
+                      key={index}
+                      style={{ paddingRight: "40px", marginBottom: "10px" }}
+                      onClick={() => handleGoToQuestion(question.id)}
+                    >
+                      <ContestQuestionCard
+                        isCoding={question.isCoding}
+                        question={question.question}
+                        difficulty={question.difficulty}
+                        likeRate={question.likeRate}
+                        isSolved={question.isSolved}
+                        questionPoint={question.questionPoint}
+                        style={{ marginTop: "20px" }}
+                      />
+                    </div>
+                  ))}
+                </Grid>
+                <Grid
+                  style={{
+                    paddingTop: "20px",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    paddingRight: "50px",
+                  }}
+                >
+                  <Button
+                    style={{ backgroundColor: "#64DD17", color: "white" }}
+                    onClick={handleSubmission}
+                  >
+                    Finish Contest
+                  </Button>
+                </Grid>
+              </div>
+            )}
+            {isContestEnded === false && (
+              <div>
+                <h1>Questions</h1>
+                <Grid
+                  style={{
+                    height: "550px",
+                    overflowX: "auto",
+                    overflowY: "auto",
+                  }}
+                >
+                  {questions.map((question, index) => (
+                    <div
+                      key={index}
+                      style={{ paddingRight: "40px", marginBottom: "10px" }}
+                      onClick={() => handleGoToQuestion(question.id)}
+                    >
+                      <ContestQuestionCard
+                        isCoding={question.isCoding}
+                        question={question.question}
+                        difficulty={question.difficulty}
+                        likeRate={question.likeRate}
+                        isSolved={question.isSolved}
+                        questionPoint={question.questionPoint}
+                        style={{ marginTop: "20px" }}
+                      />
+                    </div>
+                  ))}
+                </Grid>
+                <Grid
+                  style={{
+                    paddingTop: "20px",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    paddingRight: "50px",
+                  }}
+                >
+                  <Button
+                    style={{ backgroundColor: "#64DD17", color: "white" }}
+                    onClick={handleSubmission}
+                  >
+                    Finish Contest
+                  </Button>
+                </Grid>
+              </div>
+            )}
           </Grid>
         </Grid>
       </div>
@@ -317,3 +417,5 @@ export const ContestScreen = () => {
 };
 
 export default ContestScreen;
+
+

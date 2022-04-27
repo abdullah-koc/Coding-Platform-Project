@@ -12,9 +12,9 @@ const ProblemsScreen = () => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("session") === null) {
+    /*if (localStorage.getItem("session") === null) {
       navigate("/");
-    }
+    }*/
   }, []);
 
   const [questionType, setQuestionType] = useState("All");

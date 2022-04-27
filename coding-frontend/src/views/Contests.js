@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, MenuItem, Select, Pagination } from "@mui/material";
+import { Grid, Pagination } from "@mui/material";
 import NavbarUser from "../components/Navbars/NavbarUser";
 import ContestInfo from "../components/ContestInfo";
 import AttendedContestInfo from "../components/AttendedContestInfo";
