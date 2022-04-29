@@ -33,13 +33,20 @@ const EditorQuestionCard = ({
   difficulty,
   questionPoint,
   inContestScreen,
+  parentCallback,
 }) => {
   const classes = useStyles();
 
   const [isAdded, setIsAdded] = React.useState(false);
   const handleAddToContest = () => {
-    isAdded ? setIsAdded(false) : setIsAdded(true);
+    if (!isAdded) {
+      setIsAdded(true);
+    } else {
+      setIsAdded(false);
+    }
+    parentCallback(isAdded, question);
   };
+
   return (
     <CustomWidthTooltip title={questionText}>
       <div className={classes.root}>
