@@ -117,7 +117,7 @@ export const ContestScreen = () => {
       questionPoint: 22,
     },
   ]);
-  
+
   const [isContestEnded, setIsContestEnded] = useState(
     // Date.now() > Date(contestInfo.end_date)
     false
@@ -135,7 +135,7 @@ export const ContestScreen = () => {
   };
   let navigate = useNavigate();
   const handleGoToQuestion = (id) => {
-    if (isTermsAccepted || isContestEnded) {
+    if (isTermsAccepted) {
       if (id.startsWith("CQ")) {
         navigate("/cquestion/" + id);
       } else {
@@ -164,8 +164,16 @@ export const ContestScreen = () => {
               fontSize: "20px",
             }}
           >
-            {isContestEnded === false && (<div><h1>{contestInfo.contest_name}</h1></div>)}
-            {isContestEnded === true && (<div><h1>{contestInfo.contest_name} (Ended)</h1></div>)}
+            {isContestEnded === false && (
+              <div>
+                <h1>{contestInfo.contest_name}</h1>
+              </div>
+            )}
+            {isContestEnded === true && (
+              <div>
+                <h1>{contestInfo.contest_name} (Ended)</h1>
+              </div>
+            )}
             <Grid container>
               <Grid item xs={4}>
                 <img
@@ -307,7 +315,7 @@ export const ContestScreen = () => {
                     paddingTop: "10px",
                   }}
                 >
-                 <RanksTable />
+                  <RanksTable />
                 </Grid>
               </div>
             )}
@@ -403,5 +411,3 @@ export const ContestScreen = () => {
 };
 
 export default ContestScreen;
-
-

@@ -5,9 +5,7 @@ import ContestInfo from "../components/ContestInfo";
 import AttendedContestInfo from "../components/AttendedContestInfo";
 import { useNavigate } from "react-router-dom";
 
-
 export const Contests = () => {
-  
   const [upcomingPage, setUpcomingPage] = useState(1);
   const [attendedPage, setAttendedPage] = useState(1);
   const [totalPagesUpcoming, setTotalPagesUpcoming] = useState(1);
@@ -86,7 +84,7 @@ export const Contests = () => {
       end_date: "03/08/2022",
       prize: "Mercedes A180 AMG Sport",
       creation_date: "21/04/2022",
-    }
+    },
   ]);
   const [attendedContests, setAttendedContests] = useState([
     {
@@ -156,7 +154,7 @@ export const Contests = () => {
 
   let navigate = useNavigate();
   const handleStartContest = (contest_id) => {
-    navigate("/contests/" + contest_id);
+    //navigate("/contests/" + contest_id);
   };
 
   useEffect(() => {
@@ -165,7 +163,9 @@ export const Contests = () => {
   }, []);
 
   useEffect(() => {
-    setUpcomingCurContests(upcomingContests.slice((upcomingPage - 1) * 5, 5 * upcomingPage));
+    setUpcomingCurContests(
+      upcomingContests.slice((upcomingPage - 1) * 5, 5 * upcomingPage)
+    );
   }, [upcomingPage]);
 
   useEffect(() => {
@@ -174,21 +174,24 @@ export const Contests = () => {
   }, []);
 
   useEffect(() => {
-    setAttendedCurContests(attendedContests.slice((attendedPage - 1) * 5, 5 * attendedPage));
+    setAttendedCurContests(
+      attendedContests.slice((attendedPage - 1) * 5, 5 * attendedPage)
+    );
   }, [attendedPage]);
-
 
   function sortAttendedContets() {
     const sortedData = [...attendedContests].sort((a, b) => {
       return new Date(b.end_date) - new Date(a.end_date) < 0 ? 1 : -1;
     });
     setAttendedContests(sortedData);
-    setAttendedCurContests(sortedData.slice((attendedPage - 1) * 5, 5 * attendedPage));
+    setAttendedCurContests(
+      sortedData.slice((attendedPage - 1) * 5, 5 * attendedPage)
+    );
   }
 
   useEffect(() => {
     sortAttendedContets();
-  }, [])
+  }, []);
 
   return (
     <div>
@@ -218,7 +221,7 @@ export const Contests = () => {
                   end_date={contest.end_date}
                   prize={contest.prize}
                   creation_date={contest.creation_date}
-                  style={{ marginTop: "20px",}}
+                  style={{ marginTop: "20px" }}
                 />
               </div>
             ))}
