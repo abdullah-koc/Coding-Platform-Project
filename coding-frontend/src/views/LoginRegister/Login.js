@@ -20,16 +20,22 @@ const Login = () => {
           process.env.REACT_APP_URL + "api/auth/login/" + email + "/" + password
         )
         .then((response) => {
+          if (!response.data) {
+            alert("Invalid Credentials");
+            return;
+          }
           alert("Successfully logged in");
           var details;
           axios
             .get(process.env.REACT_APP_URL + "api/user/" + email)
             .then((response) => {
               details = response.data;
-              console.log(details);
               localStorage.setItem("session", JSON.stringify(details));
               navigate("/problems");
             });
+        })
+        .catch((error) => {
+          alert("Invalid credentials");
         });
     }
   };

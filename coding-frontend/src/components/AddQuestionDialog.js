@@ -12,7 +12,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 
-const AddQuestionDialog = ({ open, handleParentOpen }) => {
+const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
   const [questionType, setQuestionType] = useState("CQ");
   const [questionTitle, setQuestionTitle] = useState("");
   const [explanation, setExplanation] = useState("");

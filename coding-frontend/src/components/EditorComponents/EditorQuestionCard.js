@@ -14,6 +14,7 @@ const useStyles = makeStyles({
     display: "flex",
     alignItems: "center",
     color: "white",
+    marginBottom: "5px",
   },
 });
 
@@ -31,15 +32,21 @@ const EditorQuestionCard = ({
   questionText,
   difficulty,
   questionPoint,
+  inContestScreen,
 }) => {
   const classes = useStyles();
+
+  const [isAdded, setIsAdded] = React.useState(false);
+  const handleAddToContest = () => {
+    isAdded ? setIsAdded(false) : setIsAdded(true);
+  };
   return (
     <CustomWidthTooltip title={questionText}>
       <div className={classes.root}>
         <Grid container>
           <Grid
             item
-            xs={2}
+            xs={inContestScreen ? 1 : 2}
             style={{
               display: "flex",
               alignItems: "center",
@@ -72,6 +79,21 @@ const EditorQuestionCard = ({
           <Grid item xs={1} style={{ display: "flex", alignItems: "center" }}>
             {questionPoint}
           </Grid>
+          {inContestScreen && (
+            <Grid
+              item
+              xs={1}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                fontSize: "160%",
+                cursor: "pointer",
+              }}
+              onClick={handleAddToContest}
+            >
+              {isAdded ? "➖" : "➕"}
+            </Grid>
+          )}
         </Grid>
       </div>
     </CustomWidthTooltip>

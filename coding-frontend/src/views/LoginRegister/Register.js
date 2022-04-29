@@ -168,7 +168,7 @@ const Register = () => {
         <TextField
           style={{ width: "400px" }}
           placeholder="Birthday"
-          type={"datetime-local"}
+          type={"date"}
           color="warning"
           value={birthday}
           onChange={(e) => setBirthday(e.target.value)}

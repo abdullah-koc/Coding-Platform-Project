@@ -43,6 +43,11 @@ const UserProfileScreen = () => {
     }
   }, []);
 
+  const handleLogOut = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
   const handlePhoneChange = () => {
     axios
       .post(
@@ -238,6 +243,23 @@ const UserProfileScreen = () => {
               >
                 <span style={{ fontWeight: "bold" }}>Birth Date: </span>
                 {"  "} {new Date(birthDate).toLocaleDateString()}
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginBottom: "20px",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleLogOut}
+                >
+                  Log Out
+                </Button>
               </Grid>
             </Grid>
           </Grid>

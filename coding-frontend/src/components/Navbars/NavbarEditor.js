@@ -35,10 +35,16 @@ const useStyles = makeStyles({
 const NavbarEditor = () => {
   let navigate = useNavigate();
   const classes = useStyles();
-  const goToMainPage = () => {};
+  const goToMainPage = () => {
+    navigate("/editor");
+  };
   const goToAccountPage = () => {};
-  const goToCreateQuestionPage = () => {};
-  const goToCreateContestPage = () => {};
+  const goToCreateQuestionPage = () => {
+    navigate("/editor");
+  };
+  const goToCreateContestPage = () => {
+    navigate("/editor/contests");
+  };
 
   return (
     <div className={classes.navbar}>
