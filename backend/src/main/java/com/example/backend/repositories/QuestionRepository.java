@@ -86,6 +86,9 @@ public class QuestionRepository {
          question.setCreation_date(resultSet.getDate("creation_date"));
          question.setType_description(resultSet.getString("type_description"));
          question.setVideo_link(resultSet.getString("video_link"));
+         question.setEditor_id(resultSet.getString("editor_id"));
+         question.setCompany_id(resultSet.getString("company_id"));
+
          return question;
       });
    }

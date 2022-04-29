@@ -38,7 +38,9 @@ const NavbarEditor = () => {
   const goToMainPage = () => {
     navigate("/editor");
   };
-  const goToAccountPage = () => {};
+  const goToAccountPage = () => {
+    navigate("/editor-profile");
+  };
   const goToCreateQuestionPage = () => {
     navigate("/editor");
   };

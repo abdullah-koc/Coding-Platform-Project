@@ -8,6 +8,15 @@ import EditorContestDetails from "../components/EditorComponents/EditorContestDe
 const EditorContestScreen = () => {
   let navigate = useNavigate();
 
+  React.useEffect(() => {
+    if (
+      localStorage.getItem("session") === null ||
+      JSON.parse(localStorage.getItem("session")).person_id.charAt(0) !== "E"
+    ) {
+      navigate("/");
+    }
+  }, []);
+
   const navigateToContest = (id) => {
     navigate(`/editor/contests/${id}`);
   };

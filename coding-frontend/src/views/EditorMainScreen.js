@@ -4,9 +4,36 @@ import NavbarEditor from "../components/Navbars/NavbarEditor";
 import { Button, Grid } from "@mui/material";
 import Colors from "../utils/Colors";
 import AddQuestionDialog from "../components/AddQuestionDialog";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const EditorMainScreen = () => {
+  let navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (
+      localStorage.getItem("session") === null ||
+      JSON.parse(localStorage.getItem("session")).person_id.charAt(0) !== "E"
+    ) {
+      navigate("/");
+    }
+  }, []);
+
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [questions, setQuestions] = React.useState([]);
+
+  React.useEffect(() => {
+    axios.get(process.env.REACT_APP_URL + "api/question/all").then((res) => {
+      //set questions only belonging to that editor
+      setQuestions(
+        res.data.filter(
+          (question) =>
+            question.editor_id ===
+            JSON.parse(localStorage.getItem("session")).person_id
+        )
+      );
+    });
+  }, []);
 
   const handleDialogCallback = (childData) => {
     setIsDialogOpen(childData);
@@ -39,106 +66,16 @@ const EditorMainScreen = () => {
             </Grid>
           </Grid>
           <div style={{ overflowY: "scroll", height: "76vh" }}>
-            <div style={{ marginBottom: "10px" }}>
-              <EditorQuestionCard
-                question={"dsfsdf"}
-                questionPoint="60"
-                questionText={
-                  "sfdşlfkwdşlfmwşlefmewfewlkfwlfkmewlkfkmewfewklfmlkdmfşlsd"
-                }
-                difficulty="Easy"
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <EditorQuestionCard
-                question={"dsfsdf"}
-                questionPoint="60"
-                questionText={
-                  "sfdşlfkwdşlfmwşlefmewfewlkfwlfkmewlkfkmewfewklfmlkdmfşlsd"
-                }
-                difficulty="Easy"
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <EditorQuestionCard
-                question={"dsfsdf"}
-                questionPoint="60"
-                questionText={
-                  "sfdşlfkwdşlfmwşlefmewfewlkfwlfkmewlkfkmewfewklfmlkdmfşlsd"
-                }
-                difficulty="Easy"
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <EditorQuestionCard
-                question={"dsfsdf"}
-                questionPoint="60"
-                questionText={
-                  "sfdşlfkwdşlfmwşlefmewfewlkfwlfkmewlkfkmewfewklfmlkdmfşlsd"
-                }
-                difficulty="Easy"
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <EditorQuestionCard
-                question={"dsfsdf"}
-                questionPoint="60"
-                questionText={
-                  "sfdşlfkwdşlfmwşlefmewfewlkfwlfkmewlkfkmewfewklfmlkdmfşlsd"
-                }
-                difficulty="Easy"
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <EditorQuestionCard
-                question={"dsfsdf"}
-                questionPoint="60"
-                questionText={
-                  "sfdşlfkwdşlfmwşlefmewfewlkfwlfkmewlkfkmewfewklfmlkdmfşlsd"
-                }
-                difficulty="Easy"
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <EditorQuestionCard
-                question={"dsfsdf"}
-                questionPoint="60"
-                questionText={
-                  "sfdşlfkwdşlfmwşlefmewfewlkfwlfkmewlkfkmewfewklfmlkdmfşlsd"
-                }
-                difficulty="Easy"
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <EditorQuestionCard
-                question={"dsfsdf"}
-                questionPoint="60"
-                questionText={
-                  "sfdşlfkwdşlfmwşlefmewfewlkfwlfkmewlkfkmewfewklfmlkdmfşlsd"
-                }
-                difficulty="Easy"
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <EditorQuestionCard
-                question={"dsfsdf"}
-                questionPoint="60"
-                questionText={
-                  "sfdşlfkwdşlfmwşlefmewfewlkfwlfkmewlkfkmewfewklfmlkdmfşlsd"
-                }
-                difficulty="Easy"
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <EditorQuestionCard
-                question={"dsfsdf"}
-                questionPoint="60"
-                questionText={
-                  "sfdşlfkwdşlfmwşlefmewfewlkfwlfkmewlkfkmewfewklfmlkdmfşlsd"
-                }
-                difficulty="Easy"
-              />
-            </div>
+            {questions.map((question, index) => (
+              <div style={{ marginBottom: "10px" }} key={index}>
+                <EditorQuestionCard
+                  question={question.title}
+                  questionPoint={question.question_point}
+                  questionText={question.explanation}
+                  difficulty={question.difficulty}
+                />
+              </div>
+            ))}
           </div>
         </Grid>
         <Grid

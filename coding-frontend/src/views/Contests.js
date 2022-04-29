@@ -6,6 +6,17 @@ import AttendedContestInfo from "../components/AttendedContestInfo";
 import { useNavigate } from "react-router-dom";
 
 export const Contests = () => {
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("session") === null ||
+      JSON.parse(localStorage.getItem("session")).person_id.charAt(0) !== "U"
+    ) {
+      navigate("/");
+    }
+  }, []);
+
   const [upcomingPage, setUpcomingPage] = useState(1);
   const [attendedPage, setAttendedPage] = useState(1);
   const [totalPagesUpcoming, setTotalPagesUpcoming] = useState(1);
@@ -152,7 +163,6 @@ export const Contests = () => {
     },
   ]);
 
-  let navigate = useNavigate();
   const handleStartContest = (contest_id) => {
     //navigate("/contests/" + contest_id);
   };

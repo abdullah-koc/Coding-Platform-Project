@@ -7,12 +7,16 @@ import Colors from "../utils/Colors";
 import QuestionCard from "../components/UserMainScreenComponents/QuestionCard";
 import UserStatus from "../components/UserStatus";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const ProblemsScreen = () => {
   let navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("session") === null) {
+    if (
+      localStorage.getItem("session") === null ||
+      JSON.parse(localStorage.getItem("session")).person_id.charAt(0) !== "U"
+    ) {
       navigate("/");
     }
   }, []);
@@ -21,115 +25,20 @@ const ProblemsScreen = () => {
   const [difficulty, setDifficulty] = useState("All");
   const [category, setCategory] = useState("All");
   const [status, setStatus] = useState("All");
-  const [questions, setQuestions] = useState([
-    {
-      id: "CQ1",
-      isCoding: "C",
-      question: "What is the output of the following code?",
-      difficulty: "Easy",
-      likeRate: 87,
-      isSolved: true,
-      questionPoint: 12,
-    },
-    {
-      id: "CQ2",
-      isCoding: "C",
-      question: "What is the output of the following code?",
-      difficulty: "Easy",
-      likeRate: 59,
-      isSolved: true,
-      questionPoint: 39,
-    },
-    {
-      id: "CQ3",
-      isCoding: "C",
-      question: "What is the output of the following code?",
-      difficulty: "Easy",
-      likeRate: 43,
-      isSolved: true,
-      questionPoint: 17,
-    },
-    {
-      id: "CQ4",
-      isCoding: "C",
-      question: "What is the output of the following code?",
-      difficulty: "Easy",
-      likeRate: 57,
-      isSolved: true,
-      questionPoint: 35,
-    },
-    {
-      id: "CQ5",
-      isCoding: "C",
-      question: "What is the output of the following code?",
-      difficulty: "Easy",
-      likeRate: 61,
-      isSolved: true,
-      questionPoint: 23,
-    },
-    {
-      id: "CQ6",
-      isCoding: "C",
-      question: "What is the output of the following code?",
-      difficulty: "Easy",
-      likeRate: 98,
-      isSolved: true,
-      questionPoint: 65,
-    },
-    {
-      id: "CQ7",
-      isCoding: "C",
-      question: "What is the output of the following code?",
-      difficulty: "Easy",
-      likeRate: 20,
-      isSolved: true,
-      questionPoint: 45,
-    },
-    {
-      id: "CQ8",
-      isCoding: "C",
-      question: "What is the output of the following code?",
-      difficulty: "Easy",
-      likeRate: 52,
-      isSolved: true,
-      questionPoint: 23,
-    },
-    {
-      id: "CQ9",
-      isCoding: "C",
-      question: "What is the output of the following code?",
-      difficulty: "Easy",
-      likeRate: 67,
-      isSolved: true,
-      questionPoint: 8,
-    },
-    {
-      id: "CQ10",
-      isCoding: "C",
-      question: "What is the output of the following code?",
-      difficulty: "Easy",
-      likeRate: 63,
-      isSolved: true,
-      questionPoint: 71,
-    },
-    {
-      id: "CQ11",
-      isCoding: "C",
-      question: "What is the output of the following code?",
-      difficulty: "Easy",
-      likeRate: 75,
-      isSolved: true,
-      questionPoint: 22,
-    },
-  ]);
+  const [questions, setQuestions] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [curQuestions, setCurQuestions] = useState([]);
+  useEffect(() => {
+    axios.get(process.env.REACT_APP_URL + "api/question/all").then((res) => {
+      setQuestions(res.data);
+    });
+  }, []);
 
   useEffect(() => {
     setTotalPages(Math.ceil(questions.length / 7));
     setCurQuestions(questions.slice(0, 7));
-  }, []);
+  }, [questions]);
 
   useEffect(() => {
     setCurQuestions(questions.slice((page - 1) * 7, 7 * page));
@@ -360,15 +269,22 @@ const ProblemsScreen = () => {
               <div
                 key={index}
                 style={{ paddingRight: "40px", marginBottom: "10px" }}
-                onClick={() => handleGoToQuestion(question.id)}
+                onClick={() => handleGoToQuestion(question.question_id)}
               >
                 <QuestionCard
-                  isCoding={question.isCoding}
-                  question={question.question}
+                  isCoding={
+                    question.question_id.charAt(0) === "C" ? true : false
+                  }
+                  question={question.title}
                   difficulty={question.difficulty}
-                  likeRate={question.likeRate}
+                  likeRate={
+                    question.dislike_count == 0
+                      ? 0
+                      : question.like_count /
+                        (question.like_cont + question.dislike_count)
+                  }
                   isSolved={question.isSolved}
-                  questionPoint={question.questionPoint}
+                  questionPoint={question.question_point}
                   style={{ marginTop: "20px" }}
                 />
               </div>

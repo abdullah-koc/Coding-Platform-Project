@@ -10,16 +10,30 @@ import Colors from "../utils/Colors";
 import Box from "@mui/material/Box";
 import NonCodingQuestionText from "./NonCodingQuestionText";
 import CommunitySubmission from "./CommunitySubmission";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const NonCodingQuestionInfo = ({ isContest }) => {
+  let navigate = useNavigate();
+  React.useEffect(() => {
+    if (
+      localStorage.getItem("session") === null ||
+      JSON.parse(localStorage.getItem("session")).person_id.charAt(0) !== "U"
+    ) {
+      navigate("/");
+    }
+  }, []);
+
+  const [question, setQuestion] = React.useState({});
   const [mode, setMode] = React.useState(0);
-  const [difficulty, setDifficulty] = React.useState("Easy");
   const [previousAttempts, setPreviousAttempts] = React.useState([
     { id: 1, attemptCount: 1, passedTests: 12, totalTestCaseCount: 20 },
     { id: 2, attemptCount: 2, passedTests: 18, totalTestCaseCount: 20 },
     { id: 3, attemptCount: 3, passedTests: 20, totalTestCaseCount: 20 },
   ]);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const [isLiked, setIsLiked] = React.useState(false);
+  const [isDisliked, setIsDisliked] = React.useState(false);
 
   const handleAttemptClick = (attempt) => {
     console.log(attempt);
@@ -29,12 +43,58 @@ const NonCodingQuestionInfo = ({ isContest }) => {
     setIsSubmitted(childData);
   };
 
-  const getQuestionID = () => {
-    const url = window.location.href;
-    const urlParts = url.split("/");
-    const questionID = urlParts[urlParts.length - 1];
-    return questionID;
+  //get the id from the link
+  const getID = () => {
+    let url = window.location.href;
+    let id = url.split("/")[url.split("/").length - 1];
+    return id;
   };
+
+  const handleLikeButtonClick = () => {
+    if (isLiked) {
+      setIsLiked(false);
+      axios.get(process.env.REACT_APP_URL + "api/question/unlike/" + getID());
+    } else if (isDisliked) {
+      setIsDisliked(false);
+      setIsLiked(true);
+      axios.get(
+        process.env.REACT_APP_URL + "api/question/undislike/" + getID()
+      );
+      axios.get(process.env.REACT_APP_URL + "api/question/like/" + getID());
+    } else if (!isLiked && !isDisliked) {
+      setIsLiked(true);
+      axios.get(process.env.REACT_APP_URL + "api/question/like/" + getID());
+    }
+  };
+
+  const handleDislikeButtonClick = () => {
+    if (isDisliked) {
+      setIsDisliked(false);
+      axios.get(
+        process.env.REACT_APP_URL + "api/question/undislike/" + getID()
+      );
+    } else if (isLiked) {
+      setIsLiked(false);
+      setIsDisliked(true);
+      axios.get(process.env.REACT_APP_URL + "api/question/unlike/" + getID());
+      axios.get(process.env.REACT_APP_URL + "api/question/dislike/" + getID());
+    } else if (!isLiked && !isDisliked) {
+      setIsDisliked(true);
+      axios.get(process.env.REACT_APP_URL + "api/question/dislike/" + getID());
+    }
+  };
+
+  React.useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_URL + `api/question/${getID()}`)
+      .then((res) => {
+        setQuestion(res.data);
+      })
+      .catch((err) => {
+        alert("An error occured");
+        navigate("/");
+      });
+  }, []);
 
   return (
     <div>
@@ -97,7 +157,7 @@ const NonCodingQuestionInfo = ({ isContest }) => {
                         fontSize: "20px",
                       }}
                     >
-                      1.Median of Two Sorted Arrays
+                      {question.title}
                     </Grid>
                     {!isContest && (
                       <Grid item xs={1}>
@@ -122,18 +182,36 @@ const NonCodingQuestionInfo = ({ isContest }) => {
                           fontWeight: "bolder",
                         }}
                       >
-                        {difficulty}
+                        {question.difficulty}
                       </Grid>
                     )}
                     {!isContest && (
-                      <Grid item xs={1}>
-                        <ThumbUpIcon style={{ paddingTop: "5%" }}></ThumbUpIcon>
+                      <Grid
+                        item
+                        xs={1}
+                        onClick={handleLikeButtonClick}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <ThumbUpIcon
+                          style={{
+                            paddingTop: "5%",
+                            color: isLiked ? "#00FF00" : "black",
+                          }}
+                        ></ThumbUpIcon>
                       </Grid>
                     )}
                     {!isContest && (
-                      <Grid item xs={1}>
+                      <Grid
+                        item
+                        xs={1}
+                        onClick={handleDislikeButtonClick}
+                        style={{ cursor: "pointer" }}
+                      >
                         <ThumbDownAltIcon
-                          style={{ paddingTop: "5%" }}
+                          style={{
+                            paddingTop: "5%",
+                            color: isDisliked ? "#FF0000" : "black",
+                          }}
                         ></ThumbDownAltIcon>
                       </Grid>
                     )}
@@ -149,31 +227,7 @@ const NonCodingQuestionInfo = ({ isContest }) => {
                       height: "76vh",
                     }}
                   >
-                    Given two sorted arrays nums1 and nums2 of size m and n
-                    respectively, return the median of the two sorted arrays.
-                    The overall run time complexity should be O(log (m+n)).
-                    <br></br>
-                    <br></br>
-                    Example 1:
-                    <br></br>
-                    Input: nums1 = [1,3], nums2 = [2]
-                    <br></br>
-                    Output: 2.00000
-                    <br></br>
-                    Explanation: merged array = [1,2,3] and median is 2.
-                    <br></br>
-                    <br></br>
-                    Example 2:
-                    <br></br>
-                    Input: nums1 = [1,2], nums2 = [3,4]
-                    <br></br>
-                    Output: 2.50000
-                    <br></br>
-                    Explanation: merged array = [1,2,3,4] and median is (2 + 3)
-                    / 2 = 2.5.
-                    <br></br>
-                    Constraints:
-                    <br></br>- nums1.length == m<br></br>k - nums2.length == n
+                    {question.explanation}
                   </Grid>
                 </div>
               )}

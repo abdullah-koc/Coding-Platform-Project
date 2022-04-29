@@ -12,6 +12,7 @@ import EditorMainScreen from "./views/EditorMainScreen";
 import Contests from "./views/Contests";
 import EditorContestScreen from "./views/EditorContestScreen";
 import ContestScreen from "./views/ContestScreen";
+import EditorProfileScreen from "./views/EditorProfileScreen";
 
 const useStyles = makeStyles({
   root: {
@@ -33,16 +34,30 @@ const App = () => {
     <div className={clsx(classes.root)}>
       <div>
         <Routes>
-          <Route path="/" element={<LoginRegister />} />
-          <Route path="/problems" element={<ProblemsScreen />} />
-          <Route path="/editor" element={<EditorMainScreen />} />
-          <Route path="/editor/contests" element={<EditorContestScreen />} />
-          <Route path="/contests" element={<Contests />} />
-          <Route path="/contests/:id" element={<ContestScreen />} />
-          <Route path="/cquestion/:id" element={<CodingQuestionInfo />} />
-          <Route path="/ncquestion/:id" element={<NonCodingQuestionInfo />} />
-          <Route path="/profile" element={<UserProfileScreen />} />
-          <Route path="/admin/:id" element={<AdminScreen />} />
+          <Route path="/" element={<LoginRegister />} /> {/*done*/}
+          <Route path="/problems" element={<ProblemsScreen />} /> {/*done*/}
+          <Route path="/editor" element={<EditorMainScreen />} /> {/*done*/}
+          <Route
+            path="/editor/contests"
+            element={<EditorContestScreen />}
+          />{" "}
+          {/*done*/}
+          <Route path="/contests" element={<Contests />} /> {/*done*/}
+          <Route path="/contests/:id" element={<ContestScreen />} /> {/*done*/}
+          <Route path="/cquestion/:id" element={<CodingQuestionInfo />} />{" "}
+          {/*done*/}
+          <Route
+            path="/ncquestion/:id"
+            element={<NonCodingQuestionInfo />}
+          />{" "}
+          {/*done*/}
+          <Route path="/profile" element={<UserProfileScreen />} /> {/*done*/}
+          <Route
+            path="/editor-profile"
+            element={<EditorProfileScreen />}
+          />{" "}
+          {/*done*/}
+          <Route path="/admin" element={<AdminScreen />} />
         </Routes>
       </div>
     </div>

@@ -35,7 +35,19 @@ const LoginRegister = () => {
   useEffect(() => {
     //if local storage has a user, then redirect to home
     if (localStorage.getItem("session")) {
-      navigate("/problems");
+      if (
+        JSON.parse(localStorage.getItem("session")).person_id.charAt(0) === "U"
+      ) {
+        navigate("/problems");
+      } else if (
+        JSON.parse(localStorage.getItem("session")).person_id.charAt(0) === "E"
+      ) {
+        navigate("/editor");
+      } else if (
+        JSON.parse(localStorage.getItem("session")).person_id.charAt(0) === "A"
+      ) {
+        navigate("/admin");
+      }
     }
   }, []);
 

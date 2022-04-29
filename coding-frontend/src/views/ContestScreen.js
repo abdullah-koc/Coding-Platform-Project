@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavbarUser from "../components/Navbars/NavbarUser";
 import { Grid, Button } from "@mui/material";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
@@ -7,6 +7,16 @@ import { useNavigate } from "react-router-dom";
 import RanksTable from "../components/RanksTable";
 
 export const ContestScreen = () => {
+  let navigate = useNavigate();
+  useEffect(() => {
+    if (
+      localStorage.getItem("session") === null ||
+      JSON.parse(localStorage.getItem("session")).person_id.charAt(0) !== "U"
+    ) {
+      navigate("/");
+    }
+  }, []);
+
   const [contestInfo, setContestInfo] = useState({
     contest_id: "C1",
     contest_name: "Havelsan Hackathon",
@@ -133,7 +143,7 @@ export const ContestScreen = () => {
   const handleChange = (event) => {
     setisTermsAccepted(event.target.value);
   };
-  let navigate = useNavigate();
+
   const handleGoToQuestion = (id) => {
     if (isTermsAccepted) {
       if (id.startsWith("CQ")) {

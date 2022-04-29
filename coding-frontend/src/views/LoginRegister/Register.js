@@ -19,7 +19,7 @@ const Register = () => {
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
   const [birthday, setBirthday] = useState("");
-  const [testData, setTestData] = useState();
+  const [cvURL, setCVURL] = useState("");
 
   //password should be at least 8 characters long and contain at least one number and one capital letter
   const isPasswordValid = (password) => {
@@ -42,6 +42,37 @@ const Register = () => {
       );
     } else {
       if (isEditor) {
+        if (cvURL == "") {
+          alert("Please upload your CV");
+          return;
+        } else {
+          axios
+            .post(process.env.REACT_APP_URL + "api/auth/signUp", {
+              full_name: fullName,
+              email: email,
+              nickname: nickName,
+              password: password,
+              company_phone: "",
+              birth_date: birthday,
+              company_address: "",
+              type: "Editor",
+              cv_url: cvURL,
+            })
+            .then((response) => {
+              alert("Successfully registered");
+              axios
+                .get(process.env.REACT_APP_URL + "api/editor/" + email)
+                .then((response) => {
+                  var details;
+                  details = response.data;
+                  localStorage.setItem("session", JSON.stringify(details));
+                  navigate("/editor");
+                });
+            })
+            .catch((error) => {
+              alert("A user with this email/nickname already exists");
+            });
+        }
       } else {
         axios
           .post(process.env.REACT_APP_URL + "api/auth/signUp", {
@@ -56,7 +87,6 @@ const Register = () => {
             cv_url: "",
           })
           .then((response) => {
-            console.log(response);
             alert("Successfully registered");
             //get user details from axios
             var details;
@@ -64,7 +94,6 @@ const Register = () => {
               .get(process.env.REACT_APP_URL + "api/user/" + email)
               .then((response) => {
                 details = response.data;
-                console.log(details);
                 localStorage.setItem("session", JSON.stringify(details));
                 navigate("/problems");
               });
@@ -184,11 +213,13 @@ const Register = () => {
       </Grid>
       {isEditor && (
         <Grid item xs={12} style={{ marginTop: "3%" }}>
-          Click here to upload your CV
-          <input
-            id="file-upload"
-            type={"file"}
-            style={{ paddingLeft: "10px" }}
+          <TextField
+            style={{ width: "400px" }}
+            placeholder="CV URL"
+            size="small"
+            value={cvURL}
+            onChange={(e) => setCVURL(e.target.value)}
+            variant="standard"
           />
         </Grid>
       )}

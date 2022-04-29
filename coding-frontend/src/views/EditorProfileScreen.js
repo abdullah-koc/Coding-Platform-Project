@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import NavbarUser from "../components/Navbars/NavbarUser";
 import { Grid, TextField, Button } from "@mui/material";
 import sampleProfile from "../images/sampleProfile.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import NavbarEditor from "../components/Navbars/NavbarEditor";
 
-const UserProfileScreen = () => {
+const EditorProfileScreen = () => {
   let navigate = useNavigate();
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
@@ -14,12 +14,10 @@ const UserProfileScreen = () => {
   const [photo, setPhoto] = useState("");
   const [phone, setPhone] = useState("");
   const [newPhone, setNewPhone] = useState("");
-  const [school, setSchool] = useState("");
-  const [newSchool, setNewSchool] = useState("");
-  const [department, setDepartment] = useState("");
-  const [newDepartment, setNewDepartment] = useState("");
-  const [currentCompany, setCurrentCompany] = useState("");
-  const [newCompany, setNewCompany] = useState("");
+  const [experienceLevel, setExperienceLevel] = useState("");
+  const [newExperienceLevel, setNewExperienceLevel] = useState("");
+  const [salary, setSalary] = useState("");
+  const [newSalary, setNewSalary] = useState("");
 
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,7 +27,7 @@ const UserProfileScreen = () => {
     const user = JSON.parse(localStorage.getItem("session"));
     setUser(user);
     try {
-      if (user.person_id.charAt(0) !== "U") {
+      if (user.person_id.charAt(0) !== "E") {
         navigate("/");
       }
       setName(user.full_name);
@@ -38,9 +36,10 @@ const UserProfileScreen = () => {
       setBirthDate(user.birth_date);
       setPhoto(user.photo === undefined ? sampleProfile : user.photo);
       setPhone(user.phone === undefined ? "" : user.phone);
-      setSchool(user.school === undefined ? "" : user.school);
-      setDepartment(user.department === undefined ? "" : user.department);
-      setCurrentCompany(user.cur_company === undefined ? "" : user.cur_company);
+      setExperienceLevel(
+        user.experienceLevel === undefined ? "" : user.experienceLevel
+      );
+      setSalary(user.salary === undefined ? "" : user.salary);
     } catch (err) {
       navigate("/");
     }
@@ -73,68 +72,47 @@ const UserProfileScreen = () => {
       });
   };
 
-  const handleSchoolChange = () => {
+  const handleExperienceLevelChange = () => {
     axios
       .post(
         process.env.REACT_APP_URL +
-          "api/user/change/school/" +
+          "api/user/change/experienceLevel/" +
           user.person_id +
           "/" +
-          newSchool
+          newExperienceLevel
       )
       .then((res) => {
-        alert("School changed successfully");
+        alert("Experience Level changed successfully");
         localStorage.setItem(
           "session",
-          JSON.stringify({ ...user, school: newSchool })
+          JSON.stringify({ ...user, experienceLevel: newExperienceLevel })
         );
-        setSchool(newSchool);
+        setExperienceLevel(newExperienceLevel);
       })
       .catch((err) => {
         console.log(err);
-        alert("School change failed");
+        alert("ExperienceLevel change failed");
       });
   };
-  const handleDepartmentChange = () => {
+  const handleSalaryChange = () => {
     axios
       .post(
         process.env.REACT_APP_URL +
-          "api/user/change/department/" +
+          "api/user/change/salary/" +
           user.person_id +
           "/" +
-          newDepartment
+          newSalary
       )
       .then((res) => {
-        alert("Department changed successfully");
+        alert("Salary changed successfully");
         localStorage.setItem(
           "session",
-          JSON.stringify({ ...user, department: newDepartment })
+          JSON.stringify({ ...user, salary: newSalary })
         );
-        setDepartment(newDepartment);
+        setSalary(newSalary);
       })
       .catch((err) => {
-        alert("Department change failed");
-      });
-  };
-  const handleCompanyChange = () => {
-    axios
-      .post(
-        process.env.REACT_APP_URL +
-          "api/user/change/current_company/" +
-          user.person_id +
-          "/" +
-          newCompany
-      )
-      .then((res) => {
-        alert("Company changed successfully");
-        localStorage.setItem(
-          "session",
-          JSON.stringify({ ...user, cur_company: newCompany })
-        );
-        setCurrentCompany(newCompany);
-      })
-      .catch((err) => {
-        alert("Company change failed");
+        alert("Salary change failed");
       });
   };
 
@@ -167,7 +145,7 @@ const UserProfileScreen = () => {
   };
   return (
     <div>
-      <NavbarUser />
+      <NavbarEditor />
       <div>
         <Grid container style={{ fontSize: "120%" }}>
           <Grid
@@ -317,7 +295,7 @@ const UserProfileScreen = () => {
                   Save
                 </Button>
               </Grid>
-              <Grid
+              {/*<Grid
                 item
                 xs={12}
                 style={{
@@ -333,34 +311,34 @@ const UserProfileScreen = () => {
                     marginRight: "10px",
                   }}
                 >
-                  <span style={{ fontWeight: "bold" }}>School: </span>
+                  <span style={{ fontWeight: "bold" }}>Experience Level: </span>
                   {"  "}{" "}
-                  {school === null
+                  {experienceLevel === null
                     ? "Not set"
-                    : school === undefined
+                    : experienceLevel === undefined
                     ? "Not set"
-                    : school}
+                    : experienceLevel}
                 </div>
                 <TextField
                   size="small"
-                  placeholder="New school"
+                  placeholder="New experienceLevel"
                   value={
-                    newSchool === undefined
+                    newExperienceLevel === undefined
                       ? ""
-                      : newSchool === null
+                      : newExperienceLevel === null
                       ? ""
-                      : newSchool
+                      : newExperienceLevel
                   }
                   color="success"
-                  onChange={(e) => setNewSchool(e.target.value)}
+                  onChange={(e) => setNewExperienceLevel(e.target.value)}
                 />
                 <Button
                   color="success"
-                  onClick={handleSchoolChange}
+                  onClick={handleExperienceLevelChange}
                   disabled={
-                    newSchool === "" ||
-                    newSchool === undefined ||
-                    newSchool === null
+                    newExperienceLevel === "" ||
+                    newExperienceLevel === undefined ||
+                    newExperienceLevel === null
                   }
                 >
                   Save
@@ -382,88 +360,39 @@ const UserProfileScreen = () => {
                     marginRight: "10px",
                   }}
                 >
-                  <span style={{ fontWeight: "bold" }}>Department: </span>
+                  <span style={{ fontWeight: "bold" }}>Salary: </span>
                   {"  "}{" "}
-                  {department === null
+                  {salary === null
                     ? "Not set"
-                    : department === undefined
+                    : salary === undefined
                     ? "Not set"
-                    : department}
+                    : salary}
                 </div>
                 <TextField
                   size="small"
-                  placeholder="New department"
+                  placeholder="New salary"
                   value={
-                    newDepartment === undefined
+                    newSalary === undefined
                       ? ""
-                      : newDepartment === null
+                      : newSalary === null
                       ? ""
-                      : newDepartment
+                      : newSalary
                   }
                   color="success"
-                  onChange={(e) => setNewDepartment(e.target.value)}
+                  onChange={(e) => setNewSalary(e.target.value)}
                 />
                 <Button
                   color="success"
-                  onClick={handleDepartmentChange}
+                  onClick={handleSalaryChange}
                   disabled={
-                    newDepartment === "" ||
-                    newDepartment === undefined ||
-                    newDepartment === null
+                    newSalary === "" ||
+                    newSalary === undefined ||
+                    newSalary === null
                   }
                 >
                   Save
                 </Button>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginBottom: "20px",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginRight: "10px",
-                  }}
-                >
-                  <span style={{ fontWeight: "bold" }}>Current Company: </span>
-                  {"  "}
-                  {currentCompany === null
-                    ? "Not set"
-                    : currentCompany === undefined
-                    ? "Not set"
-                    : currentCompany}
-                </div>
-                <TextField
-                  size="small"
-                  placeholder="New company"
-                  value={
-                    newCompany === undefined
-                      ? ""
-                      : newCompany === null
-                      ? ""
-                      : newCompany
-                  }
-                  color="success"
-                  onChange={(e) => setNewCompany(e.target.value)}
-                />
-                <Button
-                  color="success"
-                  onClick={handleCompanyChange}
-                  disabled={
-                    newCompany === undefined ||
-                    newCompany === "" ||
-                    newCompany === null
-                  }
-                >
-                  Save
-                </Button>
-              </Grid>
+                </Grid>*/}
               <Grid
                 item
                 xs={12}
@@ -541,4 +470,4 @@ const UserProfileScreen = () => {
   );
 };
 
-export default UserProfileScreen;
+export default EditorProfileScreen;

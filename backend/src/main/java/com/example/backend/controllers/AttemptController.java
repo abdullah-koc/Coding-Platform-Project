@@ -21,8 +21,8 @@ public class AttemptController {
         attemptService.makeAttempt(attemptDto);
     }
 
-    @GetMapping("/{user_id}")
-    public List<Attempt> getUserOwnAttempts(@PathVariable String user_id, @RequestBody String question_id) {
+    @GetMapping("/{user_id}/{question_id}")
+    public List<Attempt> getUserOwnAttempts(@PathVariable String user_id, @PathVariable String question_id) {
         return attemptService.getUserOwnAttempts(user_id, question_id);
     }
 

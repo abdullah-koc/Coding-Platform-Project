@@ -10,7 +10,9 @@ import {
   DialogContent,
   RadioGroup,
   FormControlLabel,
+  duration,
 } from "@mui/material";
+import axios from "axios";
 
 const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
   const [questionType, setQuestionType] = useState("CQ");
@@ -24,6 +26,16 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
   const [typeDescription, setTypeDescription] = useState("");
 
   const handleClose = () => {
+    //set all fields to empty
+    setQuestionType("CQ");
+    setQuestionTitle("");
+    setExplanation("");
+    setDifficulty("Easy");
+    setAdvisedDuration(0);
+    setQuestionPoint(0);
+    setSolution("");
+    setMaxTry(3);
+    setTypeDescription("");
     handleParentOpen(false);
   };
   const handleAddQuestion = () => {
@@ -32,18 +44,38 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
       questionTitle === "" ||
       explanation === "" ||
       questionPoint === 0 ||
-      maxTry === 0 ||
-      typeDescription === ""
+      maxTry === 0
     ) {
       alert("Please fill all fields");
       return;
     }
-    //TODO: add question to database
-    //if question is added for contest,
-    if (questionType === "CQ") {
-    }
+    axios
+      .post(process.env.REACT_APP_URL + "api/question/insert", {
+        title: questionTitle,
+        explanation: explanation,
+        question_duration: advisedDuration,
+        difficulty: difficulty,
+        question_point: questionPoint,
+        solution: solution,
+        max_try: maxTry,
+        question_type: questionType,
+        creation_date:
+          new Date().getFullYear() +
+          "-" +
+          ("0" + (new Date().getMonth() + 1)).slice(-2) +
+          "-" +
+          ("0" + new Date().getDate()).slice(-2),
+        editor_id: JSON.parse(localStorage.getItem("session")).person_id,
+      })
+      .then((res) => {
+        alert("Question added successfully");
+        window.location.reload();
+        handleClose();
+      })
+      .catch((err) => {
+        alert("Error adding question");
+      });
     //close dialog
-    handleClose();
   };
   return (
     <div>
@@ -175,6 +207,7 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
                       size="small"
                       style={{ width: "200px" }}
                       value={advisedDuration}
+                      type="number"
                       onChange={(e) => setAdvisedDuration(e.target.value)}
                     />
                   </Grid>
@@ -193,6 +226,7 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
                       size="small"
                       style={{ width: "200px" }}
                       value={questionPoint}
+                      type="number"
                       onChange={(e) => setQuestionPoint(e.target.value)}
                     />
                   </Grid>
@@ -212,6 +246,7 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
                         size="small"
                         style={{ width: "200px" }}
                         value={maxTry}
+                        type="number"
                         onChange={(e) => setMaxTry(e.target.value)}
                       />
                     </Grid>

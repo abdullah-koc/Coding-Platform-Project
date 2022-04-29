@@ -25,17 +25,39 @@ const Login = () => {
             return;
           }
           alert("Successfully logged in");
+
           var details;
           axios
             .get(process.env.REACT_APP_URL + "api/user/" + email)
             .then((response) => {
+              console.log(response.data);
               details = response.data;
-              localStorage.setItem("session", JSON.stringify(details));
-              navigate("/problems");
+              if (!response.data == "") {
+                localStorage.setItem("session", JSON.stringify(details));
+                navigate("/problems");
+                return;
+              }
             });
-        })
-        .catch((error) => {
-          alert("Invalid credentials");
+          axios
+            .get(process.env.REACT_APP_URL + "api/editor/" + email)
+            .then((response) => {
+              details = response.data;
+              if (!response.data == "") {
+                localStorage.setItem("session", JSON.stringify(details));
+                navigate("/editor");
+                return;
+              }
+            });
+          // axios
+          //   .get(process.env.REACT_APP_URL + "api/admin/" + email)
+          //   .then((response) => {
+          //     details = response.data;
+          //     if (!response.data == "") {
+          //       localStorage.setItem("session", JSON.stringify(details));
+          //       navigate("/admin");
+          //       return;
+          //     }
+          //   });
         });
     }
   };

@@ -2,23 +2,57 @@ import React, { useState } from "react";
 import { TextField, Grid, MenuItem, Select, Button } from "@mui/material";
 import Colors from "../utils/Colors";
 import TestCases from "./TestCases";
+import axios from "axios";
 
-const CodingQuestionText = ({ parentSubmitCallback, isContest }) => {
+const CodingQuestionText = ({ parentSubmitCallback, isContest, question }) => {
   const [questionText, setQuestionText] = useState("");
   const [programmingLanguage, setProgrammingLanguage] = useState("Java 8");
-  const [remainingAttempts, setRemainingAttempts] = useState(3);
+  const [remainingAttempts, setRemainingAttempts] = useState(0);
   const [isTestCasesShown, setIsTestCasesShown] = useState(false);
   const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 
-  const handleSubmitButtonPress = () => {
-    setIsTestCasesShown(true);
-    if (remainingAttempts === 1) {
-      if (!isContest) {
-        setIsSubmitButtonDisabled(true);
-      }
+  React.useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          `api/attempt/${
+            JSON.parse(localStorage.getItem("session")).person_id
+          }/${question.question_id}`
+      )
+      .then((res) => {
+        setRemainingAttempts(question.max_try - res.data.length);
+      });
+  }, [question]);
+
+  React.useEffect(() => {
+    if (remainingAttempts <= 0) {
+      setIsSubmitButtonDisabled(true);
       parentSubmitCallback(true);
     }
-    setRemainingAttempts(remainingAttempts - 1);
+    if (remainingAttempts > 1) {
+      setIsSubmitButtonDisabled(false);
+      parentSubmitCallback(false);
+    }
+  }, [remainingAttempts]);
+
+  const handleSubmitButtonPress = () => {
+    axios
+      .post(process.env.REACT_APP_URL + "api/attempt/make/attempt", {
+        user_id: JSON.parse(localStorage.getItem("session")).person_id,
+        question_id: question.question_id,
+        user_answer: questionText,
+        programming_language: programmingLanguage,
+      })
+      .then((res) => {
+        setIsTestCasesShown(true);
+        if (remainingAttempts === 1) {
+          if (!isContest) {
+            setIsSubmitButtonDisabled(true);
+          }
+          parentSubmitCallback(true);
+        }
+        setRemainingAttempts(remainingAttempts - 1);
+      });
   };
 
   const handleVideoRequestButtonPress = () => {
