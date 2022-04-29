@@ -164,7 +164,8 @@ export const ContestScreen = () => {
               fontSize: "20px",
             }}
           >
-            <h1>{contestInfo.contest_name}</h1>
+            {isContestEnded === false && (<div><h1>{contestInfo.contest_name}</h1></div>)}
+            {isContestEnded === true && (<div><h1>{contestInfo.contest_name} (Ended)</h1></div>)}
             <Grid container>
               <Grid item xs={4}>
                 <img
@@ -321,10 +322,10 @@ export const ContestScreen = () => {
           >
             {isContestEnded === true && (
               <div>
-                <h1>Questions</h1>
+                <h1>Contest Questions</h1>
                 <Grid
                   style={{
-                    height: "550px",
+                    height: "575px",
                     overflowX: "auto",
                     overflowY: "auto",
                   }}
@@ -346,21 +347,6 @@ export const ContestScreen = () => {
                       />
                     </div>
                   ))}
-                </Grid>
-                <Grid
-                  style={{
-                    paddingTop: "20px",
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    paddingRight: "50px",
-                  }}
-                >
-                  <Button
-                    style={{ backgroundColor: "#64DD17", color: "white" }}
-                    onClick={handleSubmission}
-                  >
-                    Finish Contest
-                  </Button>
                 </Grid>
               </div>
             )}

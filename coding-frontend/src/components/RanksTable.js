@@ -23,13 +23,13 @@ export default function BasicTable() {
 
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} style={{backgroundColor: "#e9e7e9"}}>
       <Table sx={{ minWidth: 450 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Rank</TableCell>
-            <TableCell align="left">Nickname</TableCell>
-            <TableCell align="left">Score</TableCell>
+            <TableCell style={{fontWeight: "bolder"}}>Rank</TableCell>
+            <TableCell style={{fontWeight: "bolder"}} align="left">Nickname</TableCell>
+            <TableCell style={{fontWeight: "bolder"}} align="left">Score</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
