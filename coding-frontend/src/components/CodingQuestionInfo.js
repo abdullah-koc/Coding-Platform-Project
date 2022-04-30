@@ -94,6 +94,12 @@ const CodingQuestionInfo = ({ isContest }) => {
     }
   };
 
+  const handleYoutubeClick = () => {
+    if (question.video_link) {
+      window.open(question.video_link);
+    }
+  };
+
   return (
     <div>
       <NavbarUser />
@@ -173,10 +179,11 @@ const CodingQuestionInfo = ({ isContest }) => {
                     {!isContest && (
                       <Grid item xs={1}>
                         <YouTubeIcon
+                          onClick={() => handleYoutubeClick()}
                           style={{
                             fontSize: "200%",
-                            cursor: "pointer",
-                            color: "#FF0000",
+                            cursor: question.video_link ? "pointer" : "default",
+                            color: question.video_link ? "#FF0000" : "white",
                           }}
                         />
                       </Grid>
@@ -321,7 +328,6 @@ const CodingQuestionInfo = ({ isContest }) => {
         <CodingQuestionText
           isContest={isContest}
           parentSubmitCallback={handleSubmitCallback}
-          question={question}
         />
       </div>
     </div>

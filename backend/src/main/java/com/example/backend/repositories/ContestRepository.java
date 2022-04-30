@@ -48,9 +48,9 @@ public class ContestRepository {
       String contest_id = "C" + contest_id_count;
       contest.setContest_id(contest_id);
 
-      String sql = "INSERT INTO contests (contest_id, contest_name, contest_photo, start_date, end_date, prize, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+      String sql = "INSERT INTO contests (contest_id, contest_name, contest_photo, start_date, end_date, prize) VALUES (?, ?, ?, ?, ?, ?)";
       jdbcTemplate.update(sql, contest.getContest_id(), contest.getContest_name(), contest.getContest_photo(),
-            contest.getStart_date(), contest.getEnd_date(), contest.getPrize(), contest.getCreation_time());
+            contest.getStart_date(), contest.getEnd_date(), contest.getPrize());
    }
 
    public void deleteContest(String contest_id) {

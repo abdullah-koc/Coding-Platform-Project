@@ -4,6 +4,8 @@ import Colors from "../../utils/Colors";
 import { Grid } from "@mui/material";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
+import axios from "axios";
+import UploadLinkDialog from "./UploadLinkDialog";
 
 const useStyles = makeStyles({
   root: {
@@ -27,6 +29,7 @@ const CustomWidthTooltip = styled(({ className, ...props }) => (
 });
 
 const EditorQuestionCard = ({
+  questionId,
   isCoding,
   question,
   questionText,
@@ -38,13 +41,33 @@ const EditorQuestionCard = ({
   const classes = useStyles();
 
   const [isAdded, setIsAdded] = React.useState(false);
+  const [reqCount, setReqCount] = React.useState(0);
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!inContestScreen) {
+      axios
+        .get(process.env.REACT_APP_URL + "api/question/" + questionId)
+        .then((res) => {
+          setReqCount(res.data.video_request_count);
+        })
+        .catch((err) => {
+          console.log("asdfadas");
+        });
+    }
+  }, []);
+
   const handleAddToContest = () => {
     if (!isAdded) {
       setIsAdded(true);
     } else {
       setIsAdded(false);
     }
-    parentCallback(isAdded, question);
+    parentCallback(isAdded, questionId);
+  };
+
+  const handleDialogCallback = (childData) => {
+    setIsDialogOpen(childData);
   };
 
   return (
@@ -53,7 +76,7 @@ const EditorQuestionCard = ({
         <Grid container>
           <Grid
             item
-            xs={inContestScreen ? 1 : 2}
+            xs={1}
             style={{
               display: "flex",
               alignItems: "center",
@@ -67,7 +90,7 @@ const EditorQuestionCard = ({
           </Grid>
           <Grid
             item
-            xs={3}
+            xs={2}
             style={{
               display: "flex",
               alignItems: "center",
@@ -83,6 +106,11 @@ const EditorQuestionCard = ({
           >
             {difficulty}
           </Grid>
+          {!inContestScreen && (
+            <Grid item xs={1} style={{ display: "flex", alignItems: "center" }}>
+              {reqCount}
+            </Grid>
+          )}
           <Grid item xs={1} style={{ display: "flex", alignItems: "center" }}>
             {questionPoint}
           </Grid>
@@ -101,7 +129,26 @@ const EditorQuestionCard = ({
               {isAdded ? "➖" : "➕"}
             </Grid>
           )}
+          {!inContestScreen && isCoding && (
+            <Grid
+              item
+              xs={1}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+              onClick={() => setIsDialogOpen(true)}
+            >
+              Upload YouTube Tutorial
+            </Grid>
+          )}
         </Grid>
+        <UploadLinkDialog
+          open={isDialogOpen}
+          questionID={questionId}
+          handleParentOpen={handleDialogCallback}
+        />
       </div>
     </CustomWidthTooltip>
   );

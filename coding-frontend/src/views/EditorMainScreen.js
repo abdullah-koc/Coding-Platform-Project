@@ -52,14 +52,17 @@ const EditorMainScreen = () => {
               fontSize: "120%",
             }}
           >
-            <Grid item xs={2}>
+            <Grid item xs={1}>
               Type
             </Grid>
             <Grid item xs={6}>
               Title
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={2}>
               Difficulty
+            </Grid>
+            <Grid item xs={1}>
+              Requests
             </Grid>
             <Grid item xs={1}>
               Point
@@ -69,6 +72,7 @@ const EditorMainScreen = () => {
             {questions.map((question, index) => (
               <div style={{ marginBottom: "10px" }} key={index}>
                 <EditorQuestionCard
+                  questionId={question.question_id}
                   isCoding={question.question_id.charAt(0) === "C"}
                   question={question.title}
                   questionPoint={question.question_point}

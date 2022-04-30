@@ -1,58 +1,43 @@
 import React from "react";
 import { Grid } from "@mui/material";
+import axios from "axios";
 
 const TestCases = () => {
-  const [testCases, setTestCases] = React.useState([
-    {
-      id: 1,
-      name: "Test Case 1",
-      exampleInput: "test input 1",
-      exampleOutput: "test output 1",
-      isPassed: true,
-      isLocked: false,
-    },
-    {
-      id: 2,
-      name: "Test Case 2",
-      exampleInput: "test input 2",
-      exampleOutput: "test output 2",
-      isPassed: true,
-      isLocked: false,
-    },
-    {
-      id: 3,
-      name: "Test Case 3",
-      exampleInput: "test input 3",
-      exampleOutput: "test output 3",
-      isPassed: false,
-      isLocked: false,
-    },
-    {
-      id: 4,
-      name: "Test Case 4",
-      exampleInput: "test input 4",
-      exampleOutput: "test output 4",
-      isPassed: false,
-      isLocked: true,
-    },
-    {
-      id: 5,
-      name: "Test Case 5",
-      exampleInput: "test input 5",
-      exampleOutput: "test output 5",
-      isPassed: false,
-      isLocked: true,
-    },
-    {
-      id: 6,
-      name: "Test Case 6",
-      exampleInput: "test input 6",
-      exampleOutput: "test output 6",
-      isPassed: false,
-      isLocked: true,
-    },
-  ]);
-  const [curTestCase, setCurTestCase] = React.useState(testCases[0]);
+  const [testCases, setTestCases] = React.useState([]);
+  const [questionId, setQuestionId] = React.useState(0);
+  const [curIsLocked, setCurIsLocked] = React.useState(false);
+  const [curExampleInput, setCurExampleInput] = React.useState("");
+  const [curExampleOutput, setCurExampleOutput] = React.useState("");
+
+  //get the id from the link
+  const getID = () => {
+    let url = window.location.href;
+    let id = url.split("/")[url.split("/").length - 1];
+    return id;
+  };
+
+  React.useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_URL + "api/question/" + getID())
+      .then((res) => {
+        console.log(res.data);
+        setQuestionId(res.data.question_id);
+      });
+  }, []);
+
+  React.useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL + "api/testcase/" + questionId + "/testCases"
+      )
+      .then((res) => {
+        setTestCases(res.data);
+        setCurIsLocked(res.data[0].is_locked);
+        setCurExampleInput(res.data[0].example_input);
+        setCurExampleOutput(res.data[0].example_output);
+      });
+  }, [questionId]);
+
   return (
     <div
       style={{
@@ -70,14 +55,22 @@ const TestCases = () => {
             height: "30vh",
           }}
         >
-          {testCases.map((testCase) => (
+          {testCases.map((testCase, index) => (
             <div
               style={{ marginBottom: "10px", cursor: "pointer" }}
-              key={testCase.id}
-              onClick={() => setCurTestCase(testCase)}
+              key={index}
+              onClick={() => {
+                setCurIsLocked(testCase.is_locked);
+                setCurExampleInput(testCase.example_input);
+                setCurExampleOutput(testCase.example_output);
+              }}
             >
-              {testCase.name} {testCase.isPassed ? "✅" : "❌"}{" "}
-              {testCase.isLocked ? "🔒" : ""}
+              {"Test Case " + index + 1} {true ? "✅" : "❌"}{" "}
+              {testCase.is_locked === undefined
+                ? ""
+                : testCase.is_locked
+                ? "🔒"
+                : ""}
             </div>
           ))}
         </Grid>
@@ -94,15 +87,15 @@ const TestCases = () => {
         >
           <div style={{ marginBottom: "20px" }}>
             {" "}
-            {curTestCase.name} {curTestCase.isPassed ? "✅" : "❌"}{" "}
+            {"Test Case "} {true ? "✅" : "❌"}{" "}
           </div>
-          {!curTestCase.isLocked && (
+          {!curIsLocked && (
             <div>
               <div style={{ marginBottom: "20px" }}>
-                Input: {curTestCase.exampleInput}
+                Input: {curExampleInput}
               </div>
               <div style={{ marginBottom: "20px" }}>
-                Expected output: {curTestCase.exampleOutput}
+                Expected output: {curExampleOutput}
               </div>
             </div>
           )}

@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   },
 });
 
-const EditorContestCard = ({ onClick }) => {
+const EditorContestCard = ({ contestName, startDate, endDate, onClick }) => {
   const classes = useStyles();
   return (
     <div className={classes.root} onClick={onClick}>
@@ -38,10 +38,10 @@ const EditorContestCard = ({ onClick }) => {
               marginRight: "20px",
             }}
           />
-          {"contest_name"}
+          {contestName}
         </Grid>
         <Grid item xs={5} style={{ display: "flex", alignItems: "center" }}>
-          {"start_date"} - {"end_date"}
+          {startDate} - {endDate}
         </Grid>
       </Grid>
     </div>

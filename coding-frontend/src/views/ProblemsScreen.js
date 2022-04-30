@@ -29,9 +29,17 @@ const ProblemsScreen = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [curQuestions, setCurQuestions] = useState([]);
+  const [allCategories, setAllCategories] = useState([]);
+  const [solvedQuestionIDs, setSolvedQuestionIDs] = useState([]);
   useEffect(() => {
     axios.get(process.env.REACT_APP_URL + "api/question/all").then((res) => {
       setQuestions(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios.get(process.env.REACT_APP_URL + "api/category/all").then((res) => {
+      setAllCategories(res.data);
     });
   }, []);
 
@@ -150,11 +158,11 @@ const ProblemsScreen = () => {
                   onChange={(e) => setCategory(e.target.value)}
                 >
                   <MenuItem value={"All"}>All</MenuItem>
-                  <MenuItem value={"Binary Tree"}>Binary Tree</MenuItem>
-                  <MenuItem value={"Heap"}>Heap</MenuItem>
-                  <MenuItem value={"Dynamic Programming"}>
-                    Dynamic Programming
-                  </MenuItem>
+                  {allCategories.map((category, index) => (
+                    <MenuItem key={index} value={category.category_name}>
+                      {category.category_name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </Grid>
               <Grid item xs={3}>
@@ -264,7 +272,6 @@ const ProblemsScreen = () => {
                 </div>
               </Grid>
             </Grid>
-
             {curQuestions.map((question, index) => (
               <div
                 key={index}
@@ -278,10 +285,13 @@ const ProblemsScreen = () => {
                   question={question.title}
                   difficulty={question.difficulty}
                   likeRate={
-                    question.dislike_count == 0
+                    question.dislike_count === 0 && question.like_count === 0
                       ? 0
-                      : question.like_count /
-                        (question.like_cont + question.dislike_count)
+                      : (
+                          100 *
+                          (question.like_count /
+                            (question.like_count + question.dislike_count))
+                        ).toFixed(1)
                   }
                   isSolved={question.isSolved}
                   questionPoint={question.question_point}

@@ -36,17 +36,17 @@ public class QuestionController {
       questionService.insertQuestion(question);
    }
 
-   @GetMapping("/delete/{question_id}")
+   @PostMapping("/delete/{question_id}")
    public void deleteQuestion(@PathVariable String question_id) {
       questionService.deleteQuestion(question_id);
    }
 
-   @GetMapping("/add_category/{question_id}/{category_name}")
+   @PostMapping("/add_category/{question_id}/{category_name}")
    public void addCategory(@PathVariable String question_id, @PathVariable String category_name) {
       questionService.addCategory(question_id, category_name);
    }
 
-   @GetMapping("/remove_category/{question_id}/{category_name}")
+   @PostMapping("/remove_category/{question_id}/{category_name}")
    public void removeCategory(@PathVariable String question_id, @PathVariable String category_name) {
       questionService.removeCategory(question_id, category_name);
    }
@@ -56,18 +56,18 @@ public class QuestionController {
       return questionService.getCategories(question_id);
    }
 
-   @GetMapping("/user_request/{question_id}/{user_id}")
+   @PostMapping("/user_request/{question_id}/{user_id}")
    public void userRequest(@PathVariable String question_id, @PathVariable String user_id) {
       questionService.userRequest(question_id, user_id);
    }
 
-   @GetMapping("/user_cancel_request/{question_id}/{user_id}")
+   @PostMapping("/user_cancel_request/{question_id}/{user_id}")
    public void userCancelRequest(@PathVariable String question_id, @PathVariable String user_id) {
       questionService.userCancelRequest(question_id, user_id);
    }
 
-   @PostMapping("/editor_request/{question_id}")
-   public void editorRequest(@PathVariable String question_id, @RequestBody String video_link) {
+   @PostMapping("/editor_request/{question_id}/{video_link}")
+   public void editorRequest(@PathVariable String question_id, @PathVariable String video_link) {
       questionService.editorRequest(question_id, video_link);
    }
 

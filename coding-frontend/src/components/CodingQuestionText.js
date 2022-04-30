@@ -4,7 +4,8 @@ import Colors from "../utils/Colors";
 import TestCases from "./TestCases";
 import axios from "axios";
 
-const CodingQuestionText = ({ parentSubmitCallback, isContest, question }) => {
+const CodingQuestionText = ({ parentSubmitCallback, isContest }) => {
+  const [question, setQuestion] = useState([]);
   const [questionText, setQuestionText] = useState("");
   const [programmingLanguage, setProgrammingLanguage] = useState("Java 8");
   const [remainingAttempts, setRemainingAttempts] = useState(0);
@@ -13,13 +14,30 @@ const CodingQuestionText = ({ parentSubmitCallback, isContest, question }) => {
   const [isVideoRequestButtonDisabled, setIsVideoRequestButtonDisabled] =
     useState(false);
 
+  //get the id from the link
+  const getID = () => {
+    let url = window.location.href;
+    let id = url.split("/")[url.split("/").length - 1];
+    return id;
+  };
+
+  React.useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_URL + "api/question/" + getID())
+      .then((res) => {
+        setQuestion(res.data);
+        setQuestionText(res.data.question_text);
+        setRemainingAttempts(res.data.remaining_attempts);
+      });
+  }, []);
+
   React.useEffect(() => {
     axios
       .get(
         process.env.REACT_APP_URL +
           `api/attempt/${
             JSON.parse(localStorage.getItem("session")).person_id
-          }/${question.question_id}`
+          }/${getID()}`
       )
       .then((res) => {
         setRemainingAttempts(question.max_try - res.data.length);
@@ -31,7 +49,7 @@ const CodingQuestionText = ({ parentSubmitCallback, isContest, question }) => {
       setIsSubmitButtonDisabled(true);
       parentSubmitCallback(true);
     }
-    if (remainingAttempts > 1) {
+    if (remainingAttempts >= 1) {
       setIsSubmitButtonDisabled(false);
       parentSubmitCallback(false);
     }
@@ -54,6 +72,9 @@ const CodingQuestionText = ({ parentSubmitCallback, isContest, question }) => {
           parentSubmitCallback(true);
         }
         setRemainingAttempts(remainingAttempts - 1);
+      })
+      .catch((err) => {
+        alert("Answer cannot be empty.");
       });
   };
 

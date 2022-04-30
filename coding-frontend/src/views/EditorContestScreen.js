@@ -5,8 +5,18 @@ import EditorContestCard from "../components/EditorComponents/EditorContestCard"
 import { useNavigate } from "react-router-dom";
 import EditorQuestionCard from "../components/EditorComponents/EditorQuestionCard";
 import EditorContestDetails from "../components/EditorComponents/EditorContestDetails";
+import axios from "axios";
 const EditorContestScreen = () => {
   let navigate = useNavigate();
+
+  const [addedQuestions, setAddedQuestions] = React.useState([]);
+  const [questions, setQuestions] = React.useState([]);
+  const [contests, setContests] = React.useState([]);
+  const [newID, setNewID] = React.useState(0);
+  const [newContestName, setNewContestName] = React.useState("");
+  const [newStartDate, setNewStartDate] = React.useState("");
+  const [newEndDate, setNewEndDate] = React.useState("");
+  const [newPrize, setNewPrize] = React.useState(0);
 
   React.useEffect(() => {
     if (
@@ -17,10 +27,25 @@ const EditorContestScreen = () => {
     }
   }, []);
 
+  React.useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_URL + "api/contest/all")
+      .then((response) => {
+        setContests(response.data);
+        setNewID(response.data.length);
+      });
+  }, []);
+  React.useEffect(() => {
+    axios.get(process.env.REACT_APP_URL + "api/question/all").then((res) => {
+      setQuestions(res.data);
+      setDataToShow(res.data);
+    });
+  }, []);
+
   const navigateToContest = (id) => {
     navigate(`/editor/contests/${id}`);
   };
-  const [addedQuestions, setAddedQuestions] = React.useState([]);
+
   const [tempData, setTempData] = React.useState([
     {
       question: "What is the output of the following code?",
@@ -28,89 +53,17 @@ const EditorContestScreen = () => {
       difficulty: "Easy",
       questionPoint: "60",
     },
-    {
-      question: "Two sums",
-      questionText: "",
-      difficulty: "Easy",
-      questionPoint: "60",
-    },
-    {
-      question: "Two sums",
-      questionText: "",
-      difficulty: "Easy",
-      questionPoint: "60",
-    },
-    {
-      question: "Two sums",
-      questionText: "",
-      difficulty: "Easy",
-      questionPoint: "60",
-    },
-    {
-      question: "Two sums",
-      questionText: "",
-      difficulty: "Easy",
-      questionPoint: "60",
-    },
-    {
-      question: "Two sums",
-      questionText: "",
-      difficulty: "Easy",
-      questionPoint: "60",
-    },
-    {
-      question: "Two sums",
-      questionText: "",
-      difficulty: "Easy",
-      questionPoint: "60",
-    },
-    {
-      question: "Two sums",
-      questionText: "",
-      difficulty: "Easy",
-      questionPoint: "60",
-    },
-    {
-      question: "Two sums",
-      questionText: "",
-      difficulty: "Easy",
-      questionPoint: "60",
-    },
-    {
-      question: "Two sums",
-      questionText: "",
-      difficulty: "Easy",
-      questionPoint: "60",
-    },
-    {
-      question: "Two sums",
-      questionText: "",
-      difficulty: "Easy",
-      questionPoint: "60",
-    },
-    {
-      question: "Two sums",
-      questionText: "",
-      difficulty: "Easy",
-      questionPoint: "60",
-    },
-    {
-      question: "Two sums",
-      questionText: "",
-      difficulty: "Easy",
-      questionPoint: "60",
-    },
   ]);
-  const [dataToShow, setDataToShow] = React.useState(tempData);
+  const [dataToShow, setDataToShow] = React.useState(questions);
   const [isDialogOpen, setIsDialogOpen] = React.useState({
     isOpen: false,
-    questionId: null,
+    contestId: null,
   });
 
   const searchBarHandler = (e) => {
     let searchText = e.target.value;
-    let filteredData = tempData.filter((item) => {
-      return item.question.toLowerCase().includes(searchText.toLowerCase());
+    let filteredData = questions.filter((item) => {
+      return item.title.toLowerCase().includes(searchText.toLowerCase());
     });
     setDataToShow(filteredData);
   };
@@ -131,6 +84,42 @@ const EditorContestScreen = () => {
     setIsDialogOpen({ isOpen: data, questionId: null });
   };
 
+  const handleAddContest = () => {
+    //if start date is after end date
+    if (newStartDate > newEndDate) {
+      alert("Start date cannot be after end date");
+      return;
+    }
+    axios
+      .post(process.env.REACT_APP_URL + "api/contest/insert", {
+        contest_name: newContestName,
+        start_date: newStartDate,
+        end_date: newEndDate,
+        prize: newPrize,
+      })
+      .then((res) => {
+        addedQuestions.map((q) => {
+          axios.post(
+            process.env.REACT_APP_URL +
+              "api/contest/insert_question/" +
+              "C" +
+              newID +
+              "/" +
+              q
+          );
+        });
+        alert("Contest added successfully");
+        setNewContestName("");
+        setNewStartDate("");
+        setNewEndDate("");
+        setNewPrize(0);
+        setNewID(newID + 1);
+      })
+      .catch((err) => {
+        alert("Error adding contest");
+      });
+  };
+
   return (
     <div>
       <NavbarEditor />
@@ -141,30 +130,20 @@ const EditorContestScreen = () => {
               Contests
             </h2>
             <div style={{ height: "76vh", overflowY: "scroll" }}>
-              <EditorContestCard
-                onClick={() => setIsDialogOpen({ isOpen: true, questionId: 1 })}
-              />
-              <EditorContestCard
-                onClick={() => setIsDialogOpen({ isOpen: true, questionId: 2 })}
-              />
-              <EditorContestCard
-                onClick={() => setIsDialogOpen({ isOpen: true, questionId: 3 })}
-              />
-              <EditorContestCard
-                onClick={() => setIsDialogOpen({ isOpen: true, questionId: 4 })}
-              />
-              <EditorContestCard
-                onClick={() => setIsDialogOpen({ isOpen: true, questionId: 5 })}
-              />
-              <EditorContestCard
-                onClick={() => setIsDialogOpen({ isOpen: true, questionId: 6 })}
-              />
-              <EditorContestCard
-                onClick={() => setIsDialogOpen({ isOpen: true, questionId: 7 })}
-              />
-              <EditorContestCard
-                onClick={() => setIsDialogOpen({ isOpen: true, questionId: 8 })}
-              />
+              {contests.map((contest, index) => (
+                <EditorContestCard
+                  onClick={() =>
+                    setIsDialogOpen({
+                      isOpen: true,
+                      contestId: contest.contest_id,
+                    })
+                  }
+                  key={index}
+                  contestName={contest.contest_name}
+                  startDate={contest.start_date}
+                  endDate={contest.end_date}
+                />
+              ))}
             </div>
           </Grid>
           <Grid item xs={8}>
@@ -197,6 +176,8 @@ const EditorContestScreen = () => {
                       variant="outlined"
                       color="success"
                       size="small"
+                      value={newContestName}
+                      onChange={(e) => setNewContestName(e.target.value)}
                       style={{ width: "200px" }}
                     />
                   </Grid>
@@ -215,6 +196,8 @@ const EditorContestScreen = () => {
                     <TextField
                       variant="outlined"
                       color="success"
+                      value={newStartDate}
+                      onChange={(e) => setNewStartDate(e.target.value)}
                       type="date"
                       size="small"
                       style={{ width: "200px" }}
@@ -234,6 +217,8 @@ const EditorContestScreen = () => {
 
                     <TextField
                       variant="outlined"
+                      value={newEndDate}
+                      onChange={(e) => setNewEndDate(e.target.value)}
                       color="success"
                       type="date"
                       size="small"
@@ -255,6 +240,8 @@ const EditorContestScreen = () => {
                       variant="outlined"
                       color="success"
                       size="small"
+                      value={newPrize}
+                      onChange={(e) => setNewPrize(e.target.value)}
                       type="number"
                       style={{ width: "200px" }}
                     />
@@ -325,13 +312,14 @@ const EditorContestScreen = () => {
                 <div style={{ height: "40vh", overflowY: "scroll" }}>
                   {dataToShow.map((data, index) => (
                     <EditorQuestionCard
+                      questionId={data.question_id}
                       inContestScreen
                       parentCallback={handleCallback}
                       key={index}
-                      question={data.question}
-                      questionText={data.questionText}
+                      question={data.title}
+                      questionText={data.explanation}
                       difficulty={data.difficulty}
-                      questionPoint={data.questionPoint}
+                      questionPoint={data.question_point}
                     />
                   ))}
                 </div>
@@ -346,7 +334,11 @@ const EditorContestScreen = () => {
                   marginTop: "10px",
                 }}
               >
-                <Button variant="contained" color="primary">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleAddContest()}
+                >
                   Create
                 </Button>
               </Grid>
@@ -355,7 +347,7 @@ const EditorContestScreen = () => {
           <EditorContestDetails
             open={isDialogOpen.isOpen}
             handleParentOpen={dialogCallback}
-            contestId={isDialogOpen.questionId}
+            contestId={isDialogOpen.contestId}
           />
         </Grid>
       </div>

@@ -58,12 +58,12 @@ public class ContestController {
       return contestService.getAllQuestions(contest_id);
    }
 
-   @GetMapping(path = "/insert_question/{contest_id}/{question_id}")
+   @PostMapping(path = "/insert_question/{contest_id}/{question_id}")
    public void insertQuestion(@PathVariable String contest_id, @PathVariable String question_id) {
       contestService.insertQuestion(contest_id, question_id);
    }
 
-   @GetMapping(path = "/insert_contestant/{contest_id}/{person_id}")
+   @PostMapping(path = "/insert_contestant/{contest_id}/{person_id}")
    public void insertContestant(@PathVariable String contest_id, @PathVariable String user_id) {
       contestService.insertContestant(contest_id, user_id);
    }
