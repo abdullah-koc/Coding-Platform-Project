@@ -21,16 +21,11 @@ public class QuestionRepository {
       String last_question_id;
       int question_id_count;
       String last_question_id_sql;
-      // if (question.getQuestion_type().equals("CQ")) {
-      // last_question_id_sql = "SELECT question_id FROM questions WHERE
-      // LENGTH(question_id) AND question_id LIKE \"CQ%\" >= ALL(SELECT
-      // LENGTH(question_id) FROM questions ) ORDER BY question_id DESC LIMIT 1";
-      // } else {
-      // last_question_id_sql = "SELECT question_id FROM questions WHERE
-      // LENGTH(question_id) AND question_id LIKE \"NCQ%\" >= ALL(SELECT
-      // LENGTH(question_id) FROM questions ) ORDER BY question_id DESC LIMIT 1";
-      // }
-      last_question_id_sql = "SELECT question_id FROM questions WHERE LENGTH(question_id) >= ALL(SELECT LENGTH(question_id) FROM questions ) ORDER BY question_id DESC LIMIT 1";
+      if (question.getQuestion_type().equals("CQ")) {
+         last_question_id_sql = "SELECT question_id FROM questions WHERE question_id LIKE \"CQ%\" AND LENGTH(question_id) >= ALL(SELECT LENGTH(question_id) FROM questions WHERE question_id LIKE \"CQ%\") ORDER BY question_id DESC LIMIT 1";
+      } else {
+         last_question_id_sql = "SELECT question_id FROM questions WHERE question_id LIKE \"NCQ%\" AND LENGTH(question_id) >= ALL(SELECT LENGTH(question_id) FROM questions WHERE question_id LIKE \"NCQ%\") ORDER BY question_id DESC LIMIT 1";
+      }
       try {
          last_question_id = (String) jdbcTemplate.queryForObject(last_question_id_sql, String.class);
 
