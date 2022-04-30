@@ -2,6 +2,7 @@ package com.example.backend.repositories;
 
 import java.util.List;
 
+import com.example.backend.dto.CategoryDto;
 import com.example.backend.dto.QuestionDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,16 @@ public class QuestionRepository {
       String last_question_id;
       int question_id_count;
       String last_question_id_sql;
-      if (question.getQuestion_type().equals("CQ")) {
-         last_question_id_sql = "SELECT question_id FROM questions WHERE question_id LIKE \"CQ%\" ORDER BY question_id DESC LIMIT 1";
-      } else {
-         last_question_id_sql = "SELECT question_id FROM questions WHERE question_id LIKE \"NCQ%\" ORDER BY question_id DESC LIMIT 1";
-      }
+      // if (question.getQuestion_type().equals("CQ")) {
+      // last_question_id_sql = "SELECT question_id FROM questions WHERE
+      // LENGTH(question_id) AND question_id LIKE \"CQ%\" >= ALL(SELECT
+      // LENGTH(question_id) FROM questions ) ORDER BY question_id DESC LIMIT 1";
+      // } else {
+      // last_question_id_sql = "SELECT question_id FROM questions WHERE
+      // LENGTH(question_id) AND question_id LIKE \"NCQ%\" >= ALL(SELECT
+      // LENGTH(question_id) FROM questions ) ORDER BY question_id DESC LIMIT 1";
+      // }
+      last_question_id_sql = "SELECT question_id FROM questions WHERE LENGTH(question_id) >= ALL(SELECT LENGTH(question_id) FROM questions ) ORDER BY question_id DESC LIMIT 1";
       try {
          last_question_id = (String) jdbcTemplate.queryForObject(last_question_id_sql, String.class);
 
@@ -150,20 +156,20 @@ public class QuestionRepository {
       jdbcTemplate.update(sql, question_id);
    }
 
-   public void addCategory(String question_id, String category_id) {
-      if (question_id == null || category_id == null) {
+   public void addCategory(String question_id, String category_name) {
+      if (question_id == null || category_name == null) {
          throw new IllegalArgumentException("Question does not exist!");
       }
-      String sql = "INSERT INTO question_category (question_id, category_id) VALUES (?, ?)";
-      jdbcTemplate.update(sql, question_id, category_id);
+      String sql = "INSERT INTO question_category (question_id, category_name) VALUES (?, ?)";
+      jdbcTemplate.update(sql, question_id, category_name);
    }
 
-   public void removeCategory(String question_id, String category_id) {
-      if (question_id == null || category_id == null) {
+   public void removeCategory(String question_id, String category_name) {
+      if (question_id == null || category_name == null) {
          throw new IllegalArgumentException("Question does not exist!");
       }
-      String sql = "DELETE FROM question_category WHERE question_id = ? AND category_id = ?";
-      jdbcTemplate.update(sql, question_id, category_id);
+      String sql = "DELETE FROM question_category WHERE question_id = ? AND category_name = ?";
+      jdbcTemplate.update(sql, question_id, category_name);
    }
 
    public void userRequest(String question_id, String user_id) {
@@ -285,6 +291,19 @@ public class QuestionRepository {
       }
       String sql = "UPDATE questions SET dislike_count = dislike_count - 1 WHERE question_id = ?";
       jdbcTemplate.update(sql, question_id);
+   }
+
+   public List<CategoryDto> getCategories(String question_id) {
+      if (question_id == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "SELECT DISTINCT category_name FROM categories WHERE category_name IN (SELECT category_name FROM question_category WHERE question_id = ?)";
+      return jdbcTemplate.query(sql, (resultSet, i) -> {
+         CategoryDto category = new CategoryDto();
+         category.setCategory_name(resultSet.getString("category_name"));
+         return category;
+      }, question_id);
+
    }
 
 }

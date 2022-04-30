@@ -2,6 +2,7 @@ package com.example.backend.services;
 
 import java.util.List;
 
+import com.example.backend.dto.CategoryDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.repositories.QuestionRepository;
 
@@ -92,6 +93,10 @@ public class QuestionService {
 
    public void undislike(String question_id) {
       questionRepository.undislike(question_id);
+   }
+
+   public List<CategoryDto> getCategories(String question_id) {
+      return questionRepository.getCategories(question_id);
    }
 
 }

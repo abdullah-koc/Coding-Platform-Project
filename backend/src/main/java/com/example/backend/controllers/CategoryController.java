@@ -21,7 +21,7 @@ public class CategoryController {
    CategoryService categoryService;
 
    @PostMapping(path = "/add")
-   public void addCategory(@RequestBody String categoryName) {
+   public void addCategory(@RequestBody CategoryDto categoryName) {
       categoryService.addCategory(categoryName);
    }
 
@@ -31,12 +31,12 @@ public class CategoryController {
    }
 
    @GetMapping("/{category_name}")
-   public CategoryDto getCategory(@PathVariable String category_name) {
+   public CategoryDto getCategory(@PathVariable CategoryDto category_name) {
       return categoryService.getCategory(category_name);
    }
 
    @GetMapping("/delete/{category_name}")
-   public void deleteCategory(@PathVariable String category_name) {
+   public void deleteCategory(@PathVariable CategoryDto category_name) {
       categoryService.deleteCategory(category_name);
    }
 }

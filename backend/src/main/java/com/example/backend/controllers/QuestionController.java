@@ -2,6 +2,7 @@ package com.example.backend.controllers;
 
 import java.util.List;
 
+import com.example.backend.dto.CategoryDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.services.QuestionService;
 
@@ -48,6 +49,11 @@ public class QuestionController {
    @GetMapping("/remove_category/{question_id}/{category_id}")
    public void removeCategory(@PathVariable String question_id, @PathVariable String category_id) {
       questionService.removeCategory(question_id, category_id);
+   }
+
+   @GetMapping("/get_categories/{question_id}")
+   public List<CategoryDto> getCategories(@PathVariable String question_id) {
+      return questionService.getCategories(question_id);
    }
 
    @GetMapping("/user_request/{question_id}/{user_id}")

@@ -14,7 +14,7 @@ public class CategoryService {
    @Autowired
    CategoryRepository categoryRepository;
 
-   public void addCategory(String categoryName) {
+   public void addCategory(CategoryDto categoryName) {
       categoryRepository.addCategory(categoryName);
    }
 
@@ -22,11 +22,11 @@ public class CategoryService {
       return categoryRepository.getAllCategories();
    }
 
-   public CategoryDto getCategory(String category_name) {
+   public CategoryDto getCategory(CategoryDto category_name) {
       return categoryRepository.getCategory(category_name);
    }
 
-   public void deleteCategory(String category_name) {
+   public void deleteCategory(CategoryDto category_name) {
       categoryRepository.deleteCategory(category_name);
    }
 }
