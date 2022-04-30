@@ -45,17 +45,17 @@ public class QuestionController {
       questionService.addCategory(question_id, category_name);
    }
 
-   @GetMapping("/remove_category/{question_id}/{category_name}")
+   @PostMapping("/remove_category/{question_id}/{category_name}")
    public void removeCategory(@PathVariable String question_id, @PathVariable String category_name) {
       questionService.removeCategory(question_id, category_name);
    }
 
-   @GetMapping("/user_request/{question_id}/{user_id}")
+   @PostMapping("/user_request/{question_id}/{user_id}")
    public void userRequest(@PathVariable String question_id, @PathVariable String user_id) {
       questionService.userRequest(question_id, user_id);
    }
 
-   @GetMapping("/user_cancel_request/{question_id}/{user_id}")
+   @PostMapping("/user_cancel_request/{question_id}/{user_id}")
    public void userCancelRequest(@PathVariable String question_id, @PathVariable String user_id) {
       questionService.userCancelRequest(question_id, user_id);
    }

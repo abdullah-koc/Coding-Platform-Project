@@ -25,6 +25,7 @@ public class EditorRepository {
         }
 
         String editor_id = "E" + editor_id_count;
+        editor.setEditor_id(editor_id);
         jdbcTemplate.update(
                 "INSERT INTO people (person_id, full_name, email, password, nickname, birth_date) VALUES (?, ?, ?, ?, ?, ?)",
                 editor_id, editor.getFull_name(), editor.getEmail(), editor.getPassword(), editor.getNickname(), editor.getBirth_date());
