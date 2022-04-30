@@ -13,6 +13,8 @@ import Contests from "./views/Contests";
 import EditorContestScreen from "./views/EditorContestScreen";
 import ContestScreen from "./views/ContestScreen";
 import EditorProfileScreen from "./views/EditorProfileScreen";
+import CompanyMainScreen from "./views/CompanyMainScreen";
+import DonationDialog from "./views/DonationDialog";
 
 const useStyles = makeStyles({
   root: {
@@ -44,6 +46,7 @@ const App = () => {
           {/*done*/}
           <Route path="/contests" element={<Contests />} /> {/*done*/}
           <Route path="/contests/:id" element={<ContestScreen />} /> {/*done*/}
+          <Route path="/contest/:id/donate" element={<DonationDialog />} />
           <Route path="/cquestion/:id" element={<CodingQuestionInfo />} />{" "}
           {/*done*/}
           <Route
@@ -58,6 +61,7 @@ const App = () => {
           />{" "}
           {/*done*/}
           <Route path="/admin" element={<AdminScreen />} />
+          <Route path="/company" element={<CompanyMainScreen />} />
         </Routes>
       </div>
     </div>
