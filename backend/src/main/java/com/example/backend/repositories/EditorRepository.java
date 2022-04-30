@@ -52,4 +52,14 @@ public class EditorRepository {
             return null;
         }
     }
+
+    public void updateSalary(String editor_id, int salary) {
+        String sql = "UPDATE editors SET salary = ? WHERE editor_id = ?";
+        jdbcTemplate.update(sql, salary, editor_id);
+    }
+
+    public void updateExperienceLevel(String editor_id, String experience_level) {
+        String sql = "UPDATE editors SET experience_level = ? WHERE editor_id = ?";
+        jdbcTemplate.update(sql, experience_level, editor_id);
+    }
 }

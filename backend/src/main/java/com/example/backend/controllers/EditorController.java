@@ -19,4 +19,14 @@ public class EditorController {
         return editorService.getEditorByEmail(email);
     }
 
+    @PostMapping("/set/salary/{email}/{salary}")
+    public void setSalary(@PathVariable String email, @PathVariable int salary){
+        editorService.setSalary(email, salary);
+    }
+
+    @PostMapping("/set/experience/{email}/{experience_level}")
+    public void setExperienceLevel(@PathVariable String email, @PathVariable String experience_level) {
+        editorService.setExperienceLevel(email, experience_level);
+    }
+
 }
