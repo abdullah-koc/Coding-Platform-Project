@@ -35,19 +35,19 @@ public class QuestionController {
       questionService.insertQuestion(question);
    }
 
-   @GetMapping("/delete/{question_id}")
+   @PostMapping("/delete/{question_id}")
    public void deleteQuestion(@PathVariable String question_id) {
       questionService.deleteQuestion(question_id);
    }
 
-   @GetMapping("/add_category/{question_id}/{category_id}")
-   public void addCategory(@PathVariable String question_id, @PathVariable String category_id) {
-      questionService.addCategory(question_id, category_id);
+   @PostMapping("/add_category/{question_id}/{category_name}")
+   public void addCategory(@PathVariable String question_id, @PathVariable String category_name) {
+      questionService.addCategory(question_id, category_name);
    }
 
-   @GetMapping("/remove_category/{question_id}/{category_id}")
-   public void removeCategory(@PathVariable String question_id, @PathVariable String category_id) {
-      questionService.removeCategory(question_id, category_id);
+   @GetMapping("/remove_category/{question_id}/{category_name}")
+   public void removeCategory(@PathVariable String question_id, @PathVariable String category_name) {
+      questionService.removeCategory(question_id, category_name);
    }
 
    @GetMapping("/user_request/{question_id}/{user_id}")

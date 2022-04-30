@@ -30,7 +30,6 @@ const Login = () => {
           axios
             .get(process.env.REACT_APP_URL + "api/user/" + email)
             .then((response) => {
-              console.log(response.data);
               details = response.data;
               if (!response.data == "") {
                 localStorage.setItem("session", JSON.stringify(details));
@@ -48,16 +47,16 @@ const Login = () => {
                 return;
               }
             });
-          // axios
-          //   .get(process.env.REACT_APP_URL + "api/admin/" + email)
-          //   .then((response) => {
-          //     details = response.data;
-          //     if (!response.data == "") {
-          //       localStorage.setItem("session", JSON.stringify(details));
-          //       navigate("/admin");
-          //       return;
-          //     }
-          //   });
+          axios
+            .get(process.env.REACT_APP_URL + "api/admin/" + email)
+            .then((response) => {
+              details = response.data;
+              if (!response.data == "") {
+                localStorage.setItem("session", JSON.stringify(details));
+                navigate("/admin");
+                return;
+              }
+            });
         });
     }
   };

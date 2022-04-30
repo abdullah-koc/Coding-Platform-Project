@@ -150,20 +150,20 @@ public class QuestionRepository {
       jdbcTemplate.update(sql, question_id);
    }
 
-   public void addCategory(String question_id, String category_id) {
-      if (question_id == null || category_id == null) {
+   public void addCategory(String question_id, String category_name) {
+      if (question_id == null || category_name == null) {
          throw new IllegalArgumentException("Question does not exist!");
       }
-      String sql = "INSERT INTO question_category (question_id, category_id) VALUES (?, ?)";
-      jdbcTemplate.update(sql, question_id, category_id);
+      String sql = "INSERT INTO question_category (question_id, category_name) VALUES (?, ?)";
+      jdbcTemplate.update(sql, question_id, category_name);
    }
 
-   public void removeCategory(String question_id, String category_id) {
-      if (question_id == null || category_id == null) {
+   public void removeCategory(String question_id, String category_name) {
+      if (question_id == null || category_name == null) {
          throw new IllegalArgumentException("Question does not exist!");
       }
-      String sql = "DELETE FROM question_category WHERE question_id = ? AND category_id = ?";
-      jdbcTemplate.update(sql, question_id, category_id);
+      String sql = "DELETE FROM question_category WHERE question_id = ? AND category_name = ?";
+      jdbcTemplate.update(sql, question_id, category_name);
    }
 
    public void userRequest(String question_id, String user_id) {
