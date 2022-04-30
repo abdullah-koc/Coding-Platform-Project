@@ -27,12 +27,37 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
   const [typeDescription, setTypeDescription] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [noOfTestCases, setNoOfTestCases] = useState(0);
+  const [inputs, setInputs] = useState([]);
+  const [outputs, setOutputs] = useState([]);
+  const [lockedStatus, setLockedStatus] = useState([]);
 
   useEffect(() => {
     axios.get(process.env.REACT_APP_URL + "api/category/all").then((res) => {
       setCategories(res.data);
     });
   }, []);
+
+  useEffect(() => {
+    if (noOfTestCases > inputs.length) {
+      setInputs([...inputs, ""]);
+    }
+    if (noOfTestCases > outputs.length) {
+      setOutputs([...outputs, ""]);
+    }
+    if (noOfTestCases > lockedStatus.length) {
+      setLockedStatus([...lockedStatus, false]);
+    }
+    if (noOfTestCases < inputs.length) {
+      setInputs(inputs.slice(0, noOfTestCases));
+    }
+    if (noOfTestCases < outputs.length) {
+      setOutputs(outputs.slice(0, noOfTestCases));
+    }
+    if (noOfTestCases < lockedStatus.length) {
+      setLockedStatus(lockedStatus.slice(0, noOfTestCases));
+    }
+  }, [noOfTestCases]);
 
   const handleClose = () => {
     //set all fields to empty
@@ -46,6 +71,22 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
     setMaxTry(3);
     setTypeDescription("");
     handleParentOpen(false);
+  };
+
+  const addTestCaseHelper = (curQuestionId, ins, outs, locks, index) => {
+    if (index === noOfTestCases) {
+      return;
+    }
+    axios
+      .post(process.env.REACT_APP_URL + "api/testcase/add", {
+        example_input: inputs[index],
+        example_output: outputs[index],
+        is_locked: lockedStatus[index],
+        coding_question_id: curQuestionId,
+      })
+      .then((res) => {
+        addTestCaseHelper(curQuestionId, ins, outs, locks, index + 1);
+      });
   };
   const handleAddQuestion = () => {
     //check if all fields are filled
@@ -96,11 +137,20 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
                   category.category_name
               );
             });
+            if (questionType === "CQ") {
+              addTestCaseHelper(
+                curQuestion.question_id,
+                inputs,
+                outputs,
+                lockedStatus,
+                0
+              );
+            }
           });
 
         alert("Question added successfully");
-        //window.location.reload();
-        //handleClose();
+        window.location.reload();
+        handleClose();
       })
       .catch((err) => {
         alert("Error adding question");
@@ -131,7 +181,15 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
                         row
                         defaultValue="CQ"
                         value={questionType}
-                        onChange={(e) => setQuestionType(e.target.value)}
+                        onChange={(e) => {
+                          setQuestionType(e.target.value);
+                          if (e.target.value === "NCQ") {
+                            setNoOfTestCases(0);
+                            setInputs([]);
+                            setOutputs([]);
+                            setLockedStatus([]);
+                          }
+                        }}
                       >
                         <FormControlLabel
                           value="CQ"
@@ -348,6 +406,67 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
                   />
                 ))}
               </Grid>
+              {questionType === "CQ" && (
+                <Grid item xs={12} style={{ marginTop: "10px" }}>
+                  <div>Test Cases:</div>
+                  <div>
+                    Number of Test Cases:{" "}
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        if (noOfTestCases > 0) {
+                          setNoOfTestCases(noOfTestCases - 1);
+                        }
+                      }}
+                    >
+                      ➖
+                    </span>{" "}
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setNoOfTestCases(noOfTestCases + 1);
+                      }}
+                    >
+                      ➕
+                    </span>
+                  </div>
+                </Grid>
+              )}
+              {[...Array(noOfTestCases).fill(0)].map((val, index) => (
+                <Grid
+                  item
+                  xs={12}
+                  style={{
+                    marginTop: "10px",
+                    display: "flex",
+                    justifyContent: "space-around",
+                  }}
+                  key={index}
+                >
+                  <TextField
+                    label="Input"
+                    size="small"
+                    onChange={(e) => {
+                      inputs[index] = e.target.value;
+                    }}
+                  />
+                  <TextField
+                    label="Expected Output"
+                    size="small"
+                    onChange={(e) => {
+                      outputs[index] = e.target.value;
+                    }}
+                  />
+                  <div>
+                    <Checkbox
+                      onChange={(e) => {
+                        lockedStatus[index] = e.target.checked;
+                      }}
+                    />{" "}
+                    Locked
+                  </div>
+                </Grid>
+              ))}
             </Grid>
           </DialogContent>
           <DialogActions>
