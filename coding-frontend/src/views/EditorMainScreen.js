@@ -69,6 +69,7 @@ const EditorMainScreen = () => {
             {questions.map((question, index) => (
               <div style={{ marginBottom: "10px" }} key={index}>
                 <EditorQuestionCard
+                  isCoding={question.question_id.charAt(0) === "C"}
                   question={question.title}
                   questionPoint={question.question_point}
                   questionText={question.explanation}

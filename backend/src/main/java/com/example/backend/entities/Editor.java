@@ -7,6 +7,7 @@ public class Editor extends Person {
     private String editor_id;
 
     private boolean is_approved;
+    private String admin_id;
 
     public Editor() {
         super();
@@ -26,7 +27,6 @@ public class Editor extends Person {
                   int salary,
                   String cv_url) {
         super(editor_id, full_name, email, photo, password, nickname, phone, is_confirmed, reg_date, birth_date);
-        this.editor_id = editor_id;
         this.experience_level = experience_level;
         this.salary = salary;
         this.cv_url = cv_url;
@@ -34,6 +34,9 @@ public class Editor extends Person {
 
     public String getEditor_id() {
         return editor_id;
+    }
+    public void setEditor_id(String editor_id) {
+        this.editor_id = editor_id;
     }
 
     public String getExperience_level() {
@@ -64,5 +67,13 @@ public class Editor extends Person {
 
     public void setIs_approved(boolean is_approved) {
         this.is_approved = is_approved;
+    }
+
+    public String getAdmin_id() {
+        return admin_id;
+    }
+
+    public void setAdmin_id(String admin_id) {
+        this.admin_id = admin_id;
     }
 }

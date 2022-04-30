@@ -31,12 +31,12 @@ public class QuestionService {
       questionRepository.deleteQuestion(question_id);
    }
 
-   public void addCategory(String question_id, String category_id) {
-      questionRepository.addCategory(question_id, category_id);
+   public void addCategory(String question_id, String category_name) {
+      questionRepository.addCategory(question_id, category_name);
    }
 
-   public void removeCategory(String question_id, String category_id) {
-      questionRepository.removeCategory(question_id, category_id);
+   public void removeCategory(String question_id, String category_name) {
+      questionRepository.removeCategory(question_id, category_name);
    }
 
    public void userRequest(String question_id, String user_id) {

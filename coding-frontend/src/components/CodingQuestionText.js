@@ -10,6 +10,8 @@ const CodingQuestionText = ({ parentSubmitCallback, isContest, question }) => {
   const [remainingAttempts, setRemainingAttempts] = useState(0);
   const [isTestCasesShown, setIsTestCasesShown] = useState(false);
   const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
+  const [isVideoRequestButtonDisabled, setIsVideoRequestButtonDisabled] =
+    useState(false);
 
   React.useEffect(() => {
     axios
@@ -56,7 +58,21 @@ const CodingQuestionText = ({ parentSubmitCallback, isContest, question }) => {
   };
 
   const handleVideoRequestButtonPress = () => {
-    console.log("video request button pressed");
+    //check if the user has already requested a video
+
+    //then update the database
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/question/user_request/" +
+          question.question_id +
+          "/" +
+          JSON.parse(localStorage.getItem("session")).person_id
+      )
+      .then((res) => {
+        alert("Video request sent");
+        setIsVideoRequestButtonDisabled(true);
+      });
   };
   return (
     <div style={{ width: "55vw", margin: "20px" }}>
@@ -108,6 +124,7 @@ const CodingQuestionText = ({ parentSubmitCallback, isContest, question }) => {
               variant="contained"
               style={{ backgroundColor: Colors.dark_color }}
               onClick={handleVideoRequestButtonPress}
+              disabled={isVideoRequestButtonDisabled}
             >
               Request Video
             </Button>

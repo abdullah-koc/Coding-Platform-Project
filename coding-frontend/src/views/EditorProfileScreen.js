@@ -37,7 +37,7 @@ const EditorProfileScreen = () => {
       setPhoto(user.photo === undefined ? sampleProfile : user.photo);
       setPhone(user.phone === undefined ? "" : user.phone);
       setExperienceLevel(
-        user.experienceLevel === undefined ? "" : user.experienceLevel
+        user.experience_level === undefined ? "" : user.experience_level
       );
       setSalary(user.salary === undefined ? "" : user.salary);
     } catch (err) {
@@ -76,8 +76,8 @@ const EditorProfileScreen = () => {
     axios
       .post(
         process.env.REACT_APP_URL +
-          "api/user/change/experienceLevel/" +
-          user.person_id +
+          "api/editor/set/experience/" +
+          user.email +
           "/" +
           newExperienceLevel
       )
@@ -85,7 +85,7 @@ const EditorProfileScreen = () => {
         alert("Experience Level changed successfully");
         localStorage.setItem(
           "session",
-          JSON.stringify({ ...user, experienceLevel: newExperienceLevel })
+          JSON.stringify({ ...user, experience_level: newExperienceLevel })
         );
         setExperienceLevel(newExperienceLevel);
       })
@@ -98,8 +98,8 @@ const EditorProfileScreen = () => {
     axios
       .post(
         process.env.REACT_APP_URL +
-          "api/user/change/salary/" +
-          user.person_id +
+          "api/editor/set/salary/" +
+          user.email +
           "/" +
           newSalary
       )
@@ -295,7 +295,7 @@ const EditorProfileScreen = () => {
                   Save
                 </Button>
               </Grid>
-              {/*<Grid
+              <Grid
                 item
                 xs={12}
                 style={{
@@ -392,7 +392,7 @@ const EditorProfileScreen = () => {
                 >
                   Save
                 </Button>
-                </Grid>*/}
+              </Grid>
               <Grid
                 item
                 xs={12}

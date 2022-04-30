@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Dialog,
   TextField,
   DialogTitle,
   Radio,
+  Checkbox,
   Grid,
   DialogActions,
   DialogContent,
   RadioGroup,
   FormControlLabel,
-  duration,
+  FormGroup,
 } from "@mui/material";
 import axios from "axios";
 
@@ -24,6 +25,14 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
   const [solution, setSolution] = useState("");
   const [maxTry, setMaxTry] = useState(3);
   const [typeDescription, setTypeDescription] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  useEffect(() => {
+    axios.get(process.env.REACT_APP_URL + "api/category/all").then((res) => {
+      setCategories(res.data);
+    });
+  }, []);
 
   const handleClose = () => {
     //set all fields to empty
@@ -68,9 +77,30 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
         editor_id: JSON.parse(localStorage.getItem("session")).person_id,
       })
       .then((res) => {
+        var curQuestion;
+        axios
+          .get(process.env.REACT_APP_URL + "api/question/all")
+          .then((res) => {
+            curQuestion = res.data.filter(
+              (question) =>
+                question.title === questionTitle &&
+                question.editor_id ===
+                  JSON.parse(localStorage.getItem("session")).person_id
+            )[0];
+            selectedCategories.map((category) => {
+              axios.post(
+                process.env.REACT_APP_URL +
+                  "api/question/add_category/" +
+                  curQuestion.question_id +
+                  "/" +
+                  category.category_name
+              );
+            });
+          });
+
         alert("Question added successfully");
-        window.location.reload();
-        handleClose();
+        //window.location.reload();
+        //handleClose();
       })
       .catch((err) => {
         alert("Error adding question");
@@ -147,7 +177,7 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
                     <div style={{ marginLeft: "25px" }} />
                     <TextField
                       multiline
-                      rows="20"
+                      rows="14"
                       style={{ width: "400px" }}
                       value={explanation}
                       onChange={(e) => setExplanation(e.target.value)}
@@ -292,6 +322,31 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
                     />
                   </Grid>
                 </Grid>
+              </Grid>
+              <Grid item xs={12} style={{ marginTop: "10px" }}>
+                <div>Category Selection:</div>
+                {categories.map((category, index) => (
+                  <FormControlLabel
+                    key={index}
+                    control={
+                      <Checkbox
+                        onChange={() => {
+                          if (selectedCategories.includes(category)) {
+                            setSelectedCategories(
+                              selectedCategories.filter((c) => c !== category)
+                            );
+                          } else {
+                            setSelectedCategories([
+                              ...selectedCategories,
+                              category,
+                            ]);
+                          }
+                        }}
+                      />
+                    }
+                    label={category.category_name}
+                  />
+                ))}
               </Grid>
             </Grid>
           </DialogContent>

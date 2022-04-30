@@ -25,6 +25,7 @@ public class EditorRepository {
         }
 
         String editor_id = "E" + editor_id_count;
+        editor.setEditor_id(editor_id);
         jdbcTemplate.update(
                 "INSERT INTO people (person_id, full_name, email, password, nickname, birth_date) VALUES (?, ?, ?, ?, ?, ?)",
                 editor_id, editor.getFull_name(), editor.getEmail(), editor.getPassword(), editor.getNickname(), editor.getBirth_date());
@@ -51,5 +52,15 @@ public class EditorRepository {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    public void updateSalary(String editor_id, int salary) {
+        String sql = "UPDATE editors SET salary = ? WHERE editor_id = ?";
+        jdbcTemplate.update(sql, salary, editor_id);
+    }
+
+    public void updateExperienceLevel(String editor_id, String experience_level) {
+        String sql = "UPDATE editors SET experience_level = ? WHERE editor_id = ?";
+        jdbcTemplate.update(sql, experience_level, editor_id);
     }
 }

@@ -37,4 +37,15 @@ public class EditorService {
         return false;
     }
 
+    public void setSalary(String email, int salary){
+        Editor editor = editorRepository.findByEmail(email);
+        editor.setSalary(salary);
+        editorRepository.updateSalary(editor.getEditor_id(), salary);
+    }
+
+    public void setExperienceLevel(String email, String experience_level) {
+        Editor editor = editorRepository.findByEmail(email);
+        editor.setExperience_level(experience_level);
+        editorRepository.updateExperienceLevel(editor.getEditor_id(), experience_level);
+    }
 }
