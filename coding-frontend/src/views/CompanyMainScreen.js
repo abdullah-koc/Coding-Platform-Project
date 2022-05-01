@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Pagination } from "@mui/material";
 import ContestInfoDonation from "../components/ContestInfoDonation";
-import NavbarUser from "../components/Navbars/NavbarUser";
+import NavbarCompany from "../components/Navbars/NavbarCompany";
 
 export const CompanyMainScreen = () => {
   const [upcomingPage, setUpcomingPage] = useState(1);
@@ -173,7 +173,7 @@ export const CompanyMainScreen = () => {
 
   return (
     <div>
-      <NavbarUser />
+      <NavbarCompany />
       <div
         style={{
           paddingLeft: "40px",

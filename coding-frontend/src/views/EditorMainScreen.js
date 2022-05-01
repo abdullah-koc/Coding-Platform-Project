@@ -33,7 +33,7 @@ const EditorMainScreen = () => {
         )
       );
     });
-  }, []);
+  }, [isDialogOpen]);
 
   const handleDialogCallback = (childData) => {
     setIsDialogOpen(childData);

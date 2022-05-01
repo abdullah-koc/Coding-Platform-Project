@@ -4,6 +4,7 @@ import NavbarUser from "../components/Navbars/NavbarUser";
 import ContestInfo from "../components/ContestInfo";
 import AttendedContestInfo from "../components/AttendedContestInfo";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const Contests = () => {
   let navigate = useNavigate();
@@ -23,145 +24,33 @@ export const Contests = () => {
   const [curUpcomingContests, setUpcomingCurContests] = useState([]);
   const [totalPagesAttended, setTotalPagesAttended] = useState(1);
   const [curAttendedContests, setAttendedCurContests] = useState([]);
-  const [upcomingContests, setUpcomingContests] = useState([
-    {
-      contest_id: "C1",
-      contest_name: "Coding Contest 1",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "12/06/2022",
-      end_date: "18/06/2022",
-      prize: "10000$",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C2",
-      contest_name: "Coding Contest 2",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "14/06/2022",
-      end_date: "20/06/2022",
-      prize: "13000$",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C3",
-      contest_name: "Coding Contest 3",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "25/07/2022",
-      end_date: "18/08/2022",
-      prize: "Free Space Trip",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C4",
-      contest_name: "Coding Contest 4",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "12/02/2022",
-      end_date: "18/02/2022",
-      prize: "Amazon web services: 5000$",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C5",
-      contest_name: "Coding Contest 5",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "31/07/2022",
-      end_date: "03/08/2022",
-      prize: "Mercedes A180 AMG Sport",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C6",
-      contest_name: "Coding Contest 5",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "31/07/2022",
-      end_date: "03/08/2022",
-      prize: "Mercedes A180 AMG Sport",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C7",
-      contest_name: "Coding Contest 5",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "31/07/2022",
-      end_date: "03/08/2022",
-      prize: "Mercedes A180 AMG Sport",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C8",
-      contest_name: "Coding Contest 5",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "31/07/2022",
-      end_date: "03/08/2022",
-      prize: "Mercedes A180 AMG Sport",
-      creation_date: "21/04/2022",
-    },
-  ]);
-  const [attendedContests, setAttendedContests] = useState([
-    {
-      contest_id: "C1",
-      contest_name: "Coding Contest 1",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "12/06/2022",
-      end_date: "18/06/2022",
-      prize: "10000$",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C2",
-      contest_name: "Coding Contest 2",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "14/06/2022",
-      end_date: "20/06/2022",
-      prize: "13000$",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C3",
-      contest_name: "Coding Contest 3",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "25/07/2022",
-      end_date: "18/08/2022",
-      prize: "Free Space Trip",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C4",
-      contest_name: "Coding Contest 4",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "12/02/2022",
-      end_date: "18/02/2022",
-      prize: "Amazon web services: 5000$",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C5",
-      contest_name: "Coding Contest 5",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "31/07/2022",
-      end_date: "03/08/2022",
-      prize: "Mercedes A180 AMG Sport",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C5",
-      contest_name: "Coding Contest 5",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "31/07/2022",
-      end_date: "03/08/2022",
-      prize: "Mercedes A180 AMG Sport",
-      creation_date: "21/04/2022",
-    },
-    {
-      contest_id: "C5",
-      contest_name: "Coding Contest 5",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "31/07/2022",
-      end_date: "03/08/2022",
-      prize: "Mercedes A180 AMG Sport",
-      creation_date: "21/04/2022",
-    },
-  ]);
+  const [upcomingContests, setUpcomingContests] = useState([]);
+  const [attendedContests, setAttendedContests] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/contest/get/all/" +
+          JSON.parse(localStorage.getItem("session")).person_id
+      )
+      .then((res) => {
+        setAttendedContests(res.data);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios.get(process.env.REACT_APP_URL + "api/contest/all").then((res) => {
+      let allContests = res.data;
+      //get upcoming contests (not attended)
+      let upcomingContests = allContests.filter(
+        (contest) =>
+          new Date(contest.start_date) > new Date() &&
+          new Date(contest.end_date) > new Date()
+      );
+      setUpcomingContests(upcomingContests);
+    });
+  }, [attendedContests]);
 
   const handleStartContest = (contest_id) => {
     //navigate("/contests/" + contest_id);
@@ -176,12 +65,12 @@ export const Contests = () => {
     setUpcomingCurContests(
       upcomingContests.slice((upcomingPage - 1) * 5, 5 * upcomingPage)
     );
-  }, [upcomingPage]);
+  }, [upcomingContests, upcomingPage]);
 
   useEffect(() => {
     setTotalPagesAttended(Math.ceil(attendedContests.length / 5));
     setAttendedCurContests(attendedContests.slice(0, 5));
-  }, []);
+  }, [attendedContests]);
 
   useEffect(() => {
     setAttendedCurContests(
@@ -259,7 +148,6 @@ export const Contests = () => {
                   start_date={contest.start_date}
                   end_date={contest.end_date}
                   prize={contest.prize}
-                  creation_date={contest.creation_date}
                   style={{ marginTop: "20px" }}
                 />
               </div>

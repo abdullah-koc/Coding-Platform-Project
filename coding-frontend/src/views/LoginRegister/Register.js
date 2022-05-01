@@ -65,8 +65,7 @@ const Register = () => {
                 .then((response) => {
                   var details;
                   details = response.data;
-                  localStorage.setItem("session", JSON.stringify(details));
-                  navigate("/editor");
+                  alert("You need to wait admin approval");
                 });
             })
             .catch((error) => {

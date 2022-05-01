@@ -37,11 +37,10 @@ const UploadLinkDialog = ({ open, handleParentOpen, questionID }) => {
     }
     axios
       .post(
-        process.env.REACT_APP_URL +
-          "api/question/editor_request/" +
-          questionID +
-          "/" +
-          videoLink
+        process.env.REACT_APP_URL + "api/question/editor_request/" + questionID,
+        {
+          video_link: videoLink,
+        }
       )
       .then((res) => {
         alert("Video link uploaded successfully");

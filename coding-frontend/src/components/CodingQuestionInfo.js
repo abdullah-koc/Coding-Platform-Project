@@ -96,7 +96,7 @@ const CodingQuestionInfo = ({ isContest }) => {
 
   const handleYoutubeClick = () => {
     if (question.video_link) {
-      window.open(question.video_link);
+      window.open(JSON.parse(question.video_link).video_link, "_blank");
     }
   };
 

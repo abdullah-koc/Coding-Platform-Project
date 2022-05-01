@@ -28,9 +28,8 @@ const ContestInfoDonation = ({
   const handleDonateContest = () => {
     if (donated_amount === 0) {
       window.location.href = `/contest/${contest_id}/donate`;
-    }
-    else {
-        alert("You have already donated to this contest");
+    } else {
+      alert("You have already donated to this contest");
     }
   };
   return (
@@ -57,14 +56,21 @@ const ContestInfoDonation = ({
           {start_date} - {end_date}
         </Grid>
         <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
-            <Button onClick={() => handleDonateContest(contest_id)}>
-                {donated_amount === 0 && (<div>
-                    <span>Donate</span>
-                </div>)}
-                {donated_amount !== 0 && (<div>
-                    <span style={{color: "green"}}>Donated</span>
-                </div>)}
-            </Button>
+          <Button
+            onClick={() => handleDonateContest(contest_id)}
+            disabled={donated_amount !== 0}
+          >
+            {donated_amount === 0 && (
+              <div>
+                <span>Donate</span>
+              </div>
+            )}
+            {donated_amount !== 0 && (
+              <div>
+                <span style={{ color: "green" }}>Donated</span>
+              </div>
+            )}
+          </Button>
         </Grid>
       </Grid>
     </div>

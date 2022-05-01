@@ -66,8 +66,8 @@ public class QuestionController {
       questionService.userCancelRequest(question_id, user_id);
    }
 
-   @PostMapping("/editor_request/{question_id}/{video_link}")
-   public void editorRequest(@PathVariable String question_id, @PathVariable String video_link) {
+   @PostMapping("/editor_request/{question_id}")
+   public void editorRequest(@PathVariable String question_id, @RequestBody String video_link) {
       questionService.editorRequest(question_id, video_link);
    }
 

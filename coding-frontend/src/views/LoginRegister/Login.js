@@ -24,7 +24,6 @@ const Login = () => {
             alert("Invalid Credentials");
             return;
           }
-          alert("Successfully logged in");
 
           var details;
           axios
@@ -33,6 +32,8 @@ const Login = () => {
               details = response.data;
               if (!response.data == "") {
                 localStorage.setItem("session", JSON.stringify(details));
+                alert("Successfully logged in");
+
                 navigate("/problems");
                 return;
               }
@@ -42,7 +43,20 @@ const Login = () => {
             .then((response) => {
               details = response.data;
               if (!response.data == "") {
+                // if (
+                //   response.data.is_approved === false &&
+                //   response.data.admin_id != null
+                // ) {
+                //   alert("You are not approved.");
+                //   return;
+                // } else if (response.data.is_approved === false) {
+                //   alert("Your account is not approved yet");
+                //   return;
+                // }
+
                 localStorage.setItem("session", JSON.stringify(details));
+                alert("Successfully logged in");
+
                 navigate("/editor");
                 return;
               }
@@ -53,6 +67,8 @@ const Login = () => {
               details = response.data;
               if (!response.data == "") {
                 localStorage.setItem("session", JSON.stringify(details));
+                alert("Successfully logged in");
+
                 navigate("/admin");
                 return;
               }

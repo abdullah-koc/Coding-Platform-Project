@@ -22,6 +22,7 @@ public class EditorService {
         editor.setBirth_date(editorDto.getBirth_date());
         editor.setNickname(editorDto.getNickname());
         editor.setPassword(editorDto.getPassword());
+        editor.setCv_url(editorDto.getCv_url());
         editorRepository.signUp(editor);
     }
 

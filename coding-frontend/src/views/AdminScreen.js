@@ -3,6 +3,7 @@ import { makeStyles } from "@mui/styles";
 import Colors from "../utils/Colors";
 import { Grid, Button } from "@mui/material";
 import CandidateEditor from "../components/AdminComponents/CandidateEditor";
+import { useNavigate } from "react-router-dom";
 import CandidateCompany from "../components/AdminComponents/CandidateCompany";
 
 const useStyles = makeStyles({
@@ -20,6 +21,16 @@ const useStyles = makeStyles({
 
 const AdminScreen = () => {
   const classes = useStyles();
+  let navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (
+      localStorage.getItem("session") === null ||
+      JSON.parse(localStorage.getItem("session")).admin_id.charAt(0) !== "A"
+    ) {
+      navigate("/");
+    }
+  }, []);
 
   const handleLogOutAdmin = () => {};
   return (

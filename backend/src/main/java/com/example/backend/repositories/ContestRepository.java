@@ -59,7 +59,7 @@ public class ContestRepository {
    }
 
    public List<ContestDto> getAllContestsByPersonId(String person_id) {
-      String sql = "SELECT contest_id, contest_name, contest_photo, start_date, end_date, prize, creation_date FROM contests NATURAL JOIN user_contest WHERE person_id = ?";
+      String sql = "SELECT contest_id, contest_name, contest_photo, start_date, end_date, prize, creation_date FROM contests NATURAL JOIN user_contest WHERE user_id = ?";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
          ContestDto contest = new ContestDto();
          contest.setContest_id(rs.getString("contest_id"));
@@ -126,7 +126,7 @@ public class ContestRepository {
    }
 
    public void insertContestant(String contest_id, String user_id) {
-      String sql = "INSERT INTO user_contest (contest_id, person_id) VALUES (?, ?)";
+      String sql = "INSERT INTO user_contest (contest_id, user_id) VALUES (?, ?)";
       jdbcTemplate.update(sql, contest_id, user_id);
    }
 

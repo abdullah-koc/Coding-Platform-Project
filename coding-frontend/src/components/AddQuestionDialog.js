@@ -31,7 +31,6 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
   const [inputs, setInputs] = useState([]);
   const [outputs, setOutputs] = useState([]);
   const [lockedStatus, setLockedStatus] = useState([]);
-
   useEffect(() => {
     axios.get(process.env.REACT_APP_URL + "api/category/all").then((res) => {
       setCategories(res.data);
@@ -149,7 +148,7 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
           });
 
         alert("Question added successfully");
-        window.location.reload();
+        //window.location.reload();
         handleClose();
       })
       .catch((err) => {

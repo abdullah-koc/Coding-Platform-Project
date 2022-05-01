@@ -29,7 +29,12 @@ const AttendedContestInfo = ({
 
   let navigate = useNavigate();
   const handleStartContest = () => {
-    navigate("/contests/" + contest_id);
+    if (
+      new Date(start_date) <= new Date() &&
+      new Date(end_date) >= new Date()
+    ) {
+      navigate("/contests/" + contest_id);
+    }
   };
 
   const handleCancelContest = () => {};
@@ -70,12 +75,22 @@ const AttendedContestInfo = ({
           <Button
             onClick={() => handleStartContest()}
             style={{
-              backgroundColor: Colors.primary_color,
+              backgroundColor:
+                new Date(start_date) > new Date()
+                  ? Colors.dark_color
+                  : Colors.primary_color,
               cursor: "pointer",
               color: "white",
+              width: "70px",
             }}
+            disabled={new Date(start_date) > new Date()}
           >
-            Start
+            {new Date(start_date) <= new Date() &&
+            new Date(end_date) >= new Date()
+              ? "Start"
+              : new Date(end_date) < new Date()
+              ? "Results"
+              : "Not Started"}
           </Button>
         </Grid>
       </Grid>
