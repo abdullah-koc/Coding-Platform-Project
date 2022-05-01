@@ -6,6 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public class CompanyRepository {
@@ -72,5 +73,15 @@ public class CompanyRepository {
     public void updateAddress(String company_id, String address) {
         String sql = "UPDATE companies SET company_address = ? WHERE company_id = ?";
         jdbcTemplate.update(sql, address, company_id);
+    }
+
+    public List<Company> getAllCompanies() {
+        String sql = "SELECT * FROM companies";
+
+        try {
+            return jdbcTemplate.query(sql, new Object[],  new BeanPropertyRowMapper(Company.class));
+        } catch(EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }

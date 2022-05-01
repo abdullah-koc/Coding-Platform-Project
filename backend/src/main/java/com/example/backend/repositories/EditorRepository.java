@@ -6,6 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public class EditorRepository {
@@ -46,7 +47,7 @@ public class EditorRepository {
     }
 
     public Editor findByNickname(String nickname) {
-        String sql = "SELECT e.* FROM editors e, people p WHERE p.person_id = e.editor_id AND nickname = ?";
+        String sql = "SELECT * FROM editors e, people p WHERE p.person_id = e.editor_id AND nickname = ?";
         try {
             return (Editor) jdbcTemplate.queryForObject(sql, new Object[]{nickname}, new BeanPropertyRowMapper(Editor.class));
         } catch (EmptyResultDataAccessException e) {
@@ -62,5 +63,15 @@ public class EditorRepository {
     public void updateExperienceLevel(String editor_id, String experience_level) {
         String sql = "UPDATE editors SET experience_level = ? WHERE editor_id = ?";
         jdbcTemplate.update(sql, experience_level, editor_id);
+    }
+
+    public List<Editor> getAllEditors() {
+        String sql = "SELECT * FROM editors e, people p WHERE p.person_id = e.editor_id";
+
+        try {
+            return jdbcTemplate.query(sql, new Object[],  new BeanPropertyRowMapper(Editor.class));
+        } catch(EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }

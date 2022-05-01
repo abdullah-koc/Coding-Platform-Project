@@ -5,6 +5,7 @@ import com.example.backend.entities.Editor;
 import com.example.backend.repositories.EditorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 import java.util.Optional;
 
@@ -48,5 +49,9 @@ public class EditorService {
         Editor editor = editorRepository.findByEmail(email);
         editor.setExperience_level(experience_level);
         editorRepository.updateExperienceLevel(editor.getEditor_id(), experience_level);
+    }
+
+    public List<Editor> getAllEditors() {
+        return editorRepository.getAllEditors();
     }
 }

@@ -4,6 +4,7 @@ import com.example.backend.entities.Editor;
 import com.example.backend.services.EditorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/editor")
@@ -24,6 +25,11 @@ public class EditorController {
     @PostMapping("/set/experience/{email}/{experience_level}")
     public void setExperienceLevel(@PathVariable String email, @PathVariable String experience_level) {
         editorService.setExperienceLevel(email, experience_level);
+    }
+
+    @GetMapping("/all")
+    public List<Editor> getAllEditors() {
+        return editorService.getAllEditors();
     }
 
 }

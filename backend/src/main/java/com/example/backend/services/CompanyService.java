@@ -5,6 +5,7 @@ import com.example.backend.entities.Company;
 import com.example.backend.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class CompanyService {
@@ -55,5 +56,9 @@ public class CompanyService {
         Company company = companyRepository.findCompanyById(company_id);
         company.setCompany_address(address);
         companyRepository.updateAddress(company_id, address);
+    }
+
+    public List<Company> getAllCompanies() {
+        return companyRepository.getAllCompanies();
     }
 }

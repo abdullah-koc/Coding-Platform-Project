@@ -4,6 +4,7 @@ import com.example.backend.entities.Company;
 import com.example.backend.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/company")
@@ -34,5 +35,10 @@ public class CompanyController {
     @PostMapping("/change/address/{company_id}/{address}")
     public void changeAddress(@PathVariable String company_id, @PathVariable String address){
         companyService.changeAddress(company_id, address);
+    }
+
+    @GetMapping("/all")
+    public List<Company> getAllCompanies() {
+        return companyService.getAllCompanies();
     }
 }
