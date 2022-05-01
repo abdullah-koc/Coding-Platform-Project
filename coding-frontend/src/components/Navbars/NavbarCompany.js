@@ -35,9 +35,9 @@ const NavbarCompany = () => {
   const classes = useStyles();
   const goToMainPage = () => {};
   const goToAccountPage = () => {};
-  const goToCreateQuestionPage = () => {};
-  const goToSponsorshipPage = () => {};
-  const goToInterviewsPage = () => {};
+  const goToCreateInterviewPage = () => {
+    window.location.href = "/create-interview";
+  };
 
   return (
     <div className={classes.navbar}>
@@ -66,21 +66,9 @@ const NavbarCompany = () => {
         >
           <div
             style={{ cursor: "pointer" }}
-            onClick={() => goToCreateQuestionPage()}
+            onClick={() => goToCreateInterviewPage()}
           >
-            Create Question
-          </div>
-          <div
-            style={{ cursor: "pointer" }}
-            onClick={() => goToInterviewsPage()}
-          >
-            Interviews
-          </div>
-          <div
-            style={{ cursor: "pointer" }}
-            onClick={() => goToSponsorshipPage()}
-          >
-            Sponsorship
+            Create Interview
           </div>
         </Grid>
         <Grid item xs={3}></Grid>

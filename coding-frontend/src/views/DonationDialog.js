@@ -13,6 +13,8 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
+import CreditCardInput from "react-credit-card-input";
+import PaymentForm from "../components/PaymentForm";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -23,12 +25,9 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-
-
 const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;
 
-  
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
       {children}
@@ -63,6 +62,10 @@ export default function DonationDialog() {
     window.history.back();
   }
 
+  function cancel() {
+    window.history.back();
+  }
+
   return (
     <div>
       <BootstrapDialog aria-labelledby="customized-dialog-title" open={open}>
@@ -70,37 +73,49 @@ export default function DonationDialog() {
           Welcome to the Donation Page!
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          <Grid container width="500px">
-            <Grid item xs={12}>
-              <FormControl fullWidth sx={{ m: 1 }}>
-                <InputLabel htmlFor="outlined-adornment-iban">
-                  Company IBAN No
-                </InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-iban"
-                  label="Company IBAN No"
-                />
-              </FormControl>
+          Please Enter Your Company's Card Information
+          <div style={{ paddingTop: "20px" }}>
+            <Grid container width="550px">
+              <Grid
+                item
+                xs={12}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <PaymentForm></PaymentForm>
+              </Grid>
+              <Grid item xs={12} style={{ paddingTop: "20px" }}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="outlined-adornment-amount">
+                    Donation Amount
+                  </InputLabel>
+                  <OutlinedInput
+                    id="outlined-adornment-amount"
+                    endAdornment={
+                      <InputAdornment position="start">$</InputAdornment>
+                    }
+                    label="Donation Amount"
+                  />
+                </FormControl>
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth sx={{ m: 1 }}>
-                <InputLabel htmlFor="outlined-adornment-amount">
-                  Donation Amount
-                </InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-amount"
-                  endAdornment={
-                    <InputAdornment position="start">$</InputAdornment>
-                  }
-                  label="Donation Amount"
-                />
-              </FormControl>
-            </Grid>
-          </Grid>
+          </div>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => donate()}>Donate</Button>
-        </DialogActions>
+        <Grid container style={{paddingLeft: "400px"}}>
+          <div>
+            <DialogActions>
+              <Button onClick={() => donate()}>Donate</Button>
+            </DialogActions>
+          </div>
+          <div>
+            <DialogActions>
+              <Button onClick={() => cancel()}>Cancel</Button>
+            </DialogActions>
+          </div>         
+        </Grid>
       </BootstrapDialog>
     </div>
   );

@@ -15,6 +15,7 @@ import ContestScreen from "./views/ContestScreen";
 import EditorProfileScreen from "./views/EditorProfileScreen";
 import CompanyMainScreen from "./views/CompanyMainScreen";
 import DonationDialog from "./views/DonationDialog";
+import CompanyCreateInterview from "./views/CompanyCreateInterview";
 
 const useStyles = makeStyles({
   root: {
@@ -62,6 +63,7 @@ const App = () => {
           {/*done*/}
           <Route path="/admin" element={<AdminScreen />} />
           <Route path="/company" element={<CompanyMainScreen />} />
+          <Route path="/create-interview" element={<CompanyCreateInterview />} />
         </Routes>
       </div>
     </div>
