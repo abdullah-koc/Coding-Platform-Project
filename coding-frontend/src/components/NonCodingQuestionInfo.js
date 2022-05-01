@@ -34,6 +34,29 @@ const NonCodingQuestionInfo = ({ isContest }) => {
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [isLiked, setIsLiked] = React.useState(false);
   const [isDisliked, setIsDisliked] = React.useState(false);
+  const [communitySubmissions, setCommunitySubmissions] = React.useState([]);
+
+  React.useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/attempt/" +
+          question.question_id +
+          "/all"
+      )
+      .then((res) => {
+        var result = [];
+        res.data.forEach((element) => {
+          if (
+            element.user_id !==
+            JSON.parse(localStorage.getItem("session")).person_id
+          ) {
+            result.push(element);
+          }
+        });
+        setCommunitySubmissions(result);
+      });
+  }, [question]);
 
   const handleAttemptClick = (attempt) => {
     console.log(attempt);
@@ -159,17 +182,7 @@ const NonCodingQuestionInfo = ({ isContest }) => {
                     >
                       {question.title}
                     </Grid>
-                    {!isContest && (
-                      <Grid item xs={1}>
-                        <YouTubeIcon
-                          style={{
-                            fontSize: "200%",
-                            cursor: "pointer",
-                            color: "#FF0000",
-                          }}
-                        />
-                      </Grid>
-                    )}
+
                     {!isContest && (
                       <Grid
                         item
@@ -233,11 +246,12 @@ const NonCodingQuestionInfo = ({ isContest }) => {
               )}
               {mode === 1 && (
                 <div style={{ overflowY: "scroll", height: "84vh" }}>
-                  <CommunitySubmission submission="dsadsadadads" />
-                  <CommunitySubmission submission="dsadsadadads" />
-                  <CommunitySubmission submission="dsadsadadads" />
-                  <CommunitySubmission submission="dsadsadadads" />
-                  <CommunitySubmission submission="dsadsadadads" />
+                  {communitySubmissions.map((submission, index) => (
+                    <CommunitySubmission
+                      submission={submission.user_answer}
+                      key={index}
+                    />
+                  ))}
                 </div>
               )}
             </Grid>

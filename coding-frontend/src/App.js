@@ -46,14 +46,18 @@ const App = () => {
           />{" "}
           {/*done*/}
           <Route path="/contests" element={<Contests />} /> {/*done*/}
-          <Route path="/contests/:id" element={<ContestScreen />} /> {/*done*/}
+          <Route path="/contests/:id" element={<ContestScreen />} />
           <Route path="/contest/:id/donate" element={<DonationDialog />} />
-          <Route path="/cquestion/:id" element={<CodingQuestionInfo />} />{" "}
-          {/*done*/}
+          <Route path="/cquestion/:id" element={<CodingQuestionInfo />} />
           <Route
-            path="/ncquestion/:id"
-            element={<NonCodingQuestionInfo />}
-          />{" "}
+            path="/contests/c/:c_id/:id"
+            element={<CodingQuestionInfo isContest />}
+          />
+          <Route path="/ncquestion/:id" element={<NonCodingQuestionInfo />} />
+          <Route
+            path="/contests/nc/:c_id/:id"
+            element={<NonCodingQuestionInfo isContest />}
+          />
           {/*done*/}
           <Route path="/profile" element={<UserProfileScreen />} /> {/*done*/}
           <Route
@@ -63,7 +67,10 @@ const App = () => {
           {/*done*/}
           <Route path="/admin" element={<AdminScreen />} />
           <Route path="/company" element={<CompanyMainScreen />} />
-          <Route path="/create-interview" element={<CompanyCreateInterview />} />
+          <Route
+            path="/create-interview"
+            element={<CompanyCreateInterview />}
+          />
         </Routes>
       </div>
     </div>

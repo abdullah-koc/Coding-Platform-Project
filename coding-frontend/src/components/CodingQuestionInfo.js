@@ -14,6 +14,13 @@ import axios from "axios";
 
 const CodingQuestionInfo = ({ isContest }) => {
   let navigate = useNavigate();
+
+  const getContestID = () => {
+    let url = window.location.href;
+    let id = url.split("/")[url.split("/").length - 2];
+    return id;
+  };
+
   React.useEffect(() => {
     if (
       localStorage.getItem("session") === null ||
@@ -22,16 +29,37 @@ const CodingQuestionInfo = ({ isContest }) => {
       navigate("/");
     }
   }, []);
+
+  React.useEffect(() => {
+    if (isContest) {
+      axios
+        .get(
+          process.env.REACT_APP_URL +
+            "api/contest/get/all/" +
+            JSON.parse(localStorage.getItem("session")).person_id
+        )
+        .then((res) => {
+          let count = 0;
+          let contestID = getContestID();
+          let userID = JSON.parse(localStorage.getItem("session")).person_id;
+          res.data.map((contest) => {
+            if (contest.contest_id === contestID) {
+              count++;
+            }
+          });
+          if (count === 0) {
+            navigate("/");
+          }
+        });
+    }
+  }, []);
+
   const [mode, setMode] = React.useState(0);
   const [question, setQuestion] = React.useState({});
-  const [previousAttempts, setPreviousAttempts] = React.useState([
-    { id: 1, attemptCount: 1, passedTests: 12, totalTestCaseCount: 20 },
-    { id: 2, attemptCount: 2, passedTests: 18, totalTestCaseCount: 20 },
-    { id: 3, attemptCount: 3, passedTests: 20, totalTestCaseCount: 20 },
-  ]);
   const [isSolutionDisabled, setIsSolutionDisabled] = React.useState(true);
   const [isLiked, setIsLiked] = React.useState(false);
   const [isDisliked, setIsDisliked] = React.useState(false);
+  const [previousAttempts, setPreviousAttempts] = React.useState([]);
 
   const handleAttemptClick = (attempt) => {
     console.log(attempt);
@@ -53,6 +81,24 @@ const CodingQuestionInfo = ({ isContest }) => {
       .get(process.env.REACT_APP_URL + `api/question/${getID()}`)
       .then((res) => {
         setQuestion(res.data);
+      })
+      .catch((err) => {
+        alert("An error occured");
+        navigate("/");
+      });
+  }, []);
+
+  React.useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/attempt/" +
+          JSON.parse(localStorage.getItem("session")).person_id +
+          "/" +
+          getID()
+      )
+      .then((res) => {
+        setPreviousAttempts(res.data);
       })
       .catch((err) => {
         alert("An error occured");
@@ -275,11 +321,11 @@ const CodingQuestionInfo = ({ isContest }) => {
                       paddingTop: "4%",
                     }}
                   >
-                    {previousAttempts.map((attempt) => (
+                    {previousAttempts.map((attempt, index) => (
                       <Grid
                         item
                         xs={12}
-                        key={attempt.id}
+                        key={index}
                         onClick={() => handleAttemptClick(attempt)}
                         sx={{
                           width: "80%",
@@ -299,7 +345,7 @@ const CodingQuestionInfo = ({ isContest }) => {
                       >
                         {attempt.passedTests !== attempt.totalTestCaseCount && (
                           <div>
-                            Attempt {attempt.attemptCount}
+                            Attempt {index + 1}
                             {" ❌"}
                             <br></br>
                             <br></br>
@@ -309,7 +355,7 @@ const CodingQuestionInfo = ({ isContest }) => {
                         )}
                         {attempt.passedTests === attempt.totalTestCaseCount && (
                           <div>
-                            Attempt {attempt.attemptCount}
+                            Attempt {index + 1}
                             {" ✅"}
                             <br></br>
                             <br></br>

@@ -1,15 +1,59 @@
 import React, { useState } from "react";
 import { TextField, Grid, MenuItem, Select, Button } from "@mui/material";
 import Colors from "../utils/Colors";
-import TestCases from "./TestCases";
+import axios from "axios";
 
 const NonCodingQuestionText = ({ parentSubmitCallback }) => {
+  const [question, setQuestion] = useState([]);
   const [questionText, setQuestionText] = useState("");
   const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(false);
 
+  //get the id from the link
+  const getID = () => {
+    let url = window.location.href;
+    let id = url.split("/")[url.split("/").length - 1];
+    return id;
+  };
+
+  React.useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_URL + "api/question/" + getID())
+      .then((res) => {
+        setQuestion(res.data);
+        setQuestionText(res.data.question_text);
+      });
+  }, []);
+
+  React.useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          `api/attempt/${
+            JSON.parse(localStorage.getItem("session")).person_id
+          }/${getID()}`
+      )
+      .then((res) => {
+        if (res.data.length > 0) {
+          setIsSubmitButtonDisabled(true);
+          parentSubmitCallback(true);
+        }
+      });
+  }, [question]);
+
   const handleSubmitButtonPress = () => {
-    setIsSubmitButtonDisabled(true);
-    parentSubmitCallback(true);
+    axios
+      .post(process.env.REACT_APP_URL + "api/attempt/make/attempt", {
+        user_id: JSON.parse(localStorage.getItem("session")).person_id,
+        question_id: question.question_id,
+        user_answer: questionText,
+      })
+      .then((res) => {
+        setIsSubmitButtonDisabled(true);
+        parentSubmitCallback(true);
+      })
+      .catch((err) => {
+        alert("Answer cannot be empty.");
+      });
   };
 
   return (

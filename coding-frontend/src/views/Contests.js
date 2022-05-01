@@ -43,18 +43,23 @@ export const Contests = () => {
     axios.get(process.env.REACT_APP_URL + "api/contest/all").then((res) => {
       let allContests = res.data;
       //get upcoming contests (not attended)
-      let upcomingContests = allContests.filter(
+      var upc = allContests.filter(
         (contest) =>
           new Date(contest.start_date) > new Date() &&
           new Date(contest.end_date) > new Date()
       );
-      setUpcomingContests(upcomingContests);
+      //remove attended contests from upc
+      upc = upc.filter(
+        (contest) =>
+          !attendedContests.some(
+            (attended) => attended.contest_id === contest.contest_id
+          )
+      );
+      setUpcomingContests(upc);
+      setTotalPagesUpcoming(Math.ceil(upc.length / 5));
+      setUpcomingCurContests(upc.slice(0, 5));
     });
   }, [attendedContests]);
-
-  const handleStartContest = (contest_id) => {
-    //navigate("/contests/" + contest_id);
-  };
 
   useEffect(() => {
     setTotalPagesUpcoming(Math.ceil(upcomingContests.length / 5));
@@ -107,6 +112,11 @@ export const Contests = () => {
         <Grid container spacing={4}>
           <Grid item xs={6}>
             <h1>Upcoming Contests</h1>
+            {upcomingContests.length === 0 && (
+              <h3 style={{ textAlign: "center" }}>
+                No upcoming contests. Check back later!
+              </h3>
+            )}
             {curUpcomingContests.map((contest, index) => (
               <div
                 key={index}
@@ -135,11 +145,13 @@ export const Contests = () => {
 
           <Grid item xs={6}>
             <h1>Attended Contests</h1>
+            {attendedContests.length === 0 && (
+              <h3 style={{ textAlign: "center" }}>No attended contests.</h3>
+            )}
             {curAttendedContests.map((contest, index) => (
               <div
                 key={index}
                 style={{ paddingRight: "40px", marginBottom: "10px" }}
-                onClick={() => handleStartContest(contest.contest_id)}
               >
                 <AttendedContestInfo
                   contest_id={contest.contest_id}

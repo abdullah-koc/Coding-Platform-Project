@@ -40,7 +40,11 @@ const CodingQuestionText = ({ parentSubmitCallback, isContest }) => {
           }/${getID()}`
       )
       .then((res) => {
-        setRemainingAttempts(question.max_try - res.data.length);
+        if (!isContest) {
+          setRemainingAttempts(question.max_try - res.data.length);
+        } else {
+          setRemainingAttempts(100);
+        }
       });
   }, [question]);
 
@@ -71,7 +75,9 @@ const CodingQuestionText = ({ parentSubmitCallback, isContest }) => {
           }
           parentSubmitCallback(true);
         }
-        setRemainingAttempts(remainingAttempts - 1);
+        if (!isContest) {
+          setRemainingAttempts(remainingAttempts - 1);
+        }
       })
       .catch((err) => {
         alert("Answer cannot be empty.");

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import Colors from "../utils/Colors";
 import { Grid, Button } from "@mui/material";
 import CandidateEditor from "../components/AdminComponents/CandidateEditor";
 import { useNavigate } from "react-router-dom";
 import CandidateCompany from "../components/AdminComponents/CandidateCompany";
+import axios from "axios";
 
 const useStyles = makeStyles({
   navbar: {
@@ -32,7 +33,13 @@ const AdminScreen = () => {
     }
   }, []);
 
-  const handleLogOutAdmin = () => {};
+  const [candidateEditorList, setCandidateEditorList] = React.useState([]);
+  const [candidateCompanyList, setCandidateCompanyList] = React.useState([]);
+
+  const handleLogOutAdmin = () => {
+    localStorage.removeItem("session");
+    navigate("/");
+  };
   return (
     <div>
       <div className={classes.navbar}>

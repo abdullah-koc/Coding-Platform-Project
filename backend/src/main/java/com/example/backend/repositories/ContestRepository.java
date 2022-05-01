@@ -136,7 +136,7 @@ public class ContestRepository {
    }
 
    public void deleteContestant(String contest_id, String user_id) {
-      String sql = "DELETE FROM user_contest WHERE contest_id = ? AND person_id = ?";
+      String sql = "DELETE FROM user_contest WHERE contest_id = ? AND user_id = ?";
       jdbcTemplate.update(sql, contest_id, user_id);
    }
 

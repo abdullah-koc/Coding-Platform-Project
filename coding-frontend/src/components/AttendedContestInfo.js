@@ -4,6 +4,7 @@ import Colors from "../utils/Colors";
 import { Button, Grid } from "@mui/material";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
@@ -29,15 +30,25 @@ const AttendedContestInfo = ({
 
   let navigate = useNavigate();
   const handleStartContest = () => {
-    if (
-      new Date(start_date) <= new Date() &&
-      new Date(end_date) >= new Date()
-    ) {
+    if (new Date(start_date) <= new Date()) {
       navigate("/contests/" + contest_id);
     }
   };
 
-  const handleCancelContest = () => {};
+  const handleCancelContest = () => {
+    var userID = JSON.parse(localStorage.getItem("session")).person_id;
+    var contestID = contest_id;
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/contest/delete_contestant" +
+          `/${contestID}/${userID}`
+      )
+      .then((res) => {
+        alert("You have successfully withdrawn from the contest");
+        window.location.reload();
+      });
+  };
 
   return (
     <div className={classes.root}>
@@ -62,15 +73,26 @@ const AttendedContestInfo = ({
         <Grid item xs={4} style={{ display: "flex", alignItems: "center" }}>
           {start_date} - {end_date}
         </Grid>
-        <Grid item xs={1} style={{ display: "flex", alignItems: "center" }}>
-          <RemoveCircleIcon
-            onClick={() => handleCancelContest()}
+        {new Date(start_date) > new Date() ? (
+          <Grid
+            item
+            xs={1}
             style={{
-              color: "red",
-              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
             }}
-          />
-        </Grid>
+          >
+            <RemoveCircleIcon
+              onClick={() => handleCancelContest()}
+              style={{
+                color: "red",
+                cursor: "pointer",
+              }}
+            />
+          </Grid>
+        ) : (
+          <Grid item xs={1}></Grid>
+        )}
         <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
           <Button
             onClick={() => handleStartContest()}
@@ -81,7 +103,7 @@ const AttendedContestInfo = ({
                   : Colors.primary_color,
               cursor: "pointer",
               color: "white",
-              width: "70px",
+              width: "100px",
             }}
             disabled={new Date(start_date) > new Date()}
           >

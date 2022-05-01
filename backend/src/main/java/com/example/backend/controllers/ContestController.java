@@ -68,12 +68,12 @@ public class ContestController {
       contestService.insertContestant(contest_id, user_id);
    }
 
-   @GetMapping(path = "/delete_question/{contest_id}/{question_id}")
+   @PostMapping(path = "/delete_question/{contest_id}/{question_id}")
    public void deleteQuestion(@PathVariable String contest_id, @PathVariable String question_id) {
       contestService.deleteQuestion(contest_id, question_id);
    }
 
-   @GetMapping(path = "/delete_contestant/{contest_id}/{person_id}")
+   @PostMapping(path = "/delete_contestant/{contest_id}/{user_id}")
    public void deleteContestant(@PathVariable String contest_id, @PathVariable String user_id) {
       contestService.deleteContestant(contest_id, user_id);
    }

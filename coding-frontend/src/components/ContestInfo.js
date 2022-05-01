@@ -4,6 +4,7 @@ import Colors from "../utils/Colors";
 import { Button, Grid } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import ExampleImage from "../images/loginregisterimage.jpg";
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
@@ -27,7 +28,18 @@ const ContestInfo = ({
 }) => {
   const classes = useStyles();
   const handleJoinContest = () => {
-    
+    var userID = JSON.parse(localStorage.getItem("session")).person_id;
+    var contestID = contest_id;
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/contest/insert_contestant" +
+          `/${contestID}/${userID}`
+      )
+      .then((res) => {
+        alert("You have successfully joined the contest");
+        window.location.reload();
+      });
   };
   return (
     <div className={classes.root}>

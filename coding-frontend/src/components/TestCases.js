@@ -99,7 +99,7 @@ const TestCases = () => {
               </div>
             </div>
           )}
-          <div style={{ marginBottom: "20px" }}>Your output: Test output</div>
+          <div style={{ marginBottom: "20px" }}>Your output: {}</div>
         </Grid>
       </Grid>
     </div>

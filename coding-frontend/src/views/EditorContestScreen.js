@@ -16,7 +16,7 @@ const EditorContestScreen = () => {
   const [newContestName, setNewContestName] = React.useState("");
   const [newStartDate, setNewStartDate] = React.useState("");
   const [newEndDate, setNewEndDate] = React.useState("");
-  const [newPrize, setNewPrize] = React.useState(0);
+  const [newPrize, setNewPrize] = React.useState("");
 
   React.useEffect(() => {
     if (
@@ -112,7 +112,7 @@ const EditorContestScreen = () => {
         setNewContestName("");
         setNewStartDate("");
         setNewEndDate("");
-        setNewPrize(0);
+        setNewPrize("");
         setNewID(newID + 1);
       })
       .catch((err) => {
@@ -136,6 +136,7 @@ const EditorContestScreen = () => {
                     setIsDialogOpen({
                       isOpen: true,
                       contestId: contest.contest_id,
+                      contestName: contest.contest_name,
                     })
                   }
                   key={index}
@@ -171,7 +172,7 @@ const EditorContestScreen = () => {
                       marginLeft: "100px",
                     }}
                   >
-                    <div style={{ marginRight: "20px" }}>Contest Name</div>
+                    <div style={{ marginRight: "21px" }}>Contest Name</div>
                     <TextField
                       variant="outlined"
                       color="success"
@@ -235,14 +236,13 @@ const EditorContestScreen = () => {
                       marginLeft: "100px",
                     }}
                   >
-                    <div style={{ marginRight: "60px" }}>Prize (TL)</div>
+                    <div style={{ marginRight: "88px" }}>Prize</div>
                     <TextField
                       variant="outlined"
                       color="success"
                       size="small"
                       value={newPrize}
                       onChange={(e) => setNewPrize(e.target.value)}
-                      type="number"
                       style={{ width: "200px" }}
                     />
                   </Grid>
@@ -348,6 +348,7 @@ const EditorContestScreen = () => {
             open={isDialogOpen.isOpen}
             handleParentOpen={dialogCallback}
             contestId={isDialogOpen.contestId}
+            contestName={isDialogOpen.contestName}
           />
         </Grid>
       </div>
