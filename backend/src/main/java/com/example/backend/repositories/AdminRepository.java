@@ -31,6 +31,22 @@ public class AdminRepository {
 
     }
 
+    public void disapproveEditor(String admin_id, String editor_id) {
+        String update_is_approved = "UPDATE editors SET is_approved = ? WHERE editor_id = ?";
+        jdbcTemplate.update(update_is_approved, false, editor_id);
+
+        String update_admin_id = "UPDATE editors SET admin_id = ? WHERE editor_id = ?";
+        jdbcTemplate.update(update_admin_id, admin_id, editor_id);
+    }
+
+    public void disapproveCompany(String admin_id, String company_id) {
+        String update_is_approved = "UPDATE companies SET is_approved = ? WHERE company_id = ?";
+        jdbcTemplate.update(update_is_approved, false, company_id);
+
+        String update_admin_id = "UPDATE companies SET admin_id = ? WHERE company_id = ?";
+        jdbcTemplate.update(update_admin_id, admin_id, company_id);
+    }
+
     public Admin findAdminByEmail(String email) {
         String sql = "SELECT * FROM admins WHERE admin_email = ?";
         try {

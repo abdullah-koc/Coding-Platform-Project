@@ -19,6 +19,14 @@ public class AdminService {
         adminRepository.approveCompany(admin_id, company_id);
     }
 
+    public void disapproveEditor(String admin_id, String editor_id) {
+        adminRepository.disapproveEditor(admin_id, editor_id);
+    }
+
+    public void disapproveCompany(String admin_id, String company_id) {
+        adminRepository.disapproveCompany(admin_id, company_id);
+    }
+
     public Admin getAdminByEmail(String email) {
         return adminRepository.findAdminByEmail(email);
     }

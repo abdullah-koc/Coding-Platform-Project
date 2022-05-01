@@ -20,6 +20,16 @@ public class AdminController {
     public void approveCompany(@PathVariable String admin_id, @PathVariable String company_id) {
         adminService.approveCompany(admin_id, company_id);
     }
+
+    @PutMapping("/disapprove/editor/{admin_id}/{editor_id}")
+    public void disapproveEditor(@PathVariable String admin_id, @PathVariable String editor_id) {
+        adminService.disapproveEditor(admin_id, editor_id);
+    }
+
+    @PutMapping("/disapprove/company/{admin_id}/{company_id}")
+    public void disapproveCompany(@PathVariable String admin_id, @PathVariable String company_id) {
+        adminService.disapproveCompany(admin_id, company_id);
+    }
     
     @GetMapping("/{email}")
     public Admin getAdminByEmail(@PathVariable String email) {
