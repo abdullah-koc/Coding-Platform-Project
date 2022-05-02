@@ -1,13 +1,13 @@
 package com.example.backend.dto;
 
 public class EditorDto extends PersonDto {
-    private String cv_url;
+    private String cv;
 
-    public String getCv_url() {
-        return cv_url;
+    public String getCv() {
+        return cv;
     }
 
-    public void setCv_url(String cv_url) {
-        this.cv_url = cv_url;
+    public void setCv(String cv_url) {
+        this.cv = cv_url;
     }
 }

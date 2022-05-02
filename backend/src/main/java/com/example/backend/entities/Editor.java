@@ -3,7 +3,7 @@ package com.example.backend.entities;
 public class Editor extends Person {
     private String experience_level;
     private int salary;
-    private String cv_url;
+    private String cv;
     private String editor_id;
 
     private boolean is_approved;
@@ -25,11 +25,11 @@ public class Editor extends Person {
                   String birth_date,
                   String experience_level,
                   int salary,
-                  String cv_url) {
+                  String cv) {
         super(editor_id, full_name, email, photo, password, nickname, phone, is_confirmed, reg_date, birth_date);
         this.experience_level = experience_level;
         this.salary = salary;
-        this.cv_url = cv_url;
+        this.cv = cv;
     }
 
     public String getEditor_id() {
@@ -55,10 +55,10 @@ public class Editor extends Person {
         this.salary = salary;
     }
 
-    public String getCv_url() { return cv_url;}
+    public String getCv() { return cv;}
 
-    public void setCv_url(String cv_url) {
-        this.cv_url = cv_url;
+    public void setCv(String cv) {
+        this.cv = cv;
     }
 
     public boolean isIs_approved() {

@@ -36,6 +36,25 @@ const AdminScreen = () => {
   const [candidateEditorList, setCandidateEditorList] = React.useState([]);
   const [candidateCompanyList, setCandidateCompanyList] = React.useState([]);
 
+  React.useEffect(() => {
+    axios.get(process.env.REACT_APP_URL + "api/editor/all").then((res) => {
+      let allEditors = res.data;
+      var filtered = allEditors.filter(
+        (editor) => editor.admin_id === null && editor.is_approved === false
+      );
+      setCandidateEditorList(filtered);
+    });
+  }, []);
+  React.useEffect(() => {
+    axios.get(process.env.REACT_APP_URL + "api/company/all").then((res) => {
+      console.log(res.data);
+      let allCompanies = res.data;
+      var filtered = allCompanies.filter(
+        (company) => company.admin_id === null && company.is_approved === false
+      );
+      setCandidateCompanyList(filtered);
+    });
+  }, []);
   const handleLogOutAdmin = () => {
     localStorage.removeItem("session");
     navigate("/");
@@ -131,76 +150,16 @@ const AdminScreen = () => {
             </Grid>
           </Grid>
           <div style={{ overflowY: "scroll", height: "80vh" }}>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateEditor
-                editorName={"ahmet"}
-                editorNickname={"testnickname"}
-                editorCV={"https://www.google.com"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateEditor
-                editorName={"ahmet"}
-                editorNickname={"testnickname"}
-                editorCV={"https://www.google.com"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateEditor
-                editorName={"ahmet"}
-                editorNickname={"testnickname"}
-                editorCV={"https://www.google.com"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateEditor
-                editorName={"ahmet"}
-                editorNickname={"testnickname"}
-                editorCV={"https://www.google.com"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateEditor
-                editorName={"ahmet"}
-                editorNickname={"testnickname"}
-                editorCV={"https://www.google.com"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateEditor
-                editorName={"ahmet"}
-                editorNickname={"testnickname"}
-                editorCV={"https://www.google.com"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateEditor
-                editorName={"ahmet"}
-                editorNickname={"testnickname"}
-                editorCV={"https://www.google.com"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateEditor
-                editorName={"ahmet"}
-                editorNickname={"testnickname"}
-                editorCV={"https://www.google.com"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateEditor
-                editorName={"ahmet"}
-                editorNickname={"testnickname"}
-                editorCV={"https://www.google.com"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateEditor
-                editorName={"ahmet"}
-                editorNickname={"testnickname"}
-                editorCV={"https://www.google.com"}
-              />
-            </div>
+            {candidateEditorList.map((editor, index) => (
+              <div style={{ marginBottom: "10px" }} key={index}>
+                <CandidateEditor
+                  editorId={editor.person_id}
+                  editorName={editor.full_name}
+                  editorNickname={editor.nickname}
+                  editorCV={editor.cv}
+                />
+              </div>
+            ))}
           </div>
         </Grid>
         <Grid item xs={7}>
@@ -272,86 +231,17 @@ const AdminScreen = () => {
             </Grid>
           </Grid>
           <div style={{ overflowY: "scroll", height: "80vh" }}>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateCompany
-                companyName={"Google"}
-                companyEmail={"google@google.com"}
-                companyAddress={
-                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nulla sequi, debitis atque eveniet minima reprehenderit natus sunt eligendi aspernatur."
-                }
-                companyPhone={"+90 554 554 55 55"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateCompany
-                companyName={"Google"}
-                companyEmail={"google@google.com"}
-                companyAddress={
-                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nulla sequi, debitis atque eveniet minima reprehenderit natus sunt eligendi aspernatur."
-                }
-                companyPhone={"+90 554 554 55 55"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateCompany
-                companyName={"Google"}
-                companyEmail={"google@google.com"}
-                companyAddress={
-                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nulla sequi, debitis atque eveniet minima reprehenderit natus sunt eligendi aspernatur."
-                }
-                companyPhone={"+90 554 554 55 55"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateCompany
-                companyName={"Google"}
-                companyEmail={"google@google.com"}
-                companyAddress={
-                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nulla sequi, debitis atque eveniet minima reprehenderit natus sunt eligendi aspernatur."
-                }
-                companyPhone={"+90 554 554 55 55"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateCompany
-                companyName={"Google"}
-                companyEmail={"google@google.com"}
-                companyAddress={
-                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nulla sequi, debitis atque eveniet minima reprehenderit natus sunt eligendi aspernatur."
-                }
-                companyPhone={"+90 554 554 55 55"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateCompany
-                companyName={"Google"}
-                companyEmail={"google@google.com"}
-                companyAddress={
-                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nulla sequi, debitis atque eveniet minima reprehenderit natus sunt eligendi aspernatur."
-                }
-                companyPhone={"+90 554 554 55 55"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateCompany
-                companyName={"Google"}
-                companyEmail={"google@google.com"}
-                companyAddress={
-                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nulla sequi, debitis atque eveniet minima reprehenderit natus sunt eligendi aspernatur."
-                }
-                companyPhone={"+90 554 554 55 55"}
-              />
-            </div>
-            <div style={{ marginBottom: "10px" }}>
-              <CandidateCompany
-                companyName={"Google"}
-                companyEmail={"google@google.com"}
-                companyAddress={
-                  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione nulla sequi, debitis atque eveniet minima reprehenderit natus sunt eligendi aspernatur."
-                }
-                companyPhone={"+90 554 554 55 55"}
-              />
-            </div>
+            {candidateCompanyList.map((company, index) => (
+              <div style={{ marginBottom: "10px" }} key={index}>
+                <CandidateCompany
+                  companyId={company.company_id}
+                  companyName={company.company_name}
+                  companyEmail={company.company_email}
+                  companyAddress={company.company_address}
+                  companyPhone={company.company_phone}
+                />
+              </div>
+            ))}
           </div>
         </Grid>
       </Grid>

@@ -32,7 +32,7 @@ public class EditorRepository {
                 editor_id, editor.getFull_name(), editor.getEmail(), editor.getPassword(), editor.getNickname(), editor.getBirth_date());
 
         String update_cv = "UPDATE editors SET cv = ? WHERE editor_id = ?";
-        jdbcTemplate.update(update_cv, editor.getCv_url(), editor.getEditor_id());
+        jdbcTemplate.update(update_cv, editor.getCv(), editor.getEditor_id());
 
         return editor;
     }
@@ -69,7 +69,7 @@ public class EditorRepository {
         String sql = "SELECT * FROM editors e, people p WHERE p.person_id = e.editor_id";
 
         try {
-            return jdbcTemplate.query(sql, new Object[],  new BeanPropertyRowMapper(Editor.class));
+            return jdbcTemplate.query(sql, new Object[]{},  new BeanPropertyRowMapper(Editor.class));
         } catch(EmptyResultDataAccessException e) {
             return null;
         }

@@ -56,7 +56,7 @@ const Register = () => {
               birth_date: birthday,
               company_address: "",
               type: "Editor",
-              cv_url: cvURL,
+              cv: cvURL,
             })
             .then((response) => {
               alert("Successfully registered");

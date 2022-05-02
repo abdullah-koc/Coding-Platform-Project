@@ -3,6 +3,7 @@ import { makeStyles } from "@mui/styles";
 import Colors from "../../utils/Colors";
 import { Grid } from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
@@ -18,10 +19,35 @@ const useStyles = makeStyles({
   },
 });
 
-const handleApproveClick = () => {};
-const handleRejectClick = () => {};
+const handleApproveClick = (companyId) => {
+  axios
+    .put(
+      process.env.REACT_APP_URL +
+        "api/admin/approve/company/" +
+        JSON.parse(localStorage.getItem("session")).admin_id +
+        "/" +
+        companyId
+    )
+    .then((res) => {
+      window.location.reload();
+    });
+};
+const handleRejectClick = (companyId) => {
+  axios
+    .put(
+      process.env.REACT_APP_URL +
+        "api/admin/disapprove/company/" +
+        JSON.parse(localStorage.getItem("session")).admin_id +
+        "/" +
+        companyId
+    )
+    .then((res) => {
+      window.location.reload();
+    });
+};
 
 const CandidateCompany = ({
+  companyId,
   companyName,
   companyEmail,
   companyPhone,
@@ -85,13 +111,13 @@ const CandidateCompany = ({
           }}
         >
           <div
-            onClick={() => handleApproveClick()}
+            onClick={() => handleApproveClick(companyId)}
             style={{ cursor: "pointer", fontSize: "28px" }}
           >
             ✅
           </div>
           <div
-            onClick={() => handleRejectClick()}
+            onClick={() => handleRejectClick(companyId)}
             style={{ cursor: "pointer", fontSize: "28px" }}
           >
             ❌

@@ -43,16 +43,16 @@ const Login = () => {
             .then((response) => {
               details = response.data;
               if (!response.data == "") {
-                // if (
-                //   response.data.is_approved === false &&
-                //   response.data.admin_id != null
-                // ) {
-                //   alert("You are not approved.");
-                //   return;
-                // } else if (response.data.is_approved === false) {
-                //   alert("Your account is not approved yet");
-                //   return;
-                // }
+                if (
+                  response.data.is_approved === false &&
+                  response.data.admin_id != null
+                ) {
+                  alert("You are not approved.");
+                  return;
+                } else if (response.data.is_approved === false) {
+                  alert("Your account is not approved yet");
+                  return;
+                }
 
                 localStorage.setItem("session", JSON.stringify(details));
                 alert("Successfully logged in");

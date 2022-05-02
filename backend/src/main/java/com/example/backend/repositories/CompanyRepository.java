@@ -79,7 +79,7 @@ public class CompanyRepository {
         String sql = "SELECT * FROM companies";
 
         try {
-            return jdbcTemplate.query(sql, new Object[],  new BeanPropertyRowMapper(Company.class));
+            return jdbcTemplate.query(sql, new Object[]{},  new BeanPropertyRowMapper(Company.class));
         } catch(EmptyResultDataAccessException e) {
             return null;
         }

@@ -53,7 +53,8 @@ public class AuthController {
             editorDto.setFull_name(signUpDto.getFull_name());
             editorDto.setPassword(signUpDto.getPassword());
             editorDto.setNickname(signUpDto.getNickname());
-            editorDto.setCv_url(signUpDto.getCv_url());
+            System.out.println(signUpDto.getCv());
+            editorDto.setCv(signUpDto.getCv());
             editorService.signUp(editorDto);
         }
         else if(type.equals("Company")) {

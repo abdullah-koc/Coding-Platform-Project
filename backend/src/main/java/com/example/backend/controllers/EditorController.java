@@ -1,5 +1,6 @@
 package com.example.backend.controllers;
 
+import com.example.backend.dto.EditorDto;
 import com.example.backend.entities.Editor;
 import com.example.backend.services.EditorService;
 import org.springframework.beans.factory.annotation.Autowired;

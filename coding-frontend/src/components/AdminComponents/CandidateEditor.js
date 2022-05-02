@@ -3,6 +3,7 @@ import { makeStyles } from "@mui/styles";
 import Colors from "../../utils/Colors";
 import { Grid } from "@mui/material";
 import LinkIcon from "@mui/icons-material/Link";
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
@@ -16,10 +17,39 @@ const useStyles = makeStyles({
   },
 });
 
-const handleApproveClick = () => {};
-const handleRejectClick = () => {};
+const handleApproveClick = (editorId) => {
+  axios
+    .put(
+      process.env.REACT_APP_URL +
+        "api/admin/approve/editor/" +
+        JSON.parse(localStorage.getItem("session")).admin_id +
+        "/" +
+        editorId
+    )
+    .then((res) => {
+      window.location.reload();
+    });
+};
+const handleRejectClick = (editorId) => {
+  axios
+    .put(
+      process.env.REACT_APP_URL +
+        "api/admin/disapprove/editor/" +
+        JSON.parse(localStorage.getItem("session")).admin_id +
+        "/" +
+        editorId
+    )
+    .then((res) => {
+      window.location.reload();
+    });
+};
 
-const CandidateEditor = ({ editorName, editorNickname, editorCV }) => {
+const CandidateEditor = ({
+  editorId,
+  editorName,
+  editorNickname,
+  editorCV,
+}) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -60,7 +90,13 @@ const CandidateEditor = ({ editorName, editorNickname, editorCV }) => {
               cursor: "pointer",
               fontSize: "40px",
             }}
-            onClick={() => window.open(editorCV)}
+            onClick={() => {
+              if (!editorCV) {
+                return;
+              } else {
+                window.open(editorCV);
+              }
+            }}
           />
         </Grid>
         <Grid
@@ -73,13 +109,13 @@ const CandidateEditor = ({ editorName, editorNickname, editorCV }) => {
           }}
         >
           <div
-            onClick={() => handleApproveClick()}
+            onClick={() => handleApproveClick(editorId)}
             style={{ cursor: "pointer", fontSize: "28px" }}
           >
             ✅
           </div>
           <div
-            onClick={() => handleRejectClick()}
+            onClick={() => handleRejectClick(editorId)}
             style={{ cursor: "pointer", fontSize: "28px" }}
           >
             ❌
