@@ -10,6 +10,7 @@ public class Company {
     private String company_email;
     private String company_password;
     private boolean is_approved;
+    private boolean admin_id;
 
     public Company() {
     }
@@ -76,5 +77,13 @@ public class Company {
 
     public void setIs_approved(boolean is_approved) {
         this.is_approved = is_approved;
+    }
+
+    public String getAdmin_id() {
+        return admin_id;
+    }
+
+    public void setAdmin_id(String admin_id) {
+        this.admin_id = admin_id;
     }
 }
