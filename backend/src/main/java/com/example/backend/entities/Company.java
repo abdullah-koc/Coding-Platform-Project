@@ -10,7 +10,7 @@ public class Company {
     private String company_email;
     private String company_password;
     private boolean is_approved;
-    private boolean admin_id;
+    private String admin_id;
 
     public Company() {
     }

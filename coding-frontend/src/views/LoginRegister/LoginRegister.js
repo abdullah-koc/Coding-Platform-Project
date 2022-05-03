@@ -35,16 +35,24 @@ const LoginRegister = () => {
   useEffect(() => {
     //if local storage has a user, then redirect to home
     if (localStorage.getItem("session")) {
-      if (
-        JSON.parse(localStorage.getItem("session")).person_id.charAt(0) === "U"
-      ) {
-        navigate("/problems");
+      if (JSON.parse(localStorage.getItem("session")).person_id !== undefined) {
+        if (
+          JSON.parse(localStorage.getItem("session")).person_id.charAt(0) ===
+          "U"
+        ) {
+          navigate("/problems");
+        } else if (
+          JSON.parse(localStorage.getItem("session")).person_id.charAt(0) ===
+          "E"
+        ) {
+          navigate("/editor");
+        }
       } else if (
-        JSON.parse(localStorage.getItem("session")).person_id.charAt(0) === "E"
+        JSON.parse(localStorage.getItem("session")).company_id !== undefined
       ) {
-        navigate("/editor");
+        navigate("/company");
       } else if (
-        JSON.parse(localStorage.getItem("session")).person_id.charAt(0) === "A"
+        JSON.parse(localStorage.getItem("session")).admin_id !== undefined
       ) {
         navigate("/admin");
       }

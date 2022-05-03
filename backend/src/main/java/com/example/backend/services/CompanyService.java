@@ -28,7 +28,7 @@ public class CompanyService {
 
     public boolean login(String email, String password) {
         Company company = companyRepository.findCompanyByEmail(email);
-        if(company.getCompany_password().equals(password) && company.isIs_approved()) {
+        if(company.getCompany_password().equals(password)) {
             return true;
         }
         return false;

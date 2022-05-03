@@ -6,8 +6,35 @@ import Colors from "../../utils/Colors";
 import PhoneIcon from "@mui/icons-material/Phone";
 import BusinessIcon from "@mui/icons-material/Business";
 import AlternateEmail from "@mui/icons-material/AlternateEmail";
+import axios from "axios";
 
 const RegisterCompany = () => {
+  const [companyName, setCompanyName] = useState("");
+  const [companyEmail, setCompanyEmail] = useState("");
+  const [companyPhone, setCompanyPhone] = useState("");
+  const [companyAddress, setCompanyAddress] = useState("");
+  const [companyPassword, setCompanyPassword] = useState("");
+
+  const handleRegisterCompany = () => {
+    axios
+      .post(process.env.REACT_APP_URL + "api/auth/signUp", {
+        full_name: companyName,
+        email: companyEmail,
+        password: companyPassword,
+        company_address: companyAddress,
+        company_phone: companyPhone,
+        type: "Company",
+      })
+      .then((res) => {
+        alert(
+          "Successfully registered. You need to wait admin approval to login"
+        );
+      })
+      .catch((err) => {
+        alert("A user with this email/nickname already exists");
+      });
+  };
+
   return (
     <Grid
       container
@@ -32,6 +59,8 @@ const RegisterCompany = () => {
           style={{ width: "400px" }}
           placeholder="Company Name"
           color="warning"
+          value={companyName}
+          onChange={(e) => setCompanyName(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -47,6 +76,8 @@ const RegisterCompany = () => {
           style={{ width: "400px" }}
           placeholder="Company Email"
           color="warning"
+          value={companyEmail}
+          onChange={(e) => setCompanyEmail(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -63,6 +94,8 @@ const RegisterCompany = () => {
           placeholder="Password"
           type="password"
           color="warning"
+          value={companyPassword}
+          onChange={(e) => setCompanyPassword(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -78,6 +111,8 @@ const RegisterCompany = () => {
           style={{ width: "400px" }}
           placeholder="Company Phone"
           color="warning"
+          value={companyPhone}
+          onChange={(e) => setCompanyPhone(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -94,6 +129,8 @@ const RegisterCompany = () => {
           style={{ width: "400px" }}
           placeholder="Company Address"
           color="warning"
+          value={companyAddress}
+          onChange={(e) => setCompanyAddress(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -109,6 +146,7 @@ const RegisterCompany = () => {
           variant="contained"
           size="large"
           style={{ backgroundColor: Colors.primary_color }}
+          onClick={() => handleRegisterCompany()}
         >
           Register
         </Button>

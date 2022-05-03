@@ -2,8 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Grid, Pagination } from "@mui/material";
 import ContestInfoDonation from "../components/ContestInfoDonation";
 import NavbarCompany from "../components/Navbars/NavbarCompany";
+import { useNavigate } from "react-router-dom";
 
 export const CompanyMainScreen = () => {
+  let navigate = useNavigate();
+  React.useEffect(() => {
+    if (
+      localStorage.getItem("session") === null ||
+      JSON.parse(localStorage.getItem("session")).company_id.charAt(0) !== "C"
+    ) {
+      navigate("/");
+    }
+  }, []);
   const [upcomingPage, setUpcomingPage] = useState(1);
   const [totalPagesUpcoming, setTotalPagesUpcoming] = useState(1);
   const [curUpcomingContests, setUpcomingCurContests] = useState([]);
