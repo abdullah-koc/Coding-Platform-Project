@@ -3,17 +3,18 @@ import { Grid, Pagination } from "@mui/material";
 import ContestInfoDonation from "../components/ContestInfoDonation";
 import NavbarCompany from "../components/Navbars/NavbarCompany";
 import { useNavigate } from "react-router-dom";
+import InterviewCard from "../components/CompanyComponents/InterviewCard";
 
 export const CompanyMainScreen = () => {
   let navigate = useNavigate();
-  React.useEffect(() => {
+  /*React.useEffect(() => {
     if (
       localStorage.getItem("session") === null ||
       JSON.parse(localStorage.getItem("session")).company_id.charAt(0) !== "C"
     ) {
       navigate("/");
     }
-  }, []);
+  }, []);*/
   const [upcomingPage, setUpcomingPage] = useState(1);
   const [totalPagesUpcoming, setTotalPagesUpcoming] = useState(1);
   const [curUpcomingContests, setUpcomingCurContests] = useState([]);
@@ -100,6 +101,9 @@ export const CompanyMainScreen = () => {
     },
   ]);
 
+  const [upcomingInterviewPage, setUpcomingInterviewPage] = useState(1);
+  const [totalPagesInterviewUpcoming, setTotalPagesInterviewUpcoming] = useState(1);
+  const [curUpcomingInterviews, setUpcomingCurInterviews] = useState([]);
   const [interviews, setInterviews] = useState([
     {
       interview_id: "I1",
@@ -181,6 +185,31 @@ export const CompanyMainScreen = () => {
     sortContets();
   }, []);
 
+  useEffect(() => {
+    setTotalPagesInterviewUpcoming(Math.ceil(interviews.length / 7));
+    setUpcomingCurInterviews(interviews.slice(0, 7));
+  }, []);
+
+  useEffect(() => {
+    setUpcomingCurInterviews(
+      interviews.slice((upcomingInterviewPage - 1) * 7, 7 * upcomingInterviewPage)
+    );
+  }, [upcomingInterviewPage]);
+
+  function sortInterviews() {
+    const sortedData = [...interviews].sort((a, b) => {
+      return new Date(a.interview_date) < new Date(b.interview_date) ? 1 : -1;
+    });
+    setInterviews(sortedData);
+    setUpcomingCurInterviews(
+      sortedData.slice((upcomingInterviewPage - 1) * 7, 7 * upcomingInterviewPage)
+    );
+  }
+
+  useEffect(() => {
+    sortInterviews();
+  }, []);
+
   return (
     <div>
       <NavbarCompany />
@@ -224,6 +253,27 @@ export const CompanyMainScreen = () => {
           </Grid>
           <Grid item xs={6}>
             <h1>Your Interviews</h1>
+            {curUpcomingInterviews.map((interview, index) => (
+              <div
+                key={index}
+                style={{ paddingRight: "40px", marginBottom: "20px" }}
+              >
+                <InterviewCard
+                  interview_id={interview.interview_id}
+                  interview_name={interview.interview_name}
+                  interview_date={interview.interview_date}
+                  interview_duration={interview.interview_duration}
+                  style={{ marginTop: "20px" }}
+                />
+              </div>
+            ))}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Pagination
+                count={totalPagesInterviewUpcoming}
+                page={upcomingInterviewPage}
+                onChange={(e, page) => setUpcomingInterviewPage(page)}
+              />
+            </div>
           </Grid>
         </Grid>
       </div>

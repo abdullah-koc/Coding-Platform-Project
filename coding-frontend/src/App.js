@@ -16,6 +16,7 @@ import EditorProfileScreen from "./views/EditorProfileScreen";
 import CompanyMainScreen from "./views/CompanyMainScreen";
 import DonationDialog from "./views/DonationDialog";
 import CompanyCreateInterview from "./views/CompanyCreateInterview";
+import InterviewCard from "./components/CompanyComponents/InterviewCard";
 
 const useStyles = makeStyles({
   root: {
@@ -68,7 +69,7 @@ const App = () => {
           <Route path="/admin" element={<AdminScreen />} />
           <Route path="/company" element={<CompanyMainScreen />} />
           <Route
-            path="/create-interview"
+            path="/company/create-interview"
             element={<CompanyCreateInterview />}
           />
         </Routes>

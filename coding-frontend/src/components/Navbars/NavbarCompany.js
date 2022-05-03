@@ -36,7 +36,7 @@ const NavbarCompany = () => {
   const goToMainPage = () => {};
   const goToAccountPage = () => {};
   const goToCreateInterviewPage = () => {
-    window.location.href = "/create-interview";
+    window.location.href = "/company/create-interview";
   };
 
   return (
