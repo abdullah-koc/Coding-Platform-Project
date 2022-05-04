@@ -68,4 +68,6 @@ public class Contest {
       this.creation_date = creation_date;
    }
 
+   public void setPhoto(String photo) {this.contest_photo = photo;}
+
 }

@@ -1,20 +1,21 @@
 package com.example.backend.controllers;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.example.backend.dto.ContestDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.dto.UserDto;
 import com.example.backend.services.ContestService;
 
+import com.example.backend.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(path = "api/contest")
@@ -22,6 +23,8 @@ public class ContestController {
 
    @Autowired
    ContestService contestService;
+   @Autowired
+   private PhotoService photoService;
 
    @GetMapping(path = "/{contest_id}")
    public ContestDto getContestById(@PathVariable String contest_id) {
@@ -83,9 +86,11 @@ public class ContestController {
       contestService.updateContestName(contest_id, contest_name);
    }
 
-   @PostMapping(path = "/update_contest_photo/{contest_id}")
-   public void updateContestPhoto(@PathVariable String contest_id, @RequestBody String contest_photo) {
-      contestService.updateContestPhoto(contest_id, contest_photo);
+   @PostMapping("/change/photo/{contest_id}")
+   public ResponseEntity<Map> changePhoto(@PathVariable String contest_id, @RequestParam MultipartFile multipartFile) throws IOException {
+      Map result = photoService.uploadPhoto(multipartFile);
+      contestService.changePhoto(contest_id, (String) result.get("url"));
+      return new ResponseEntity(result, HttpStatus.OK);
    }
 
    @PostMapping(path = "/update_contest_start_date/{contest_id}")

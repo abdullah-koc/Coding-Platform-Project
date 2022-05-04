@@ -7,8 +7,11 @@ import com.example.backend.dto.ContestDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.dto.UserDto;
 
+import com.example.backend.entities.Contest;
+import com.example.backend.entities.Editor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -51,6 +54,15 @@ public class ContestRepository {
       String sql = "INSERT INTO contests (contest_id, contest_name, contest_photo, start_date, end_date, prize) VALUES (?, ?, ?, ?, ?, ?)";
       jdbcTemplate.update(sql, contest.getContest_id(), contest.getContest_name(), contest.getContest_photo(),
             contest.getStart_date(), contest.getEnd_date(), contest.getPrize());
+   }
+
+   public Contest findById(String contest_id) {
+      String sql = "SELECT * FROM contests c WHERE c.contest_id = ?";
+      try {
+         return (Contest) jdbcTemplate.queryForObject(sql, new Object[]{contest_id}, new BeanPropertyRowMapper(Editor.class));
+      } catch (EmptyResultDataAccessException e) {
+         return null;
+      }
    }
 
    public void deleteContest(String contest_id) {

@@ -7,6 +7,8 @@ import com.example.backend.dto.ContestDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.dto.UserDto;
 
+import com.example.backend.entities.Contest;
+import com.example.backend.entities.Editor;
 import com.example.backend.repositories.ContestRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +68,10 @@ public class ContestService {
       contestRepository.updateContestName(contest_id, contest_name);
    }
 
-   public void updateContestPhoto(String contest_id, String contest_photo) {
-      contestRepository.updateContestPhoto(contest_id, contest_photo);
+   public void changePhoto(String contest_id, String photo){
+      Contest contest = contestRepository.findById(contest_id);
+      contest.setPhoto(photo);
+      contestRepository.updateContestPhoto(contest_id, photo);
    }
 
    public void updateContestStartDate(String contest_id, Date contest_start_date) {
