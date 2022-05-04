@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Pagination } from "@mui/material";
-import ContestInfoDonation from "../components/ContestInfoDonation";
+import ContestInfoDonation from "../components/CompanyComponents/ContestInfoDonation";
 import NavbarCompany from "../components/Navbars/NavbarCompany";
 import { useNavigate } from "react-router-dom";
 import InterviewCard from "../components/CompanyComponents/InterviewCard";

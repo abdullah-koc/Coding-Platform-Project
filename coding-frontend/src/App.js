@@ -15,8 +15,9 @@ import ContestScreen from "./views/ContestScreen";
 import EditorProfileScreen from "./views/EditorProfileScreen";
 import CompanyMainScreen from "./views/CompanyMainScreen";
 import DonationDialog from "./views/DonationDialog";
-import CompanyCreateInterview from "./views/CompanyCreateInterview";
-import InterviewCard from "./components/CompanyComponents/InterviewCard";
+import CompanyCreateInterview from "./views/CompanyCreateInterviewScreen";
+import CompanyProfileScreen from "./views/CompanyProfileScreen";
+import InterviewUpdatePage from "./views/InterviewUpdatePage";
 
 const useStyles = makeStyles({
   root: {
@@ -72,6 +73,8 @@ const App = () => {
             path="/company/create-interview"
             element={<CompanyCreateInterview />}
           />
+          <Route path="/company/profile" element={<CompanyProfileScreen />} />
+          <Route path="/interview/:i_id" element={<InterviewUpdatePage />} />
         </Routes>
       </div>
     </div>

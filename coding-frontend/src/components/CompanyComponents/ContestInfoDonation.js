@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
-import Colors from "../utils/Colors";
+import Colors from "../../utils/Colors";
 import { Button, Grid } from "@mui/material";
 
 const useStyles = makeStyles({

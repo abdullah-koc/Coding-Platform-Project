@@ -3,6 +3,7 @@ import { makeStyles } from "@mui/styles";
 import Colors from "../../utils/Colors";
 import { Grid } from "@mui/material";
 import BusinessIcon from "@mui/icons-material/Business";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   navbar: {
@@ -32,17 +33,22 @@ const useStyles = makeStyles({
 });
 
 const NavbarCompany = () => {
+  let navigate = useNavigate();
   const classes = useStyles();
-  const goToMainPage = () => {};
-  const goToAccountPage = () => {};
+  const goToMainPage = () => {
+    navigate("/company");
+  };
+  const goToAccountPage = () => {
+    navigate("/company/profile");
+  };
   const goToCreateInterviewPage = () => {
-    window.location.href = "/company/create-interview";
+    navigate("/company/create-interview");
   };
 
   return (
     <div className={classes.navbar}>
       <Grid container spacing={10}>
-        <Grid item xs={3} style={{ display: "flex" }}>
+        <Grid item xs={2} style={{ display: "flex" }}>
           <div onClick={() => goToMainPage()} className={classes.navbarLogo}>
             Syncoder
           </div>
@@ -64,6 +70,9 @@ const NavbarCompany = () => {
             alignItems: "center",
           }}
         >
+          <div style={{ cursor: "pointer" }} onClick={() => goToMainPage()}>
+            Contests & Interviews
+          </div>
           <div
             style={{ cursor: "pointer" }}
             onClick={() => goToCreateInterviewPage()}
@@ -71,7 +80,7 @@ const NavbarCompany = () => {
             Create Interview
           </div>
         </Grid>
-        <Grid item xs={3}></Grid>
+        <Grid item xs={4}></Grid>
         <Grid
           item
           xs={2}
