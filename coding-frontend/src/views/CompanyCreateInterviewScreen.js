@@ -9,6 +9,14 @@ import NavbarCompany from "../components/Navbars/NavbarCompany";
 
 export const CompanyCreateInterview = () => {
   let navigate = useNavigate();
+  React.useEffect(() => {
+    if (
+      localStorage.getItem("session") === null ||
+      JSON.parse(localStorage.getItem("session")).company_id.charAt(0) !== "C"
+    ) {
+      navigate("/");
+    }
+  }, []);
 
   const [questions, setQuestions] = useState([
     {
@@ -66,7 +74,7 @@ export const CompanyCreateInterview = () => {
       handleParentOpen={handleDialogCallback}
     ></AddQuestionDialog>;
   };
-  
+
   const handleCreateInterview = () => {
     if (questions.length === 0) {
       alert("Please add questions to the interview!");
@@ -148,10 +156,7 @@ export const CompanyCreateInterview = () => {
               handleParentOpen={handleDialogCallback}
             />
             {questions.map((question, index) => (
-              <div
-                style={{ marginBottom: "10px" }}
-                key={index}
-              >
+              <div style={{ marginBottom: "10px" }} key={index}>
                 <InterviewQuestionCard
                   question_id={question.question_id}
                   isCoding={question.isCoding}

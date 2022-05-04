@@ -7,14 +7,14 @@ import InterviewCard from "../components/CompanyComponents/InterviewCard";
 
 export const CompanyMainScreen = () => {
   let navigate = useNavigate();
-  /*React.useEffect(() => {
+  React.useEffect(() => {
     if (
       localStorage.getItem("session") === null ||
       JSON.parse(localStorage.getItem("session")).company_id.charAt(0) !== "C"
     ) {
       navigate("/");
     }
-  }, []);*/
+  }, []);
   const [upcomingPage, setUpcomingPage] = useState(1);
   const [totalPagesUpcoming, setTotalPagesUpcoming] = useState(1);
   const [curUpcomingContests, setUpcomingCurContests] = useState([]);
@@ -102,7 +102,8 @@ export const CompanyMainScreen = () => {
   ]);
 
   const [upcomingInterviewPage, setUpcomingInterviewPage] = useState(1);
-  const [totalPagesInterviewUpcoming, setTotalPagesInterviewUpcoming] = useState(1);
+  const [totalPagesInterviewUpcoming, setTotalPagesInterviewUpcoming] =
+    useState(1);
   const [curUpcomingInterviews, setUpcomingCurInterviews] = useState([]);
   const [interviews, setInterviews] = useState([
     {
@@ -192,7 +193,10 @@ export const CompanyMainScreen = () => {
 
   useEffect(() => {
     setUpcomingCurInterviews(
-      interviews.slice((upcomingInterviewPage - 1) * 7, 7 * upcomingInterviewPage)
+      interviews.slice(
+        (upcomingInterviewPage - 1) * 7,
+        7 * upcomingInterviewPage
+      )
     );
   }, [upcomingInterviewPage]);
 
@@ -202,7 +206,10 @@ export const CompanyMainScreen = () => {
     });
     setInterviews(sortedData);
     setUpcomingCurInterviews(
-      sortedData.slice((upcomingInterviewPage - 1) * 7, 7 * upcomingInterviewPage)
+      sortedData.slice(
+        (upcomingInterviewPage - 1) * 7,
+        7 * upcomingInterviewPage
+      )
     );
   }
 

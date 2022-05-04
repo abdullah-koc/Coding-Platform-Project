@@ -15,7 +15,18 @@ const RegisterCompany = () => {
   const [companyAddress, setCompanyAddress] = useState("");
   const [companyPassword, setCompanyPassword] = useState("");
 
+  const isPasswordValid = (password) => {
+    const regex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    return regex.test(password);
+  };
+
   const handleRegisterCompany = () => {
+    if (!isPasswordValid(companyPassword)) {
+      alert(
+        "Password must contain at least 8 characters, one uppercase letter and one number"
+      );
+      return;
+    }
     axios
       .post(process.env.REACT_APP_URL + "api/auth/signUp", {
         full_name: companyName,

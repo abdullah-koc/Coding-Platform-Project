@@ -7,13 +7,19 @@ import NavbarCompany from "../components/Navbars/NavbarCompany";
 
 const CompanyProfileScreen = () => {
   let navigate = useNavigate();
-  const [name, setName] = useState("Havelsan");
+  useEffect(() => {
+    if (
+      localStorage.getItem("session") === null ||
+      JSON.parse(localStorage.getItem("session")).company_id.charAt(0) !== "C"
+    ) {
+      navigate("/");
+    }
+  }, []);
+  const [name, setName] = useState("");
   const [photo, setPhoto] = useState("https://picsum.photos/200");
-  const [address, setAddress] = useState(
-    "Mustafa Kemal Mahallesi Şehit Öğretmen Şenay Aybüke Yalçın Cad. No:39 P.K. : 06510 Çankaya/Ankara"
-  );
-  const [phone, setPhone] = useState("0312 688 88 88");
-  const [email, setEmail] = useState("info@havelsan.com.tr");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
 
   const [newName, setNewName] = useState("");
   const [newEmail, setNewEmail] = useState("");
@@ -23,15 +29,72 @@ const CompanyProfileScreen = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [company, setCompany] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/company/" +
+          JSON.parse(localStorage.getItem("session")).company_email
+      )
+      .then((res) => {
+        setCompany(res.data);
+        setName(res.data.company_name);
+        setAddress(res.data.company_address);
+        setPhone(res.data.company_phone);
+        setEmail(res.data.company_email);
+        setPhoto(res.data.company_photo);
+      });
+  }, []);
   const handleLogOut = () => {
     localStorage.clear();
     navigate("/");
   };
 
-  const handlePhoneChange = () => {};
-  const handleNameChange = () => {};
+  const handlePhoneChange = () => {
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/company/change/phone/" +
+          company.company_id +
+          "/" +
+          newPhone
+      )
+      .then((res) => {
+        alert("Phone number changed successfully");
+        localStorage.setItem(
+          "session",
+          JSON.stringify({ ...company, company_phone: newPhone })
+        );
+        setPhone(newPhone);
+      })
+      .catch((err) => {
+        alert("Phone number change failed");
+      });
+  };
   const handleEmailChange = () => {};
-  const handleAddressChange = () => {};
+  const handleAddressChange = () => {
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/company/change/address/" +
+          company.company_id +
+          "/" +
+          newAddress
+      )
+      .then((res) => {
+        alert("Address changed successfully");
+        localStorage.setItem(
+          "session",
+          JSON.stringify({ ...company, company_address: newAddress })
+        );
+        setAddress(newAddress);
+      })
+      .catch((err) => {
+        alert("Address change failed");
+      });
+  };
 
   const isPasswordValid = (password) => {
     const regex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
@@ -44,6 +107,21 @@ const CompanyProfileScreen = () => {
       );
       return;
     }
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/company/change/password/" +
+          company.company_id +
+          "/" +
+          newPassword
+      )
+      .then((res) => {
+        alert("Password changed successfully");
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert("Password change failed");
+      });
   };
   return (
     <div>
@@ -164,56 +242,7 @@ const CompanyProfileScreen = () => {
                     marginRight: "10px",
                   }}
                 >
-                  <span style={{ fontWeight: "bold" }}>Name:&nbsp;</span>
-                  {"  "}{" "}
-                  {name === null
-                    ? "Not set"
-                    : name === undefined
-                    ? "Not set"
-                    : name}
-                </div>
-                <TextField
-                  size="small"
-                  placeholder="New department"
-                  value={
-                    newName === undefined ? "" : newName === null ? "" : newName
-                  }
-                  color="success"
-                  onChange={(e) => setNewName(e.target.value)}
-                />
-                <Button
-                  color="success"
-                  onClick={handleNameChange}
-                  disabled={
-                    newName === "" || newName === undefined || newName === null
-                  }
-                >
-                  Save
-                </Button>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                style={{
-                  display: "flex",
-                  justifyContent: "left",
-                  marginBottom: "20px",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "left",
-                    marginRight: "10px",
-                  }}
-                >
                   <span style={{ fontWeight: "bold" }}>Email:&nbsp;</span>
-                  {"  "}{" "}
-                  {email === null
-                    ? "Not set"
-                    : email === undefined
-                    ? "Not set"
-                    : email}
                 </div>
                 <TextField
                   size="small"
@@ -258,11 +287,6 @@ const CompanyProfileScreen = () => {
                 >
                   <span style={{ fontWeight: "bold" }}>Address:&nbsp;</span>
                   {"  "}{" "}
-                  {address === null
-                    ? "Not set"
-                    : address === undefined
-                    ? "Not set"
-                    : address}
                 </div>
                 <TextField
                   size="small"
@@ -306,12 +330,6 @@ const CompanyProfileScreen = () => {
                   }}
                 >
                   <span style={{ fontWeight: "bold" }}>Phone:&nbsp;</span>
-                  {"  "}{" "}
-                  {phone === null
-                    ? "Not set"
-                    : phone === undefined
-                    ? "Not set"
-                    : phone}
                 </div>
                 <TextField
                   size="small"
