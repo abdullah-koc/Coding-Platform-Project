@@ -2,6 +2,7 @@ package com.example.backend.services;
 
 import com.example.backend.dto.EditorDto;
 import com.example.backend.entities.Editor;
+import com.example.backend.entities.User;
 import com.example.backend.repositories.EditorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,5 +54,11 @@ public class EditorService {
 
     public List<Editor> getAllEditors() {
         return editorRepository.getAllEditors();
+    }
+
+    public void changePhoto(String nickname, String photo){
+        Editor editor = editorRepository.findByNickname(nickname);
+        editor.setPhoto(photo);
+        editorRepository.updatePhoto(editor.getPerson_id(), photo);
     }
 }

@@ -74,4 +74,9 @@ public class UserRepository {
         String sql = "UPDATE users SET cur_company = ? WHERE user_id = ?";
         jdbcTemplate.update(sql, cur_company, user_id);
     }
+
+    public void updatePhoto(String user_id, String photo) {
+        String sql = "UPDATE people SET photo = ? WHERE person_id = ?";
+        jdbcTemplate.update(sql, photo, user_id);
+    }
 }

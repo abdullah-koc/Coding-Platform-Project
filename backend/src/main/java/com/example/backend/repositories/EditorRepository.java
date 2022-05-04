@@ -74,4 +74,9 @@ public class EditorRepository {
             return null;
         }
     }
+
+    public void updatePhoto(String editor_id, String photo) {
+        String sql = "UPDATE people SET photo = ? WHERE person_id = ?";
+        jdbcTemplate.update(sql, photo, editor_id);
+    }
 }

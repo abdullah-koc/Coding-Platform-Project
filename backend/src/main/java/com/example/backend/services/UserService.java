@@ -57,4 +57,9 @@ public class UserService {
        userRepository.updateCurrentCompany(user_id, cur_company);
     }
 
+    public void changePhoto(String nickname, String photo){
+        User user = userRepository.findByNickname(nickname);
+        user.setPhoto(photo);
+        userRepository.updatePhoto(user.getPerson_id(), photo);
+    }
 }

@@ -2,17 +2,25 @@ package com.example.backend.controllers;
 
 import com.example.backend.entities.Attempt;
 import com.example.backend.entities.User;
+import com.example.backend.services.PhotoService;
 import com.example.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "api/user")
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    private PhotoService photoService;
 
     @GetMapping("/{email}")
     public User getUserByEmail(@PathVariable String email) {
@@ -30,5 +38,12 @@ public class UserController {
     @PostMapping("/change/current_company/{user_id}/{cur_company}")
     public void changeCurrentCompany(@PathVariable String user_id, @PathVariable String cur_company){
         userService.changeCurrentCompany(user_id, cur_company);
+    }
+
+    @PostMapping("/change/photo/{nickname}")
+    public ResponseEntity<Map> changePhoto(@PathVariable String nickname, @RequestParam MultipartFile multipartFile) throws IOException {
+        Map result = photoService.uploadPhoto(multipartFile);
+        userService.changePhoto(nickname, (String) result.get("url"));
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 }
