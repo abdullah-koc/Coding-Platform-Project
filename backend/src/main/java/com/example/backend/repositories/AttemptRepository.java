@@ -34,10 +34,10 @@ public class AttemptRepository {
         String attemptId = "A" + attempt_id_count;
         attempt.setAttempt_id(attemptId);
 
-        String tempSql = "SELECT title FROM question_contest WHERE question_id = ?";
-        String questionTitle = (String) jdbcTemplate.queryForObject(tempSql, String.class, attempt.getQuestion_id());
+        String tempSql = "SELECT contest_id FROM question_contest WHERE question_id = ?";
+        String contestId = (String) jdbcTemplate.queryForObject(tempSql, String.class, attempt.getQuestion_id());
 
-        if (questionTitle.equals("") || questionTitle == null) {
+        if (!contestId.equals("")) {
             String sql = "INSERT INTO attempts(attempt_id, user_answer, try_count, is_solved, is_contest, user_id, question_id, programming_language) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
             jdbcTemplate.update(sql, attemptId, attempt.getUser_answer(), 1, true, true, attempt.getUser_id(),
                     attempt.getQuestion_id(), attempt.getProgramming_language());
