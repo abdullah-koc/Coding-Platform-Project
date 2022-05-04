@@ -4,6 +4,7 @@ import ContestInfoDonation from "../components/CompanyComponents/ContestInfoDona
 import NavbarCompany from "../components/Navbars/NavbarCompany";
 import { useNavigate } from "react-router-dom";
 import InterviewCard from "../components/CompanyComponents/InterviewCard";
+import axios from "axios";
 
 export const CompanyMainScreen = () => {
   let navigate = useNavigate();
@@ -18,88 +19,7 @@ export const CompanyMainScreen = () => {
   const [upcomingPage, setUpcomingPage] = useState(1);
   const [totalPagesUpcoming, setTotalPagesUpcoming] = useState(1);
   const [curUpcomingContests, setUpcomingCurContests] = useState([]);
-  const [upcomingContests, setUpcomingContests] = useState([
-    {
-      contest_id: "C1",
-      contest_name: "Coding Contest 1",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "12/06/2022",
-      end_date: "18/06/2022",
-      prize: "10000$",
-      creation_date: "21/04/2022",
-      donated_amount: 0,
-    },
-    {
-      contest_id: "C2",
-      contest_name: "Coding Contest 2",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "14/06/2022",
-      end_date: "20/06/2022",
-      prize: "13000$",
-      creation_date: "21/04/2022",
-      donated_amount: 10300,
-    },
-    {
-      contest_id: "C3",
-      contest_name: "Coding Contest 3",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "25/07/2022",
-      end_date: "18/08/2022",
-      prize: "Free Space Trip",
-      creation_date: "21/04/2022",
-      donated_amount: 0,
-    },
-    {
-      contest_id: "C4",
-      contest_name: "Coding Contest 4",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "12/02/2022",
-      end_date: "18/02/2022",
-      prize: "Amazon web services: 5000$",
-      creation_date: "21/04/2022",
-      donated_amount: 0,
-    },
-    {
-      contest_id: "C5",
-      contest_name: "Coding Contest 5",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "31/07/2022",
-      end_date: "03/08/2022",
-      prize: "Mercedes A180 AMG Sport",
-      creation_date: "21/04/2022",
-      donated_amount: 10000,
-    },
-    {
-      contest_id: "C6",
-      contest_name: "Coding Contest 5",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "31/07/2022",
-      end_date: "03/08/2022",
-      prize: "Mercedes A180 AMG Sport",
-      creation_date: "21/04/2022",
-      donated_amount: 2000,
-    },
-    {
-      contest_id: "C7",
-      contest_name: "Coding Contest 5",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "31/07/2022",
-      end_date: "03/08/2022",
-      prize: "Mercedes A180 AMG Sport",
-      creation_date: "21/04/2022",
-      donated_amount: 1400,
-    },
-    {
-      contest_id: "C8",
-      contest_name: "Coding Contest 5",
-      contest_photo: "https://picsum.photos/200",
-      start_date: "31/07/2022",
-      end_date: "03/08/2022",
-      prize: "Mercedes A180 AMG Sport",
-      creation_date: "21/04/2022",
-      donated_amount: 0,
-    },
-  ]);
+  const [upcomingContests, setUpcomingContests] = useState([]);
 
   const [upcomingInterviewPage, setUpcomingInterviewPage] = useState(1);
   const [totalPagesInterviewUpcoming, setTotalPagesInterviewUpcoming] =
@@ -161,10 +81,19 @@ export const CompanyMainScreen = () => {
       interview_duration: 3,
     },
   ]);
+
+  useEffect(() => {
+    axios.get(process.env.REACT_APP_URL + "api/contest/all").then((res) => {
+      setUpcomingContests(res.data);
+      setUpcomingCurContests(res.data.slice(0, 5));
+      setTotalPagesUpcoming(Math.ceil(res.data.length / 5));
+    });
+  }, []);
+
   useEffect(() => {
     setTotalPagesUpcoming(Math.ceil(upcomingContests.length / 5));
     setUpcomingCurContests(upcomingContests.slice(0, 5));
-  }, []);
+  }, [upcomingContests]);
 
   useEffect(() => {
     setUpcomingCurContests(
@@ -245,7 +174,6 @@ export const CompanyMainScreen = () => {
                   end_date={contest.end_date}
                   prize={contest.prize}
                   creation_date={contest.creation_date}
-                  donated_amount={contest.donated_amount}
                   style={{ marginTop: "20px" }}
                 />
               </div>

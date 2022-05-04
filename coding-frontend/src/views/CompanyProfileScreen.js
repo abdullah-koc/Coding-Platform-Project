@@ -73,7 +73,27 @@ const CompanyProfileScreen = () => {
         alert("Phone number change failed");
       });
   };
-  const handleEmailChange = () => {};
+  const handleEmailChange = () => {
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/company/change/email/" +
+          company.company_id +
+          "/" +
+          newEmail
+      )
+      .then((res) => {
+        alert("Email changed successfully");
+        localStorage.setItem(
+          "session",
+          JSON.stringify({ ...company, company_email: newEmail })
+        );
+        setEmail(newEmail);
+      })
+      .catch((err) => {
+        alert("Email change failed");
+      });
+  };
   const handleAddressChange = () => {
     axios
       .post(

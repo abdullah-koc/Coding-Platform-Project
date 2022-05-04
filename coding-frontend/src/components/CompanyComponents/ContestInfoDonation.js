@@ -2,6 +2,8 @@ import React from "react";
 import { makeStyles } from "@mui/styles";
 import Colors from "../../utils/Colors";
 import { Button, Grid } from "@mui/material";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   root: {
@@ -22,12 +24,28 @@ const ContestInfoDonation = ({
   end_date,
   prize,
   creation_date,
-  donated_amount,
 }) => {
+  let navigate = useNavigate();
   const classes = useStyles();
+  const [donationAmount, setDonationAmount] = React.useState(0);
+
+  React.useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/company/get/donation/" +
+          JSON.parse(localStorage.getItem("session")).company_id +
+          "/" +
+          contest_id
+      )
+      .then((res) => {
+        setDonationAmount(res.data);
+      });
+  }, [contest_id]);
+
   const handleDonateContest = () => {
-    if (donated_amount === 0) {
-      window.location.href = `/contest/${contest_id}/donate`;
+    if (donationAmount === 0) {
+      navigate(`/contest/${contest_id}/donate`);
     } else {
       alert("You have already donated to this contest");
     }
@@ -37,7 +55,7 @@ const ContestInfoDonation = ({
       <Grid container>
         <Grid
           item
-          xs={5}
+          xs={3}
           style={{ display: "flex", alignItems: "center", paddingLeft: "20px" }}
         >
           <img
@@ -58,20 +76,25 @@ const ContestInfoDonation = ({
         <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
           <Button
             onClick={() => handleDonateContest(contest_id)}
-            disabled={donated_amount !== 0}
+            disabled={donationAmount !== 0}
           >
-            {donated_amount === 0 && (
+            {donationAmount === 0 && (
               <div>
-                <span>Donate</span>
+                <span>Support</span>
               </div>
             )}
-            {donated_amount !== 0 && (
+            {donationAmount !== 0 && (
               <div>
-                <span style={{ color: "green" }}>Donated</span>
+                <span style={{ color: "green" }}>Supported</span>
               </div>
             )}
           </Button>
         </Grid>
+        {donationAmount !== 0 && (
+          <Grid item xs={2} style={{ display: "flex", alignItems: "center" }}>
+            {donationAmount} TL
+          </Grid>
+        )}
       </Grid>
     </div>
   );

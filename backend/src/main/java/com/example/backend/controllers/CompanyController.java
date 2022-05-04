@@ -37,6 +37,21 @@ public class CompanyController {
         companyService.changeAddress(company_id, address);
     }
 
+    @PostMapping("/change/email/{company_id}/{email}")
+    public void changeEmail(@PathVariable String company_id, @PathVariable String email){
+        companyService.changeEmail(company_id, email);
+    }
+
+    @PostMapping("/donate/{company_id}/{contest_id}/{money}")
+    public void donateContest(@PathVariable String company_id, @PathVariable String contest_id, @PathVariable String money){
+        companyService.donateContest(company_id, contest_id, money);
+    }
+
+    @GetMapping("/get/donation/{company_id}/{contest_id}")
+    public int getDonationAmount(@PathVariable String company_id, @PathVariable String contest_id){
+        return companyService.getDonationAmount(company_id, contest_id);
+    }
+
     @GetMapping("/all")
     public List<Company> getAllCompanies() {
         return companyService.getAllCompanies();

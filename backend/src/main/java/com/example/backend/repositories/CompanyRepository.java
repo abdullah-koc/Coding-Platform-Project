@@ -75,6 +75,26 @@ public class CompanyRepository {
         jdbcTemplate.update(sql, address, company_id);
     }
 
+    public void updateEmail(String company_id, String email){
+        String sql = "UPDATE companies SET company_email = ? WHERE company_id = ?";
+        jdbcTemplate.update(sql, email, company_id);
+    }
+
+    public void donate(String company_id, String contest_id, String money){
+        String sql = "INSERT INTO company_contest(company_id, contest_id, money) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, company_id, contest_id, money);
+    }
+
+    public int getDonationAmount(String company_id, String contest_id){
+        String sql  = "SELECT money FROM company_contest where company_id = ? and contest_id = ?";
+        try{
+            return jdbcTemplate.queryForObject(sql, new Object[]{company_id, contest_id}, Integer.class);
+        } catch (EmptyResultDataAccessException e){
+            return 0;
+        }
+    }
+
+
     public List<Company> getAllCompanies() {
         String sql = "SELECT * FROM companies";
 

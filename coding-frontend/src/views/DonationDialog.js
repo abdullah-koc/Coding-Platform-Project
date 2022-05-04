@@ -14,6 +14,8 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import PaymentForm from "../components/CompanyComponents/PaymentForm";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -54,15 +56,51 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function DonationDialog() {
+  let navigate = useNavigate();
+
+  const getContestID = () => {
+    const contestID = window.location.href.split("/");
+    return contestID[contestID.length - 2];
+  };
+  React.useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/company/get/donation/" +
+          JSON.parse(localStorage.getItem("session")).company_id +
+          "/" +
+          getContestID()
+      )
+      .then((res) => {
+        if (res.data > 0) {
+          alert("You have already donated to this contest");
+          navigate("/company");
+        }
+      });
+  }, []);
   const [open, setOpen] = React.useState(true);
+  const [donationAmount, setDonationAmount] = React.useState(0);
 
   function donate() {
+    if (donationAmount === 0) {
+      alert("You cannot donate 0 money");
+      return;
+    }
+    axios.post(
+      process.env.REACT_APP_URL +
+        "api/company/donate/" +
+        JSON.parse(localStorage.getItem("session")).company_id +
+        "/" +
+        getContestID() +
+        "/" +
+        donationAmount
+    );
     alert("Donated!");
-    window.history.back();
+    navigate("/company");
   }
 
   function cancel() {
-    window.history.back();
+    navigate("/company");
   }
 
   return (
@@ -93,8 +131,10 @@ export default function DonationDialog() {
                   </InputLabel>
                   <OutlinedInput
                     id="outlined-adornment-amount"
+                    value={donationAmount}
+                    onChange={(e) => setDonationAmount(e.target.value)}
                     endAdornment={
-                      <InputAdornment position="start">$</InputAdornment>
+                      <InputAdornment position="start">TL</InputAdornment>
                     }
                     label="Donation Amount"
                   />
@@ -103,7 +143,7 @@ export default function DonationDialog() {
             </Grid>
           </div>
         </DialogContent>
-        <Grid container style={{paddingLeft: "400px"}}>
+        <Grid container style={{ paddingLeft: "400px" }}>
           <div>
             <DialogActions>
               <Button onClick={() => donate()}>Donate</Button>
@@ -113,7 +153,7 @@ export default function DonationDialog() {
             <DialogActions>
               <Button onClick={() => cancel()}>Cancel</Button>
             </DialogActions>
-          </div>         
+          </div>
         </Grid>
       </BootstrapDialog>
     </div>

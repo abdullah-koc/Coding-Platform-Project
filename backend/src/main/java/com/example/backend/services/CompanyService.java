@@ -58,6 +58,20 @@ public class CompanyService {
         companyRepository.updateAddress(company_id, address);
     }
 
+    public void changeEmail(String company_id, String email){
+        Company company = companyRepository.findCompanyById(company_id);
+        company.setCompany_email(email);
+        companyRepository.updateEmail(company_id, email);
+    }
+
+    public void donateContest(String company_id, String contest_id, String money){
+        companyRepository.donate(company_id, contest_id, money);
+    }
+
+    public int getDonationAmount(String company_id, String contest_id){
+        return companyRepository.getDonationAmount(company_id, contest_id);
+    }
+
     public List<Company> getAllCompanies() {
         return companyRepository.getAllCompanies();
     }
