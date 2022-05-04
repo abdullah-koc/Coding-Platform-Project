@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavbarUser from "../components/Navbars/NavbarUser";
-import { Grid, TextField, Button } from "@mui/material";
+import { Grid, TextField, Button, Input } from "@mui/material";
 import sampleProfile from "../images/sampleProfile.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -22,6 +22,7 @@ const UserProfileScreen = () => {
   const [newCompany, setNewCompany] = useState("");
 
   const [newPassword, setNewPassword] = useState("");
+  const [newPhoto, setNewPhoto] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [user, setUser] = useState({});
 
@@ -138,6 +139,36 @@ const UserProfileScreen = () => {
       });
   };
 
+  const handlePhotoChange = (event) => {
+    console.log(event.target.files[0]);
+    setNewPhoto(event.target.files[0]);
+  };
+
+  const handlePhotoUpload = () => {
+    const formData = new FormData();
+    formData.append("multipartFile", newPhoto, newPhoto.name);
+    // send a POST request with the form data to upload photo
+    axios({
+      method: "post",
+      url:
+        process.env.REACT_APP_URL +
+        "api/user/change/photo/" +
+        nickname,
+      data: formData,
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+      .then(function (response) {
+        //handle success
+        setPhoto(response.data.url);
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response);
+      });
+  };
+
   const isPasswordValid = (password) => {
     const regex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     return regex.test(password);
@@ -198,6 +229,17 @@ const UserProfileScreen = () => {
                     marginBottom: "20px",
                   }}
                 />
+              </Grid>
+              <Grid item xs={12} style={{paddingBottom: "20px", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                <Input
+                  type="file"
+                  style={{ width: "50%", marginBottom: "20px", padding: "10px", border: "1px solid #ccc", borderRadius: "4px",
+                  boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}
+                  name="file"
+                  placeholder="Upload photo"
+                  onChange={handlePhotoChange}
+                ></Input>
+                <Button onClick={() => handlePhotoUpload()}>Upload</Button>
               </Grid>
               <Grid
                 item

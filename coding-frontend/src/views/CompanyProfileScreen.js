@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, TextField, Button } from "@mui/material";
+import { Grid, TextField, Button, Input } from "@mui/material";
 import sampleProfile from "../images/sampleProfile.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -16,7 +16,7 @@ const CompanyProfileScreen = () => {
     }
   }, []);
   const [name, setName] = useState("");
-  const [photo, setPhoto] = useState("https://picsum.photos/200");
+  const [photo, setPhoto] = useState(null);
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -25,7 +25,7 @@ const CompanyProfileScreen = () => {
   const [newEmail, setNewEmail] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [newAddress, setNewAddress] = useState("");
-
+  const [newPhoto, setNewPhoto] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -50,6 +50,36 @@ const CompanyProfileScreen = () => {
   const handleLogOut = () => {
     localStorage.clear();
     navigate("/");
+  };
+
+  const handlePhotoChange = (event) => {
+    console.log(event.target.files[0]);
+    setNewPhoto(event.target.files[0]);
+  };
+
+  const handlePhotoUpload = () => {
+    const formData = new FormData();
+    formData.append("multipartFile", newPhoto, newPhoto.name);
+    // send a POST request with the form data to upload photo
+    axios({
+      method: "post",
+      url:
+        process.env.REACT_APP_URL +
+        "api/company/change/photo/" +
+        company.company_id,
+      data: formData,
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+      .then(function (response) {
+        //handle success
+        setPhoto(response.data.url);
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response);
+      });
   };
 
   const handlePhoneChange = () => {
@@ -176,6 +206,17 @@ const CompanyProfileScreen = () => {
                     marginBottom: "20px",
                   }}
                 />
+              </Grid>
+              <Grid item xs={12} style={{paddingBottom: "20px", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                <Input
+                  type="file"
+                  style={{ width: "50%", marginBottom: "20px", padding: "10px", border: "1px solid #ccc", borderRadius: "4px",
+                  boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}
+                  name="file"
+                  placeholder="Upload photo"
+                  onChange={handlePhotoChange}
+                ></Input>
+                <Button onClick={() => handlePhotoUpload()}>Upload</Button>
               </Grid>
               <Grid
                 item
