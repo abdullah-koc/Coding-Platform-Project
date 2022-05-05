@@ -25,62 +25,7 @@ export const CompanyMainScreen = () => {
   const [totalPagesInterviewUpcoming, setTotalPagesInterviewUpcoming] =
     useState(1);
   const [curUpcomingInterviews, setUpcomingCurInterviews] = useState([]);
-  const [interviews, setInterviews] = useState([
-    {
-      interview_id: "I1",
-      interview_name: "Interview 1",
-      interview_date: "12/06/2022",
-      interview_duration: 2,
-    },
-    {
-      interview_id: "I2",
-      interview_name: "Interview 2",
-      interview_date: "14/06/2022",
-      interview_duration: 2,
-    },
-    {
-      interview_id: "I3",
-      interview_name: "Interview 3",
-      interview_date: "25/07/2022",
-      interview_duration: 2,
-    },
-    {
-      interview_id: "I4",
-      interview_name: "Interview 4",
-      interview_date: "12/02/2022",
-      interview_duration: 2,
-    },
-    {
-      interview_id: "I5",
-      interview_name: "Interview 5",
-      interview_date: "31/07/2022",
-      interview_duration: 2,
-    },
-    {
-      interview_id: "I6",
-      interview_name: "Interview 6",
-      interview_date: "31/07/2022",
-      interview_duration: 2,
-    },
-    {
-      interview_id: "I7",
-      interview_name: "Interview 7",
-      interview_date: "31/07/2022",
-      interview_duration: 2,
-    },
-    {
-      interview_id: "I8",
-      interview_name: "Interview 8",
-      interview_date: "31/07/2022",
-      interview_duration: 2,
-    },
-    {
-      interview_id: "I9",
-      interview_name: "Interview 9",
-      interview_date: "31/10/2022",
-      interview_duration: 3,
-    },
-  ]);
+  const [interviews, setInterviews] = useState([]);
 
   useEffect(() => {
     axios.get(process.env.REACT_APP_URL + "api/contest/all").then((res) => {
@@ -88,6 +33,20 @@ export const CompanyMainScreen = () => {
       setUpcomingCurContests(res.data.slice(0, 5));
       setTotalPagesUpcoming(Math.ceil(res.data.length / 5));
     });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/interview/all/" +
+          JSON.parse(localStorage.getItem("session")).company_id
+      )
+      .then((res) => {
+        setInterviews(res.data);
+        setUpcomingCurInterviews(res.data.slice(0, 7));
+        setTotalPagesInterviewUpcoming(Math.ceil(res.data.length / 7));
+      });
   }, []);
 
   useEffect(() => {

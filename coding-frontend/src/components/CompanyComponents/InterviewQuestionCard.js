@@ -2,8 +2,11 @@ import React from "react";
 import { makeStyles } from "@mui/styles";
 import Colors from "../../utils/Colors";
 import { Grid } from "@mui/material";
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { useNavigate } from "react-router-dom";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import { styled } from "@mui/material/styles";
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
@@ -14,11 +17,19 @@ const useStyles = makeStyles({
     display: "flex",
     alignItems: "center",
     color: "white",
-    cursor: "pointer",
+  },
+});
+
+const CustomWidthTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))({
+  [`& .${tooltipClasses.tooltip}`]: {
+    maxWidth: 500,
   },
 });
 
 const InterviewQuestionCard = ({
+  questionText,
   question_id,
   isCoding,
   title,
@@ -27,56 +38,69 @@ const InterviewQuestionCard = ({
 }) => {
   let navigate = useNavigate();
   const classes = useStyles();
-  const handleGoToQuestion = (id) => {
-    if (id.startsWith("CQ")) {
-      navigate("/cquestion/" + id);
-    } else {
-      navigate("/ncquestion/" + id);
-    }
-  };
   const handleRemoveQuestion = () => {
-    alert("remove question");
-    // todo: remove question from database
-  }
+    axios
+      .post(process.env.REACT_APP_URL + "api/question/delete/" + question_id)
+      .then((result) => {
+        alert("Question deleted successfully");
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert("An error occurred.");
+      });
+  };
   return (
-    <div className={classes.root}>
-      <Grid container>
-        <Grid
-          item
-          xs={2}
-          style={{ display: "flex", alignItems: "center", paddingLeft: "20px" }}
-          onClick={() => handleGoToQuestion(question_id)}
-        >
-          {isCoding ? "C" : "N"}
-        </Grid>
-        <Grid item xs={3} style={{ display: "flex", alignItems: "center" }} onClick={() => handleGoToQuestion(question_id)}>
-          Title: {title}
-        </Grid>
-        <Grid item xs={3} style={{ display: "flex", alignItems: "center" }} onClick={() => handleGoToQuestion(question_id)}>
-          Difficulty:&nbsp;
-          <div
+    <CustomWidthTooltip title={questionText}>
+      <div className={classes.root}>
+        <Grid container>
+          <Grid
+            item
+            xs={2}
             style={{
-              color:
-                difficulty === "Easy"
-                  ? Colors.easy_green_color
-                  : difficulty === "Medium"
-                  ? Colors.medium_yellow_color
-                  : difficulty === "Hard"
-                  ? Colors.hard_red_color
-                  : "white",
+              display: "flex",
+              alignItems: "center",
+              paddingLeft: "20px",
             }}
           >
-            {difficulty}
-          </div>
+            {isCoding ? "C" : "N"}
+          </Grid>
+          <Grid item xs={3} style={{ display: "flex", alignItems: "center" }}>
+            Title: {title}
+          </Grid>
+          <Grid item xs={3} style={{ display: "flex", alignItems: "center" }}>
+            Difficulty:&nbsp;
+            <div
+              style={{
+                color:
+                  difficulty === "Easy"
+                    ? Colors.easy_green_color
+                    : difficulty === "Medium"
+                    ? Colors.medium_yellow_color
+                    : difficulty === "Hard"
+                    ? Colors.hard_red_color
+                    : "white",
+              }}
+            >
+              {difficulty}
+            </div>
+          </Grid>
+          <Grid item xs={3} style={{ display: "flex", alignItems: "center" }}>
+            Question Point: {questionPoint}
+          </Grid>
+          <Grid
+            item
+            xs={1}
+            style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+          >
+            <RemoveCircleIcon
+              fontSize="large"
+              style={{ color: "#F44336" }}
+              onClick={() => handleRemoveQuestion()}
+            ></RemoveCircleIcon>
+          </Grid>
         </Grid>
-        <Grid item xs={3} style={{ display: "flex", alignItems: "center" }} onClick={() => handleGoToQuestion(question_id)}>
-          Question Point: {questionPoint}
-        </Grid>
-        <Grid item xs={1} style={{ display: "flex", alignItems: "center" }}>
-          <RemoveCircleIcon fontSize="large" style={{color: "#F44336"}} onClick={() => handleRemoveQuestion()}></RemoveCircleIcon>
-        </Grid>
-      </Grid>
-    </div>
+      </div>
+    </CustomWidthTooltip>
   );
 };
 

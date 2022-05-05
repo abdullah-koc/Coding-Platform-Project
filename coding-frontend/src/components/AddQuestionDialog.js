@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
+const AddQuestionDialog = ({ open, handleParentOpen }) => {
   const [questionType, setQuestionType] = useState("CQ");
   const [questionTitle, setQuestionTitle] = useState("");
   const [explanation, setExplanation] = useState("");
@@ -31,6 +31,7 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
   const [inputs, setInputs] = useState([]);
   const [outputs, setOutputs] = useState([]);
   const [lockedStatus, setLockedStatus] = useState([]);
+
   useEffect(() => {
     axios.get(process.env.REACT_APP_URL + "api/category/all").then((res) => {
       setCategories(res.data);
@@ -98,6 +99,7 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
       alert("Please fill all fields");
       return;
     }
+
     axios
       .post(process.env.REACT_APP_URL + "api/question/insert", {
         title: questionTitle,
@@ -115,6 +117,7 @@ const AddQuestionDialog = ({ open, handleParentOpen, contestID }) => {
           "-" +
           ("0" + new Date().getDate()).slice(-2),
         editor_id: JSON.parse(localStorage.getItem("session")).person_id,
+        company_id: JSON.parse(localStorage.getItem("session")).company_id,
       })
       .then((res) => {
         var curQuestion;

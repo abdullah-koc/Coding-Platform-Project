@@ -47,18 +47,18 @@ public class InterviewController {
       interviewService.updateInterview(interviewDto);
    }
 
-   @GetMapping(path = "/delete/{interview_id}")
+   @PostMapping(path = "/delete/{interview_id}/{company_id}")
    public void deleteInterview(@PathVariable String interview_id, @PathVariable String company_id) {
       interviewService.deleteInterview(interview_id, company_id);
    }
 
-   @GetMapping(path = "/add_question/{company_id}/{interview_id}/{question_id}")
+   @PostMapping(path = "/add_question/{company_id}/{interview_id}/{question_id}")
    public void addQuestion(@PathVariable String interview_id, @PathVariable String question_id,
          @PathVariable String company_id) {
       interviewService.addQuestion(interview_id, question_id, company_id);
    }
 
-   @GetMapping(path = "/remove_question/{company_id}/{interview_id}/{question_id}")
+   @PostMapping(path = "/remove_question/{company_id}/{interview_id}/{question_id}")
    public void removeQuestion(@PathVariable String interview_id, @PathVariable String question_id,
          @PathVariable String company_id) {
       interviewService.removeQuestion(interview_id, question_id, company_id);
@@ -78,5 +78,4 @@ public class InterviewController {
    public List<UserDto> getInterviewees(@PathVariable String company_id, @PathVariable String interview_id) {
       return interviewService.getInterviewees(company_id, interview_id);
    }
-
 }

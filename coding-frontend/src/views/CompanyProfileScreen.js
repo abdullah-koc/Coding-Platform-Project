@@ -30,6 +30,7 @@ const CompanyProfileScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [company, setCompany] = useState({});
+  const [progress, setProgress] = useState(false);
 
   useEffect(() => {
     axios
@@ -53,13 +54,17 @@ const CompanyProfileScreen = () => {
   };
 
   const handlePhotoChange = (event) => {
-    console.log(event.target.files[0]);
     setNewPhoto(event.target.files[0]);
   };
 
   const handlePhotoUpload = () => {
+    if (newPhoto === null) {
+      alert("Please select a photo");
+      return;
+    }
     const formData = new FormData();
     formData.append("multipartFile", newPhoto, newPhoto.name);
+    setProgress(true);
     // send a POST request with the form data to upload photo
     axios({
       method: "post",
@@ -74,11 +79,13 @@ const CompanyProfileScreen = () => {
     })
       .then(function (response) {
         //handle success
+        setProgress(false);
         setPhoto(response.data.url);
+        setNewPhoto(null);
       })
       .catch(function (response) {
-        //handle error
-        console.log(response);
+        alert("File size is too large");
+        setProgress(false);
       });
   };
 
@@ -200,30 +207,50 @@ const CompanyProfileScreen = () => {
                   src={photo === undefined ? sampleProfile : photo}
                   alt="profile"
                   style={{
-                    width: "100px",
-                    height: "100px",
+                    width: "140px",
+                    height: "140px",
                     borderRadius: "50%",
                     marginBottom: "20px",
                   }}
                 />
+                {progress && <div>Please wait</div>}
               </Grid>
-              <Grid item xs={12} style={{paddingBottom: "20px", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                <Input
-                  type="file"
-                  style={{ width: "50%", marginBottom: "20px", padding: "10px", border: "1px solid #ccc", borderRadius: "4px",
-                  boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}
-                  name="file"
-                  placeholder="Upload photo"
-                  onChange={handlePhotoChange}
-                ></Input>
-                <Button onClick={() => handlePhotoUpload()}>Upload</Button>
+              <Grid
+                item
+                xs={12}
+                style={{
+                  paddingBottom: "20px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <label htmlFor="btn-upload">
+                  <input
+                    id="btn-upload"
+                    name="btn-upload"
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={handlePhotoChange}
+                  />
+                  <Button
+                    className="btn-choose"
+                    variant="outlined"
+                    component="span"
+                  >
+                    Choose Photo
+                  </Button>
+                </label>
+                <Button disabled={progress} onClick={() => handlePhotoUpload()}>
+                  Upload
+                </Button>
               </Grid>
               <Grid
                 item
                 xs={12}
                 style={{
                   display: "flex",
-                  justifyContent: "left",
+                  justifyContent: "center",
                   marginBottom: "20px",
                 }}
               >
@@ -235,7 +262,7 @@ const CompanyProfileScreen = () => {
                 xs={12}
                 style={{
                   display: "flex",
-                  justifyContent: "left",
+                  justifyContent: "center",
                   marginBottom: "20px",
                 }}
               >
@@ -247,7 +274,7 @@ const CompanyProfileScreen = () => {
                 xs={12}
                 style={{
                   display: "flex",
-                  justifyContent: "left",
+                  justifyContent: "center",
                   marginBottom: "20px",
                 }}
               >
@@ -259,7 +286,7 @@ const CompanyProfileScreen = () => {
                 xs={12}
                 style={{
                   display: "flex",
-                  justifyContent: "left",
+                  justifyContent: "center",
                   marginBottom: "20px",
                 }}
               >
@@ -431,7 +458,7 @@ const CompanyProfileScreen = () => {
                 xs={12}
                 style={{
                   display: "flex",
-                  justifyContent: "left",
+                  justifyContent: "center",
                   marginBottom: "10px",
                 }}
               >
@@ -442,7 +469,7 @@ const CompanyProfileScreen = () => {
                 xs={12}
                 style={{
                   display: "flex",
-                  justifyContent: "left",
+                  justifyContent: "center",
                   marginBottom: "20px",
                 }}
               >
@@ -460,7 +487,7 @@ const CompanyProfileScreen = () => {
                 xs={12}
                 style={{
                   display: "flex",
-                  justifyContent: "left",
+                  justifyContent: "center",
                   marginBottom: "20px",
                 }}
               >

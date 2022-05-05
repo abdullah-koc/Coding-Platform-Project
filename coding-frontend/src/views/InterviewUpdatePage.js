@@ -5,9 +5,42 @@ import AddQuestionDialog from "../components/AddQuestionDialog";
 import { useNavigate } from "react-router-dom";
 import InterviewQuestionCard from "../components/CompanyComponents/InterviewQuestionCard";
 import NavbarCompany from "../components/Navbars/NavbarCompany";
+import axios from "axios";
 
 export const InterviewUpdatePage = () => {
   let navigate = useNavigate();
+
+  const getID = () => {
+    let url = window.location.href;
+    return url.split("/")[url.split("/").length - 1];
+  };
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("session") === null ||
+      JSON.parse(localStorage.getItem("session")).company_id.charAt(0) !== "C"
+    ) {
+      navigate("/");
+    }
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/interview/" +
+          JSON.parse(localStorage.getItem("session")).company_id +
+          "/" +
+          getID()
+      )
+      .then((res) => {
+        setInterviewName(res.data.interview_name);
+        setInterviewDateTime(
+          res.data.interview_date + "T" + res.data.interview_time
+        );
+        setInterviewDuration(res.data.interview_duration);
+      });
+  }, []);
 
   const [questions, setQuestions] = useState([
     {
@@ -38,10 +71,8 @@ export const InterviewUpdatePage = () => {
       questionPoint: 12,
     },
   ]);
-  const [interviewName, setInterviewName] = useState("Temp Interview Name");
-  const [interviewDateTime, setInterviewDateTime] = useState(
-    "2017-06-01T08:30"
-  );
+  const [interviewName, setInterviewName] = useState("");
+  const [interviewDateTime, setInterviewDateTime] = useState("");
   const [interviewDuration, setInterviewDuration] = useState(3);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [page, setPage] = useState(1);

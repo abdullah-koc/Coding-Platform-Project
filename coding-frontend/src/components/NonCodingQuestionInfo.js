@@ -58,6 +58,20 @@ const NonCodingQuestionInfo = ({ isContest }) => {
       });
   }, [question]);
 
+  React.useEffect(() => {
+    console.log(question);
+    let question_company_id = question.company_id;
+    if (question_company_id !== null) {
+      axios
+        .get(
+          process.env.REACT_APP_URL + "api/interview/all/" + question_company_id
+        )
+        .then((res) => {
+          console.log(res.data);
+        });
+    }
+  }, [question]);
+
   const handleAttemptClick = (attempt) => {
     console.log(attempt);
   };

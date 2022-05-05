@@ -33,7 +33,10 @@ const ProblemsScreen = () => {
   const [solvedQuestionIDs, setSolvedQuestionIDs] = useState([]);
   useEffect(() => {
     axios.get(process.env.REACT_APP_URL + "api/question/all").then((res) => {
-      setQuestions(res.data);
+      let userQuestions = res.data.filter(
+        (question) => question.editor_id !== null
+      );
+      setQuestions(userQuestions);
     });
   }, []);
 
