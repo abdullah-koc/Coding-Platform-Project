@@ -1,5 +1,6 @@
 package com.example.backend.services;
 
+import com.example.backend.dto.AttemptTestCaseDto;
 import com.example.backend.dto.TestCaseDto;
 import com.example.backend.entities.TestCase;
 import com.example.backend.repositories.TestCaseRepository;
@@ -26,6 +27,14 @@ public class TestCaseService {
 
     public List<TestCase> getAllTestCasesOnCodingQuestion(String coding_question_id) {
         return testCaseRepository.findTestCases(coding_question_id);
+    }
+
+    public List<AttemptTestCaseDto> getAllAttemptTestCaseMatches(String attempt_id) {
+        return testCaseRepository.getAllAttemptTestCaseMatches(attempt_id);
+    }
+
+    public TestCase findTestCaseById(String coding_question_id, String test_case_id) {
+        return testCaseRepository.findTestCaseById(coding_question_id, test_case_id);
     }
 
 }

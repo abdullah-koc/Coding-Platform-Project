@@ -35,4 +35,9 @@ public class AttemptController {
     public boolean is_solved_correctly(@PathVariable String user_id, @PathVariable String question_id) {
         return attemptService.is_solved_correctly(user_id, question_id);
     }
+
+    @GetMapping("/get/{attempt_id}")
+    public Attempt findAttemptByAttemptId(@PathVariable String attempt_id) {
+        return attemptService.findAttemptByAttemptId(attempt_id);
+    }
 }

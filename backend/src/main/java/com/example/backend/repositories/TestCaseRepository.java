@@ -1,5 +1,6 @@
 package com.example.backend.repositories;
 
+import com.example.backend.dto.AttemptTestCaseDto;
 import com.example.backend.entities.TestCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -36,6 +37,26 @@ public class TestCaseRepository {
 
         try {
             return jdbcTemplate.query(sql, new Object[]{codingQuestionId},  new BeanPropertyRowMapper(TestCase.class));
+        } catch(EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public List<AttemptTestCaseDto> getAllAttemptTestCaseMatches(String attempt_id) {
+        try {
+            String sql = "SELECT * FROM attempt_test_case WHERE attempt_id = ?";
+            return jdbcTemplate.query(sql, new Object[] { attempt_id}, new BeanPropertyRowMapper(AttemptTestCaseDto.class));
+
+        } catch(EmptyResultDataAccessException e) {
+            System.out.println("null");
+            return null;
+        }
+    }
+
+    public TestCase findTestCaseById(String coding_question_id, String test_case_id) {
+        try {
+            String sql = "SELECT * FROM test_cases WHERE coding_question_id = ? AND test_case_id = ?";
+            return jdbcTemplate.queryForObject(sql, new Object[] {coding_question_id, test_case_id}, new BeanPropertyRowMapper<>(TestCase.class));
         } catch(EmptyResultDataAccessException e) {
             return null;
         }
