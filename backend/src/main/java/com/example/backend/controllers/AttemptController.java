@@ -30,4 +30,9 @@ public class AttemptController {
     public List<Attempt> getAllAttemptsOnQuestion(@PathVariable String question_id) {
         return attemptService.getAllAttemptsOnQuestion(question_id);
     }
+
+    @GetMapping("/{user_id}/{question_id}/is/solved")
+    public boolean is_solved_correctly(@PathVariable String user_id, @PathVariable String question_id) {
+        return attemptService.is_solved_correctly(user_id, question_id);
+    }
 }

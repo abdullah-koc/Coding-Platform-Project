@@ -30,6 +30,8 @@ public class AttemptService {
             List<TestCase> testCases = testCaseRepository.findTestCases(attempt.getQuestion_id());
             for(int i = 0; i < testCases.size(); i++)
                 attemptRepository.insertAttemptTestCase(attempt, testCases.get(i));
+
+            attemptRepository.updateUserPoint(attempt);
         }
     }
 
@@ -39,5 +41,9 @@ public class AttemptService {
 
     public List<Attempt> getAllAttemptsOnQuestion(String question_id) {
         return attemptRepository.findAllAttemptsOnQuestion(question_id);
+    }
+
+    public boolean is_solved_correctly(String user_id, String question_id) {
+        return attemptRepository.is_solved_correctly(user_id, question_id);
     }
 }
