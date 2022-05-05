@@ -104,4 +104,12 @@ public class QuestionService {
       return questionRepository.getFilteredQuestions(category_name, difficulty, question_type, is_solved);
    }
 
+   public boolean getIfUserSolved(String question_id, String user_id) {
+      return questionRepository.getIfUserSolved(question_id, user_id);
+   }
+
+   public boolean getIfUserSolvedCorrectly(String question_id, String user_id) {
+      return questionRepository.getIfUserSolvedCorrectly(question_id, user_id);
+   }
+
 }

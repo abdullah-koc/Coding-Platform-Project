@@ -132,4 +132,14 @@ public class QuestionController {
       return questionService.getFilteredQuestions(category_name, difficulty, question_type, is_solved);
    }
 
+   @GetMapping("/get_if_user_solved/{question_id}/{user_id}")
+   public boolean getIfUserSolved(@PathVariable String question_id, @PathVariable String user_id) {
+      return questionService.getIfUserSolved(question_id, user_id);
+   }
+
+   @GetMapping("/get_if_user_solved_correctly/{question_id}/{user_id}")
+   public boolean getIfUserSolvedCorrectly(@PathVariable String question_id, @PathVariable String user_id) {
+      return questionService.getIfUserSolvedCorrectly(question_id, user_id);
+   }
+
 }
