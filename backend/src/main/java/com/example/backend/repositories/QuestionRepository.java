@@ -325,10 +325,17 @@ public class QuestionRepository {
       }
       if (!is_solved.equals("all")) {
          if (sql.equals("")) {
-            sql += "SELECT * FROM questions WHERE question_id IN (SELECT question_id FROM attempts WHERE is_solved = "
-                  + is_solved + ")";
+            if (is_solved.equals("1")) {
+               sql += "SELECT * FROM questions WHERE question_id IN (SELECT question_id FROM attempts)";
+            } else if (is_solved.equals("0")) {
+               sql += "SELECT * FROM questions WHERE question_id NOT IN (SELECT question_id FROM attempts)";
+            }
          } else {
-            sql += " AND question_id IN (SELECT question_id FROM attempts WHERE is_solved = " + is_solved + ")";
+            if (is_solved.equals("1")) {
+               sql += " AND question_id IN (SELECT question_id FROM attempts)";
+            } else if (is_solved.equals("0")) {
+               sql += " AND question_id NOT IN (SELECT question_id FROM attempts)";
+            }
          }
       }
       if (sql.equals("")) {
