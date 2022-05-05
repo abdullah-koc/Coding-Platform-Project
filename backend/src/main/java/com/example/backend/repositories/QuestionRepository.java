@@ -305,7 +305,8 @@ public class QuestionRepository {
 
    }
 
-   public List<QuestionDto> getFilteredQuestions(String category_name, String difficulty, String question_type,
+   public List<QuestionDto> getFilteredQuestions(String user_id, String category_name, String difficulty,
+         String question_type,
          String is_solved) {
 
       String sql = "";
@@ -330,15 +331,17 @@ public class QuestionRepository {
       if (!is_solved.equals("all")) {
          if (sql.equals("")) {
             if (is_solved.equals("1")) {
-               sql += "SELECT * FROM questions WHERE question_id IN (SELECT question_id FROM attempts)";
+               sql += "SELECT * FROM questions WHERE question_id IN (SELECT question_id FROM attempts WHERE user_id = '"
+                     + user_id + "')";
             } else if (is_solved.equals("0")) {
-               sql += "SELECT * FROM questions WHERE question_id NOT IN (SELECT question_id FROM attempts)";
+               sql += "SELECT * FROM questions WHERE question_id NOT IN (SELECT question_id FROM attempts WHERE user_id = '"
+                     + user_id + "')";
             }
          } else {
             if (is_solved.equals("1")) {
-               sql += " AND question_id IN (SELECT question_id FROM attempts)";
+               sql += " AND question_id IN (SELECT question_id FROM attempts WHERE user_id = '" + user_id + "')";
             } else if (is_solved.equals("0")) {
-               sql += " AND question_id NOT IN (SELECT question_id FROM attempts)";
+               sql += " AND question_id NOT IN (SELECT question_id FROM attempts WHERE user_id = '" + user_id + "')";
             }
          }
       }

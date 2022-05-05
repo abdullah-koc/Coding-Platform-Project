@@ -126,10 +126,11 @@ public class QuestionController {
       questionService.undislike(question_id);
    }
 
-   @GetMapping("/get_filtered_questions/{category_name}/{difficulty}/{question_type}/{is_solved}")
-   public List<QuestionDto> getFilteredQuestions(@PathVariable String category_name, @PathVariable String difficulty,
+   @GetMapping("/get_filtered_questions/{user_id}/{category_name}/{difficulty}/{question_type}/{is_solved}")
+   public List<QuestionDto> getFilteredQuestions(@PathVariable String user_id, @PathVariable String category_name,
+         @PathVariable String difficulty,
          @PathVariable String question_type, @PathVariable String is_solved) {
-      return questionService.getFilteredQuestions(category_name, difficulty, question_type, is_solved);
+      return questionService.getFilteredQuestions(user_id, category_name, difficulty, question_type, is_solved);
    }
 
    @GetMapping("/get_if_user_solved/{question_id}/{user_id}")
