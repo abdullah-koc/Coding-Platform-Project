@@ -7,6 +7,7 @@ import com.example.backend.dto.QuestionDto;
 import com.example.backend.dto.UserDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -56,6 +57,22 @@ public class InterviewRepository {
    }
 
    public void createInterview(InterviewDto interviewDto) {
+
+      String last_interview_id;
+      int interview_id_count;
+      String last_interview_id_sql = "SELECT interview_id FROM interviews WHERE company_id = ? AND LENGTH(interview_id) >= ALL(SELECT LENGTH(interview_id) FROM interviews WHERE company_id = ?) ORDER BY interview_id DESC LIMIT 1";
+      try {
+         last_interview_id = (String) jdbcTemplate.queryForObject(last_interview_id_sql, String.class,
+               interviewDto.getCompany_id(), interviewDto.getCompany_id());
+         interview_id_count = Integer.parseInt(last_interview_id.substring(1));
+         interview_id_count++;
+      } catch (EmptyResultDataAccessException e) {
+         interview_id_count = 0;
+      }
+
+      String interview_id = "I" + interview_id_count;
+      interviewDto.setInterview_id(interview_id);
+
       String sql = "INSERT INTO interviews (interview_id, company_id, interview_date, interview_name, interview_duration) VALUES (?, ?, ?, ?, ?)";
       jdbcTemplate.update(sql, interviewDto.getInterview_id(), interviewDto.getCompany_id(),
             interviewDto.getInterview_date(), interviewDto.getInterview_name(), interviewDto.getInterview_duration());
