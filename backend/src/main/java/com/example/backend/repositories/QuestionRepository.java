@@ -301,4 +301,86 @@ public class QuestionRepository {
 
    }
 
+   public List<QuestionDto> getFilteredQuestions(String category_name, String difficulty, String question_type,
+         String is_solved) {
+
+      String sql = "";
+      if (!category_name.equals("all")) {
+         sql += "SELECT * FROM questions WHERE question_id IN (SELECT question_id FROM question_category WHERE category_name = '"
+               + category_name + "')";
+      }
+      if (!difficulty.equals("all")) {
+         if (sql.equals("")) {
+            sql += "SELECT * FROM questions WHERE difficulty = '" + difficulty + "'";
+         } else {
+            sql += " AND difficulty = '" + difficulty + "'";
+         }
+      }
+      if (!question_type.equals("all")) {
+         if (sql.equals("")) {
+            sql += "SELECT * FROM questions WHERE question_id LIKE '" + question_type + "%" + "'";
+         } else {
+            sql += " AND question_id LIKE '" + question_type + "%" + "'";
+         }
+      }
+      if (!is_solved.equals("all")) {
+         if (sql.equals("")) {
+            sql += "SELECT * FROM questions WHERE question_id IN (SELECT question_id FROM attempts WHERE is_solved = "
+                  + is_solved + ")";
+         } else {
+            sql += " AND question_id IN (SELECT question_id FROM attempts WHERE is_solved = " + is_solved + ")";
+         }
+      }
+      if (sql.equals("")) {
+         sql = "SELECT * FROM questions";
+      }
+      return jdbcTemplate.query(sql, (resultSet, i) -> {
+         QuestionDto question = new QuestionDto();
+         question.setQuestion_id(resultSet.getString("question_id"));
+         question.setTitle(resultSet.getString("title"));
+         question.setExplanation(resultSet.getString("explanation"));
+         question.setQuestion_duration(resultSet.getInt("question_duration"));
+         question.setDifficulty(resultSet.getString("difficulty"));
+         question.setQuestion_point(resultSet.getInt("question_point"));
+         question.setSolution(resultSet.getString("solution"));
+         question.setMax_try(resultSet.getInt("max_try"));
+         question.setLike_count(resultSet.getInt("like_count"));
+         question.setDislike_count(resultSet.getInt("dislike_count"));
+         return question;
+      });
+      // String sql = "SELECT * FROM questions";
+      // if (!category_name.equals("all") || !difficulty.equals("all") ||
+      // !question_type.equals("all")
+      // || !is_solved.equals("all")) {
+      // sql += " WHERE question_id IN SELECT question_id FROM questions WHERE
+      // question_point > -1";
+      // }
+      // if (!category_name.equals("all")) {
+      // sql += " AND category_name = '" + category_name + "'";
+      // }
+      // if (!difficulty.equals("all")) {
+      // sql += " AND difficulty = '" + difficulty + "'";
+      // }
+      // if (!question_type.equals("all")) {
+      // sql += " AND question_id LIKE '" + question_type + "%'";
+      // }
+      // // if (!is_solved.equals("all")) {
+      // // sql += " INTERSECT SELECT * FROM questions WHERE question_id IN ";
+      // // }
+      // return jdbcTemplate.query(sql, (resultSet, i) -> {
+      // QuestionDto question = new QuestionDto();
+      // question.setQuestion_id(resultSet.getString("question_id"));
+      // question.setTitle(resultSet.getString("title"));
+      // question.setExplanation(resultSet.getString("explanation"));
+      // question.setQuestion_duration(resultSet.getInt("question_duration"));
+      // question.setDifficulty(resultSet.getString("difficulty"));
+      // question.setQuestion_point(resultSet.getInt("question_point"));
+      // question.setSolution(resultSet.getString("solution"));
+      // question.setMax_try(resultSet.getInt("max_try"));
+      // question.setLike_count(resultSet.getInt("like_count"));
+      // question.setDislike_count(resultSet.getInt("dislike_count"));
+      // return question;
+      // });
+   }
+
 }

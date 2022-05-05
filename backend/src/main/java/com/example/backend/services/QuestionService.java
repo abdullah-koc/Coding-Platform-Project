@@ -99,4 +99,9 @@ public class QuestionService {
       return questionRepository.getCategories(question_id);
    }
 
+   public List<QuestionDto> getFilteredQuestions(String category_name, String difficulty, String question_type,
+         String is_solved) {
+      return questionRepository.getFilteredQuestions(category_name, difficulty, question_type, is_solved);
+   }
+
 }
