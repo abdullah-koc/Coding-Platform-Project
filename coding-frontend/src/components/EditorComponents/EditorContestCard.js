@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   },
 });
 
-const EditorContestCard = ({ contestName, startDate, endDate, onClick }) => {
+const EditorContestCard = ({ contestName, startDate, endDate, contestPhoto, onClick }) => {
   const classes = useStyles();
   return (
     <div className={classes.root} onClick={onClick}>
@@ -29,7 +29,7 @@ const EditorContestCard = ({ contestName, startDate, endDate, onClick }) => {
           style={{ display: "flex", alignItems: "center", paddingLeft: "20px" }}
         >
           <img
-            src={ExampleImage}
+            src={contestPhoto === null ? ExampleImage : contestPhoto}
             alt="logo"
             style={{
               width: "60px",

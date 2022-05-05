@@ -59,7 +59,7 @@ public class ContestRepository {
    public Contest findById(String contest_id) {
       String sql = "SELECT * FROM contests c WHERE c.contest_id = ?";
       try {
-         return (Contest) jdbcTemplate.queryForObject(sql, new Object[]{contest_id}, new BeanPropertyRowMapper(Editor.class));
+         return (Contest) jdbcTemplate.queryForObject(sql, new Object[]{contest_id}, new BeanPropertyRowMapper(Contest.class));
       } catch (EmptyResultDataAccessException e) {
          return null;
       }

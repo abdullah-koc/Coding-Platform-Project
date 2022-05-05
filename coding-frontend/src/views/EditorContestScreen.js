@@ -1,6 +1,6 @@
 import React from "react";
 import NavbarEditor from "../components/Navbars/NavbarEditor";
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, Input, TextField } from "@mui/material";
 import EditorContestCard from "../components/EditorComponents/EditorContestCard";
 import { useNavigate } from "react-router-dom";
 import EditorQuestionCard from "../components/EditorComponents/EditorQuestionCard";
@@ -12,11 +12,13 @@ const EditorContestScreen = () => {
   const [addedQuestions, setAddedQuestions] = React.useState([]);
   const [questions, setQuestions] = React.useState([]);
   const [contests, setContests] = React.useState([]);
+  const [photo, setPhoto] = React.useState("");
   const [newID, setNewID] = React.useState(0);
   const [newContestName, setNewContestName] = React.useState("");
   const [newStartDate, setNewStartDate] = React.useState("");
   const [newEndDate, setNewEndDate] = React.useState("");
   const [newPrize, setNewPrize] = React.useState("");
+  const [newPhoto, setNewPhoto] = React.useState(null);
 
   React.useEffect(() => {
     if (
@@ -33,6 +35,7 @@ const EditorContestScreen = () => {
       .then((response) => {
         setContests(response.data);
         setNewID(response.data.length);
+        console.log(response.data);
       });
   }, []);
   React.useEffect(() => {
@@ -98,6 +101,7 @@ const EditorContestScreen = () => {
         prize: newPrize,
       })
       .then((res) => {
+        handlePhotoUpload();
         addedQuestions.map((q) => {
           axios.post(
             process.env.REACT_APP_URL +
@@ -106,7 +110,7 @@ const EditorContestScreen = () => {
               newID +
               "/" +
               q
-          );
+          )
         });
         alert("Contest added successfully");
         setNewContestName("");
@@ -117,6 +121,34 @@ const EditorContestScreen = () => {
       })
       .catch((err) => {
         alert("Error adding contest");
+      });
+  };
+
+  const handlePhotoChange = (event) => {
+    console.log(event.target.files[0]);
+    setNewPhoto(event.target.files[0]);
+  };
+
+  const handlePhotoUpload = () => {
+    const formData = new FormData();
+    formData.append("multipartFile", newPhoto, newPhoto.name);
+    // send a POST request with the form data to upload photo
+    axios({
+      method: "post",
+      url: process.env.REACT_APP_URL + "api/contest/change/photo/C" + (newID + 1),
+      data: formData,
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    })
+      .then(function (response) {
+        //handle success
+        setPhoto(response.data.url);
+        console.log(response);
+      })
+      .catch(function (response) {
+        //handle error
+        console.log(response);
       });
   };
 
@@ -143,6 +175,7 @@ const EditorContestScreen = () => {
                   contestName={contest.contest_name}
                   startDate={contest.start_date}
                   endDate={contest.end_date}
+                  contestPhoto={contest.contest_photo}
                 />
               ))}
             </div>
@@ -290,9 +323,20 @@ const EditorContestScreen = () => {
                       paddingTop: "10px",
                     }}
                   >
-                    <Button variant="contained" color="primary" size="small">
-                      Upload Photo
-                    </Button>
+                    <Input
+                      type="file"
+                      style={{
+                        width: "50%",
+                        marginBottom: "20px",
+                        padding: "10px",
+                        border: "1px solid #ccc",
+                        borderRadius: "4px",
+                        boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
+                      }}
+                      name="file"
+                      placeholder="Upload photo"
+                      onChange={handlePhotoChange}
+                    ></Input>
                   </Grid>
                 </Grid>
               </Grid>
