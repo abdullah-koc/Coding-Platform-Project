@@ -24,6 +24,7 @@ public class InterviewRepository {
          interviewDto.setInterview_id(rs.getString("interview_id"));
          interviewDto.setCompany_id(rs.getString("company_id"));
          interviewDto.setInterview_date(rs.getDate("interview_date"));
+         interviewDto.setInterview_time(rs.getTime("interview_date"));
          interviewDto.setInterview_name(rs.getString("interview_name"));
          interviewDto.setInterview_duration(rs.getInt("interview_duration"));
          return interviewDto;

@@ -45,7 +45,6 @@ export const Contests = () => {
       //get upcoming contests (not attended)
       var upc = allContests.filter(
         (contest) =>
-          new Date(contest.start_date) > new Date() &&
           new Date(contest.end_date) > new Date()
       );
       //remove attended contests from upc

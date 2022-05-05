@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import QuestionCard from "../components/UserMainScreenComponents/QuestionCard";
 import InterviewQuestionCard from "../components/CompanyComponents/InterviewQuestionCard";
 import NavbarCompany from "../components/Navbars/NavbarCompany";
+import axios from "axios";
 
 export const CompanyCreateInterview = () => {
   let navigate = useNavigate();
@@ -18,35 +19,7 @@ export const CompanyCreateInterview = () => {
     }
   }, []);
 
-  const [questions, setQuestions] = useState([
-    {
-      question_id: "CQ1",
-      isCoding: "C",
-      question: "Question 1",
-      difficulty: "Easy",
-      likeRate: 87,
-      isSolved: true,
-      questionPoint: 12,
-    },
-    {
-      question_id: "CQ2",
-      isCoding: "C",
-      question: "Question 2",
-      difficulty: "Hard",
-      likeRate: 87,
-      isSolved: true,
-      questionPoint: 12,
-    },
-    {
-      question_id: "NCQ3",
-      isCoding: "C",
-      question: "Question 3",
-      difficulty: "Medium",
-      likeRate: 87,
-      isSolved: true,
-      questionPoint: 12,
-    },
-  ]);
+  const [questions, setQuestions] = useState([]);
   const [interviewName, setInterviewName] = useState("");
   const [interviewDateTime, setInterviewDateTime] = useState("");
   const [interviewDuration, setInterviewDuration] = useState("");
@@ -64,6 +37,19 @@ export const CompanyCreateInterview = () => {
     setCurQuestions(questions.slice((page - 1) * 7, 7 * page));
   }, [page]);
 
+  useEffect(() => {
+    axios.get(process.env.REACT_APP_URL + "api/question/all").then((res) => {
+      let companyQuestions = res.data.filter(
+        (question) =>
+          question.company_id ===
+          JSON.parse(localStorage.getItem("session")).company_id
+      );
+      setQuestions(companyQuestions);
+      setCurQuestions(companyQuestions.slice(0, 7));
+      setTotalPages(Math.ceil(companyQuestions.length / 7));
+    });
+  }, [isDialogOpen]);
+
   const handleDialogCallback = (childData) => {
     setIsDialogOpen(childData);
   };
@@ -76,10 +62,31 @@ export const CompanyCreateInterview = () => {
   };
 
   const handleCreateInterview = () => {
-    if (questions.length === 0) {
-      alert("Please add questions to the interview!");
+    if (
+      questions.length === 0 ||
+      interviewName === "" ||
+      interviewDateTime === "" ||
+      interviewDuration === 0
+    ) {
+      alert("Please fill all the fields!");
     } else {
-      // ...
+      //TODO: backend of creating interview will be implemented
+      // axios
+      //   .post(process.env.REACT_APP_URL + "api/interview/create", {
+      //     company_id: JSON.parse(localStorage.getItem("session")).company_id,
+      //     interview_name: interviewName,
+      //     interview_date: new Date(interviewDateTime),
+      //     interview_duration: interviewDuration,
+      //   })
+      //   .then((res) => {
+      //     if (res.data.success) {
+      //       alert("Interview created successfully!");
+      //       navigate("/company");
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     alert("Something went wrong!");
+      //   });
     }
   };
 
@@ -158,11 +165,12 @@ export const CompanyCreateInterview = () => {
             {questions.map((question, index) => (
               <div style={{ marginBottom: "10px" }} key={index}>
                 <InterviewQuestionCard
+                  questionText={question.explanation}
                   question_id={question.question_id}
-                  isCoding={question.isCoding}
-                  title={question.question}
+                  isCoding={question.question_id.startsWith("C")}
+                  title={question.title}
                   difficulty={question.difficulty}
-                  questionPoint={question.questionPoint}
+                  questionPoint={question.question_point}
                 />
               </div>
             ))}

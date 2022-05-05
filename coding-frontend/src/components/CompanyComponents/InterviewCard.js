@@ -4,6 +4,7 @@ import Colors from "../../utils/Colors";
 import { Grid } from "@mui/material";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
@@ -27,11 +28,23 @@ export const InterviewCard = ({
   let navigate = useNavigate();
   const classes = useStyles();
   const handleRemoveInterview = () => {
-    alert("remove interview");
-    // todo: remove interview from database
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/interview/delete/" +
+          interview_id +
+          "/" +
+          JSON.parse(localStorage.getItem("session")).company_id
+      )
+      .then((res) => {
+        alert("Interview deleted successfully");
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert("Something went wrong");
+      });
   };
   const handleGoToInterviewUpdatePage = () => {
-    alert("go to interview update page");
     navigate(`/interview/${interview_id}`);
   };
   return (
