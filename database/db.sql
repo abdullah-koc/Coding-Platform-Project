@@ -517,6 +517,8 @@ CREATE TABLE `user_question` (
 -- Table structure for table `users`
 --
 
+
+
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -540,5 +542,17 @@ CREATE TABLE `users` (
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+CREATE OR REPLACE VIEW statusBar AS
+SELECT
+       p.nickname,
+       q.difficulty,
+       COUNT(a.question_id) as total,
+       SUM(CASE WHEN is_solved = 1 THEN 1 ELSE 0 END) AS corrects,
+       SUM(CASE WHEN is_solved = 1 THEN 1 ELSE 0 END) / COUNT(a.question_id) * 100
+FROM attempts a, questions q, people p
+WHERE a.user_id = p.person_id AND q.question_id = a.question_id AND a.try_count >= ALL(SELECT try_count FROM attempts a2 WHERE a.question_id = a2.question_id)
+GROUP BY p.nickname, q.difficulty
+ORDER BY q.difficulty;
 
 -- Dump completed on 2022-05-04 22:13:31

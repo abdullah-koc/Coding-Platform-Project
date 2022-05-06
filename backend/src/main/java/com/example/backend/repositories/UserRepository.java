@@ -1,5 +1,6 @@
 package com.example.backend.repositories;
 
+import com.example.backend.dto.UserStatsDto;
 import com.example.backend.entities.Attempt;
 import com.example.backend.entities.Person;
 import com.example.backend.entities.User;
@@ -78,5 +79,14 @@ public class UserRepository {
     public void updatePhoto(String user_id, String photo) {
         String sql = "UPDATE people SET photo = ? WHERE person_id = ?";
         jdbcTemplate.update(sql, photo, user_id);
+    }
+
+    public List<UserStatsDto> getUserStats(String nickname) {
+        String sql = "SELECT * FROM statusBar s WHERE s.nickname = ?";
+        try {
+            return jdbcTemplate.query(sql, new Object[]{nickname}, new BeanPropertyRowMapper<>(UserStatsDto.class));
+        } catch(EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }

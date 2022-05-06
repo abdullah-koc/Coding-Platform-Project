@@ -1,5 +1,6 @@
 package com.example.backend.controllers;
 
+import com.example.backend.dto.UserStatsDto;
 import com.example.backend.entities.Attempt;
 import com.example.backend.entities.User;
 import com.example.backend.services.PhotoService;
@@ -45,5 +46,10 @@ public class UserController {
         Map result = photoService.uploadPhoto(multipartFile);
         userService.changePhoto(nickname, (String) result.get("url"));
         return new ResponseEntity(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/get/stats/{nickname}")
+    public List<UserStatsDto> getUserStats(@PathVariable String nickname) {
+        return userService.getUserStats(nickname);
     }
 }

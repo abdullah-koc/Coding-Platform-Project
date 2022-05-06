@@ -1,6 +1,7 @@
 package com.example.backend.services;
 
 import com.example.backend.dto.UserDto;
+import com.example.backend.dto.UserStatsDto;
 import com.example.backend.entities.Attempt;
 import com.example.backend.entities.Company;
 import com.example.backend.entities.Person;
@@ -61,5 +62,9 @@ public class UserService {
         User user = userRepository.findByNickname(nickname);
         user.setPhoto(photo);
         userRepository.updatePhoto(user.getPerson_id(), photo);
+    }
+
+    public List<UserStatsDto> getUserStats(String nickname) {
+        return userRepository.getUserStats(nickname);
     }
 }
