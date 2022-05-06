@@ -60,4 +60,8 @@ public class InterviewService {
       return interviewRepository.getInterviewees(company_id, interview_id);
    }
 
+   public List<InterviewDto> getInterviewsByUser(String user_id) {
+      return interviewRepository.getInterviewsByUser(user_id);
+   }
+
 }

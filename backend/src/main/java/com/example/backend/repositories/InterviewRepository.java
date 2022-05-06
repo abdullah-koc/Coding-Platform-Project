@@ -161,4 +161,18 @@ public class InterviewRepository {
       }, company_id, interview_id);
    }
 
+   public List<InterviewDto> getInterviewsByUser(String user_id) {
+      String sql = "SELECT * FROM interviews NATURAL JOIN user_interview WHERE user_id = ?";
+      return jdbcTemplate.query(sql, (rs, rowNum) -> {
+         InterviewDto interviewDto = new InterviewDto();
+         interviewDto.setInterview_id(rs.getString("interview_id"));
+         interviewDto.setCompany_id(rs.getString("company_id"));
+         interviewDto.setInterview_date(rs.getDate("interview_date"));
+         interviewDto.setInterview_name(rs.getString("interview_name"));
+         interviewDto.setInterview_time(rs.getTime("interview_time"));
+         interviewDto.setInterview_duration(rs.getInt("interview_duration"));
+         return interviewDto;
+      }, user_id);
+   }
+
 }

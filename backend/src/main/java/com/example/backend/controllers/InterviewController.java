@@ -78,4 +78,9 @@ public class InterviewController {
    public List<UserDto> getInterviewees(@PathVariable String company_id, @PathVariable String interview_id) {
       return interviewService.getInterviewees(company_id, interview_id);
    }
+
+   @GetMapping(path = "/get_interviews_by_user/{user_id}")
+   public List<InterviewDto> getInterviewsByUser(@PathVariable String user_id) {
+      return interviewService.getInterviewsByUser(user_id);
+   }
 }
