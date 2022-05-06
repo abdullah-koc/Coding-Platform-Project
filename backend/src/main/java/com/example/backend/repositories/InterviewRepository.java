@@ -175,4 +175,9 @@ public class InterviewRepository {
       }, user_id);
    }
 
+   public void addInterviewee(String interview_id, String user_id, String company_id) {
+      String sql = "INSERT INTO user_interview (interview_id, user_id, company_id) VALUES (?, ?, ?)";
+      jdbcTemplate.update(sql, interview_id, user_id, company_id);
+   }
+
 }

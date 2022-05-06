@@ -64,4 +64,8 @@ public class InterviewService {
       return interviewRepository.getInterviewsByUser(user_id);
    }
 
+   public void addInterviewee(String interview_id, String user_id, String company_id) {
+      interviewRepository.addInterviewee(interview_id, user_id, company_id);
+   }
+
 }

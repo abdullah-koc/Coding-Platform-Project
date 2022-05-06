@@ -83,4 +83,10 @@ public class InterviewController {
    public List<InterviewDto> getInterviewsByUser(@PathVariable String user_id) {
       return interviewService.getInterviewsByUser(user_id);
    }
+
+   @PostMapping(path = "/add_interviewee/{company_id}/{interview_id}/{user_id}")
+   public void addInterviewee(@PathVariable String interview_id, @PathVariable String user_id,
+         @PathVariable String company_id) {
+      interviewService.addInterviewee(interview_id, user_id, company_id);
+   }
 }
