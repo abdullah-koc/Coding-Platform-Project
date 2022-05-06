@@ -1,5 +1,6 @@
 package com.example.backend.controllers;
 
+import com.example.backend.dto.AttemptTestCaseDto;
 import com.example.backend.dto.TestCaseDto;
 import com.example.backend.entities.TestCase;
 import com.example.backend.services.TestCaseService;
@@ -23,5 +24,15 @@ public class TestCaseController {
     @GetMapping("/{coding_question_id}/testCases")
     public List<TestCase> getAllTestCasesOnCodingQuestion(@PathVariable String coding_question_id) {
         return testCaseService.getAllTestCasesOnCodingQuestion(coding_question_id);
+    }
+
+    @GetMapping("/get/matches/{attempt_id}")
+    public List<AttemptTestCaseDto> getAllAttemptTestCaseMatches(@PathVariable String attempt_id) {
+        return testCaseService.getAllAttemptTestCaseMatches(attempt_id);
+    }
+
+    @GetMapping("/get/{coding_question_id}/{test_case_id}")
+    public TestCase findTestCaseById(@PathVariable String coding_question_id, @PathVariable String test_case_id) {
+        return testCaseService.findTestCaseById(coding_question_id, test_case_id);
     }
 }

@@ -21,24 +21,56 @@ const ProblemsScreen = () => {
     }
   }, []);
 
-  const [questionType, setQuestionType] = useState("All");
-  const [difficulty, setDifficulty] = useState("All");
-  const [category, setCategory] = useState("All");
-  const [status, setStatus] = useState("All");
+  const [questionType, setQuestionType] = useState("all");
+  const [difficulty, setDifficulty] = useState("all");
+  const [category, setCategory] = useState("all");
+  const [status, setStatus] = useState("all");
   const [questions, setQuestions] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [curQuestions, setCurQuestions] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
-  const [solvedQuestionIDs, setSolvedQuestionIDs] = useState([]);
+  const [temp, setTemp] = useState([]);
+
+  const getIsSolved = (id) => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/question/get_if_user_solved/" +
+          id +
+          "/" +
+          JSON.parse(localStorage.getItem("session")).person_id
+      )
+      .then((res) => {
+        return res.data;
+      });
+  };
+
   useEffect(() => {
-    axios.get(process.env.REACT_APP_URL + "api/question/all").then((res) => {
-      let userQuestions = res.data.filter(
-        (question) => question.editor_id !== null
-      );
-      setQuestions(userQuestions);
-    });
-  }, []);
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/question/get_filtered_questions/" +
+          JSON.parse(localStorage.getItem("session")).person_id +
+          "/" +
+          category +
+          "/" +
+          difficulty +
+          "/" +
+          questionType +
+          "/" +
+          status
+      )
+      .then((res) => {
+        let userQuestions = res.data.filter(
+          (question) => question.editor_id !== null
+        );
+        setQuestions(userQuestions);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [questionType, difficulty, category, status]);
 
   useEffect(() => {
     axios.get(process.env.REACT_APP_URL + "api/category/all").then((res) => {
@@ -123,11 +155,9 @@ const ProblemsScreen = () => {
                   label=""
                   onChange={(e) => setQuestionType(e.target.value)}
                 >
-                  <MenuItem value={"All"}>All</MenuItem>
-                  <MenuItem value={"Coding Question"}>Coding Question</MenuItem>
-                  <MenuItem value={"Noncoding Question"}>
-                    Noncoding Question
-                  </MenuItem>
+                  <MenuItem value={"all"}>All</MenuItem>
+                  <MenuItem value={"CQ"}>Coding Question</MenuItem>
+                  <MenuItem value={"NCQ"}>Noncoding Question</MenuItem>
                 </Select>
               </Grid>
               <Grid item xs={3}>
@@ -142,7 +172,7 @@ const ProblemsScreen = () => {
                   label=""
                   onChange={(e) => setDifficulty(e.target.value)}
                 >
-                  <MenuItem value={"All"}>All</MenuItem>
+                  <MenuItem value={"all"}>All</MenuItem>
                   <MenuItem value={"Easy"}>Easy</MenuItem>
                   <MenuItem value={"Medium"}>Medium</MenuItem>
                   <MenuItem value={"Hard"}>Hard</MenuItem>
@@ -160,7 +190,7 @@ const ProblemsScreen = () => {
                   label=""
                   onChange={(e) => setCategory(e.target.value)}
                 >
-                  <MenuItem value={"All"}>All</MenuItem>
+                  <MenuItem value={"all"}>All</MenuItem>
                   {allCategories.map((category, index) => (
                     <MenuItem key={index} value={category.category_name}>
                       {category.category_name}
@@ -181,9 +211,9 @@ const ProblemsScreen = () => {
                   label=""
                   onChange={(e) => setStatus(e.target.value)}
                 >
-                  <MenuItem value={"All"}>All</MenuItem>
-                  <MenuItem value={"Solved"}>Solved</MenuItem>
-                  <MenuItem value={"Not Solved"}>Not Solved</MenuItem>
+                  <MenuItem value={"all"}>All</MenuItem>
+                  <MenuItem value={"1"}>Solved</MenuItem>
+                  <MenuItem value={"0"}>Not Solved</MenuItem>
                 </Select>
               </Grid>
             </Grid>
@@ -296,7 +326,7 @@ const ProblemsScreen = () => {
                             (question.like_count + question.dislike_count))
                         ).toFixed(1)
                   }
-                  isSolved={question.isSolved}
+                  isSolved={temp[index]}
                   questionPoint={question.question_point}
                   style={{ marginTop: "20px" }}
                 />
