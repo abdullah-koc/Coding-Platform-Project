@@ -348,18 +348,21 @@ public class QuestionRepository {
       if (sql.equals("")) {
          sql = "SELECT * FROM questions";
       }
-      return jdbcTemplate.query(sql, (resultSet, i) -> {
+      return jdbcTemplate.query(sql, (rs, i) -> {
          QuestionDto question = new QuestionDto();
-         question.setQuestion_id(resultSet.getString("question_id"));
-         question.setTitle(resultSet.getString("title"));
-         question.setExplanation(resultSet.getString("explanation"));
-         question.setQuestion_duration(resultSet.getInt("question_duration"));
-         question.setDifficulty(resultSet.getString("difficulty"));
-         question.setQuestion_point(resultSet.getInt("question_point"));
-         question.setSolution(resultSet.getString("solution"));
-         question.setMax_try(resultSet.getInt("max_try"));
-         question.setLike_count(resultSet.getInt("like_count"));
-         question.setDislike_count(resultSet.getInt("dislike_count"));
+         question.setQuestion_id(rs.getString("question_id"));
+         question.setTitle(rs.getString("title"));
+         question.setExplanation(rs.getString("explanation"));
+         question.setQuestion_duration(rs.getInt("question_duration"));
+         question.setDifficulty(rs.getString("difficulty"));
+         question.setCompany_id(rs.getString("company_id"));
+         question.setEditor_id(rs.getString("editor_id"));
+         question.setQuestion_point(rs.getInt("question_point"));
+         question.setSolution(rs.getString("solution"));
+         question.setMax_try(rs.getInt("max_try"));
+         question.setLike_count(rs.getInt("like_count"));
+         question.setDislike_count(rs.getInt("dislike_count"));
+         question.setCreation_date(rs.getDate("creation_date"));
          return question;
       });
 
