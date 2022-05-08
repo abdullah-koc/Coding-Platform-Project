@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Button, Grid, Pagination, TextField } from "@mui/material";
+import {
+  Button,
+  Grid,
+  MenuItem,
+  Pagination,
+  Select,
+  TextField,
+} from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddQuestionDialog from "../components/AddQuestionDialog";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +14,7 @@ import QuestionCard from "../components/UserMainScreenComponents/QuestionCard";
 import InterviewQuestionCard from "../components/CompanyComponents/InterviewQuestionCard";
 import NavbarCompany from "../components/Navbars/NavbarCompany";
 import axios from "axios";
+import Colors from "../utils/Colors";
 
 export const CompanyCreateInterview = () => {
   let navigate = useNavigate();
@@ -27,7 +35,7 @@ export const CompanyCreateInterview = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [curQuestions, setCurQuestions] = useState([]);
-
+  
   useEffect(() => {
     setTotalPages(Math.ceil(questions.length / 7));
     setCurQuestions(questions.slice(0, 7));
@@ -70,23 +78,20 @@ export const CompanyCreateInterview = () => {
     ) {
       alert("Please fill all the fields!");
     } else {
-      //TODO: backend of creating interview will be implemented
-      // axios
-      //   .post(process.env.REACT_APP_URL + "api/interview/create", {
-      //     company_id: JSON.parse(localStorage.getItem("session")).company_id,
-      //     interview_name: interviewName,
-      //     interview_date: new Date(interviewDateTime),
-      //     interview_duration: interviewDuration,
-      //   })
-      //   .then((res) => {
-      //     if (res.data.success) {
-      //       alert("Interview created successfully!");
-      //       navigate("/company");
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     alert("Something went wrong!");
-      //   });
+      axios
+        .post(process.env.REACT_APP_URL + "api/interview/create", {
+          company_id: JSON.parse(localStorage.getItem("session")).company_id,
+          interview_name: interviewName,
+          interview_date: new Date(interviewDateTime),
+          interview_duration: interviewDuration,
+        })
+        .then((res) => {
+          alert("Interview created successfully!");
+          navigate("/company");
+        })
+        .catch((err) => {
+          alert("Something went wrong!");
+        });
     }
   };
 

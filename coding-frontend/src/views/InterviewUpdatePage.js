@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Button, Grid, Pagination, TextField } from "@mui/material";
+import { Button, Grid, MenuItem, Pagination, Select, TextField } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddQuestionDialog from "../components/AddQuestionDialog";
 import { useNavigate } from "react-router-dom";
 import InterviewQuestionCard from "../components/CompanyComponents/InterviewQuestionCard";
 import NavbarCompany from "../components/Navbars/NavbarCompany";
 import axios from "axios";
+import Colors from "../utils/Colors";
 
 export const InterviewUpdatePage = () => {
   let navigate = useNavigate();
@@ -78,6 +79,24 @@ export const InterviewUpdatePage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [curQuestions, setCurQuestions] = useState([]);
+  const [users, setUsers] = useState([
+    {
+      nickname: "aslan",
+    },
+    {
+      nickname: "kaplan",
+    },
+    {
+      nickname: "masal",
+    },
+    {
+      nickname: "kasap",
+    },
+    {
+      nickname: "a",
+    },
+  ]);
+
 
   useEffect(() => {
     setTotalPages(Math.ceil(questions.length / 7));
@@ -97,6 +116,22 @@ export const InterviewUpdatePage = () => {
       open={isDialogOpen}
       handleParentOpen={handleDialogCallback}
     ></AddQuestionDialog>;
+  };
+
+  const handleAddUser = (user) => {
+    axios
+      .post(
+        process.env.REACT_APP_URL +
+          "api/interview/add_interviewee/" +
+          JSON.parse(localStorage.getItem("session")).company_id +
+          "/" + getID() + "/" + user.nickname
+      )
+      .then((res) => {
+        alert("User added successfully!");
+      })
+      .catch((err) => {
+        alert("Something went wrong!");
+      });
   };
 
   const handleSaveUpdates = () => {
@@ -142,7 +177,7 @@ export const InterviewUpdatePage = () => {
                 onChange={(e) => setInterviewDateTime(e.target.value)}
                 type="datetime-local"
                 style={{ width: "200px", marginLeft: "32px" }}
-                placeholder={new Date(interviewDateTime).toLocaleTimeString}
+                placeholder={interviewDateTime}
               ></TextField>
             </div>
 
@@ -159,6 +194,24 @@ export const InterviewUpdatePage = () => {
                 style={{ width: "200px", marginLeft: "58px" }}
                 placeholder={interviewDuration}
               ></TextField>
+            </div>
+            <br />
+            <div>
+              <h2>Set Attendees</h2>
+              <Select
+                value={users}
+                style={{
+                  marginBottom: "10px",
+                  width: "200px",
+                  color: Colors.light_grey_color,
+                }}
+                label=""
+                onChange={(e) => handleAddUser(e.target.value)}
+              >
+                {users.map((user) => (
+                  <MenuItem value={user}>{user.nickname}</MenuItem>
+                ))}
+              </Select>
             </div>
 
             <br />

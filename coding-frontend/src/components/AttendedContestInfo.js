@@ -4,6 +4,7 @@ import Colors from "../utils/Colors";
 import { Button, Grid } from "@mui/material";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { useNavigate } from "react-router-dom";
+import ExampleImage from "../images/loginregisterimage.jpg";
 import axios from "axios";
 
 const useStyles = makeStyles({
@@ -59,7 +60,7 @@ const AttendedContestInfo = ({
           style={{ display: "flex", alignItems: "center", paddingLeft: "20px" }}
         >
           <img
-            src={contest_photo}
+            src={contest_photo === null ? ExampleImage : contest_photo}
             alt="logo"
             style={{
               width: "60px",
