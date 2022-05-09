@@ -110,7 +110,7 @@ const EditorContestScreen = () => {
               newID +
               "/" +
               q
-          )
+          );
         });
         alert("Contest added successfully");
         setNewContestName("");
@@ -118,6 +118,7 @@ const EditorContestScreen = () => {
         setNewEndDate("");
         setNewPrize("");
         setNewID(newID + 1);
+        window.location.reload();
       })
       .catch((err) => {
         alert("Error adding contest");
@@ -135,7 +136,8 @@ const EditorContestScreen = () => {
     // send a POST request with the form data to upload photo
     axios({
       method: "post",
-      url: process.env.REACT_APP_URL + "api/contest/change/photo/C" + (newID + 1),
+      url:
+        process.env.REACT_APP_URL + "api/contest/change/photo/C" + (newID + 1),
       data: formData,
       headers: {
         "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,

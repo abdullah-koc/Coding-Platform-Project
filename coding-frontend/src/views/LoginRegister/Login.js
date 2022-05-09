@@ -142,6 +142,7 @@ const Login = () => {
           placeholder="Password"
           type="password"
           value={password}
+          onKeyPress={(e) => e.key === "Enter" && handleLogin()}
           onChange={(e) => setPassword(e.target.value)}
           color="warning"
           InputProps={{

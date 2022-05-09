@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import CodingQuestionText from "./CodingQuestionText";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import TestCases from "./TestCases";
 
 const CodingQuestionInfo = ({ isContest }) => {
   let navigate = useNavigate();
@@ -60,9 +61,11 @@ const CodingQuestionInfo = ({ isContest }) => {
   const [isLiked, setIsLiked] = React.useState(false);
   const [isDisliked, setIsDisliked] = React.useState(false);
   const [previousAttempts, setPreviousAttempts] = React.useState([]);
+  const [previousTestCases, setPreviousTestCases] = React.useState([]);
+  const [previousSubmission, setPreviousSubmission] = React.useState({});
 
   const handleAttemptClick = (attempt) => {
-    console.log(attempt);
+    setPreviousSubmission(attempt);
   };
 
   const handleSubmitCallback = (childData) => {
@@ -105,6 +108,31 @@ const CodingQuestionInfo = ({ isContest }) => {
         navigate("/");
       });
   }, []);
+
+  React.useEffect(() => {
+    var reqArr = [];
+    previousAttempts.map((attempt) => {
+      reqArr.push(
+        axios.get(
+          process.env.REACT_APP_URL +
+            `api/testcase/get/matches/${attempt.attempt_id}`
+        )
+      );
+    });
+    axios.all(reqArr).then(
+      axios.spread((...responses) => {
+        let testCases = [];
+        responses.map((response) => {
+          testCases.push(response.data);
+        });
+        setPreviousTestCases(testCases);
+      })
+    );
+  }, [previousAttempts]);
+
+  React.useEffect(() => {
+    console.log(previousTestCases);
+  }, [previousTestCases]);
 
   const handleLikeButtonClick = () => {
     if (isLiked) {
@@ -317,8 +345,9 @@ const CodingQuestionInfo = ({ isContest }) => {
                     container
                     style={{
                       display: "flex",
-                      justifyContent: "center",
-                      paddingTop: "4%",
+                      paddingTop: "10px",
+                      maxHeight: "40vh",
+                      overflowY: "scroll",
                     }}
                   >
                     {previousAttempts.map((attempt, index) => (
@@ -329,7 +358,7 @@ const CodingQuestionInfo = ({ isContest }) => {
                         onClick={() => handleAttemptClick(attempt)}
                         sx={{
                           width: "80%",
-                          height: "100px",
+                          height: "40px",
                           cursor: "pointer",
                           backgroundColor: Colors.dark_color,
                           borderRadius: "5px",
@@ -343,38 +372,44 @@ const CodingQuestionInfo = ({ isContest }) => {
                           paddingTop: "10px",
                         }}
                       >
-                        {attempt.passedTests !== attempt.totalTestCaseCount && (
-                          <div>
-                            Attempt {index + 1}
-                            {" ❌"}
-                            <br></br>
-                            <br></br>
-                            Failed {attempt.passedTests}/
-                            {attempt.totalTestCaseCount} of test cases
-                          </div>
-                        )}
-                        {attempt.passedTests === attempt.totalTestCaseCount && (
-                          <div>
-                            Attempt {index + 1}
-                            {" ✅"}
-                            <br></br>
-                            <br></br>
-                            Passed {attempt.passedTests}/
-                            {attempt.totalTestCaseCount} of test cases
-                          </div>
-                        )}
+                        <div>Attempt {index + 1}</div>
                       </Grid>
                     ))}
                   </Grid>
+                  {previousSubmission.user_answer !== undefined && (
+                    <Grid container style={{ padding: "20px" }}>
+                      <Grid item xs={12}>
+                        Your submission: {previousSubmission.user_answer}
+                      </Grid>
+                      <Grid item xs={12}>
+                        Test case results:
+                      </Grid>
+                      <TestCases
+                        isExisting
+                        attemptID={previousSubmission.attempt_id}
+                        tests={previousTestCases}
+                      />
+                    </Grid>
+                  )}
                 </div>
               )}
             </Grid>
           </Grid>
         </Box>
-        <CodingQuestionText
-          isContest={isContest}
-          parentSubmitCallback={handleSubmitCallback}
-        />
+        {previousSubmission && (
+          <CodingQuestionText
+            isContest={isContest}
+            parentSubmitCallback={handleSubmitCallback}
+            previousSubmission={previousSubmission}
+          />
+        )}
+
+        {!previousSubmission && (
+          <CodingQuestionText
+            isContest={isContest}
+            parentSubmitCallback={handleSubmitCallback}
+          />
+        )}
       </div>
     </div>
   );

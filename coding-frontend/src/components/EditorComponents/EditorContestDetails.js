@@ -73,7 +73,7 @@ const EditorContestDetails = ({
               xs={12}
               style={{ fontSize: "120%", marginBottom: "10px" }}
             >
-              <RanksTable />
+              <RanksTable contestId={contestId} />
             </Grid>
           </Grid>
         </DialogContent>

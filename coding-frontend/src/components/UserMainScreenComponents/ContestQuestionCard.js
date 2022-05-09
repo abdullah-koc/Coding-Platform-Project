@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import Colors from "../../utils/Colors";
 import { Grid } from "@mui/material";
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
@@ -21,10 +22,36 @@ const ContestQuestionCard = ({
   question,
   difficulty,
   likeRate,
-  isSolved,
   questionPoint,
 }) => {
   const classes = useStyles();
+  const [isSubmitted, setIsSubmitted] = useState(true);
+
+  const getID = () => {
+    let url = window.location.href;
+    let id = url.split("/")[url.split("/").length - 1];
+    return id;
+  };
+
+  useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_URL + `api/contest/all_questions/${getID()}`)
+      .then((res) => {
+        var data = res.data.filter((item) => item.title === question);
+        var ID = data[0].question_id;
+        axios
+          .get(
+            process.env.REACT_APP_URL +
+              `api/question/get_if_user_solved/${ID}/${
+                JSON.parse(localStorage.getItem("session")).person_id
+              }`
+          )
+          .then((res) => {
+            setIsSubmitted(res.data);
+          });
+      });
+  }, []);
+
   return (
     <div className={classes.root}>
       <Grid container>
@@ -39,7 +66,7 @@ const ContestQuestionCard = ({
           Title: {question}
         </Grid>
         <Grid item xs={3} style={{ display: "flex", alignItems: "center" }}>
-          Submitted: {isSolved ? "✅" : "❌"}
+          Submitted: {isSubmitted ? "✅" : "❌"}
         </Grid>
       </Grid>
     </div>

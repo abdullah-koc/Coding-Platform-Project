@@ -31,6 +31,7 @@ const AddQuestionDialog = ({ open, handleParentOpen }) => {
   const [inputs, setInputs] = useState([]);
   const [outputs, setOutputs] = useState([]);
   const [lockedStatus, setLockedStatus] = useState([]);
+  const [isContest, setIsContest] = useState(false);
 
   useEffect(() => {
     axios.get(process.env.REACT_APP_URL + "api/category/all").then((res) => {
@@ -177,6 +178,7 @@ const AddQuestionDialog = ({ open, handleParentOpen }) => {
                     }}
                   >
                     <div>Question Type:</div>
+
                     <div style={{ marginLeft: "10px" }} />
                     <div>
                       <RadioGroup
@@ -383,6 +385,7 @@ const AddQuestionDialog = ({ open, handleParentOpen }) => {
                   </Grid>
                 </Grid>
               </Grid>
+
               <Grid item xs={12} style={{ marginTop: "10px" }}>
                 <div>Category Selection:</div>
                 {categories.map((category, index) => (

@@ -4,7 +4,11 @@ import Colors from "../utils/Colors";
 import TestCases from "./TestCases";
 import axios from "axios";
 
-const CodingQuestionText = ({ parentSubmitCallback, isContest }) => {
+const CodingQuestionText = ({
+  parentSubmitCallback,
+  isContest,
+  previousSubmission,
+}) => {
   const [question, setQuestion] = useState([]);
   const [questionText, setQuestionText] = useState("");
   const [programmingLanguage, setProgrammingLanguage] = useState("Java 8");
@@ -68,7 +72,6 @@ const CodingQuestionText = ({ parentSubmitCallback, isContest }) => {
         programming_language: programmingLanguage,
       })
       .then((res) => {
-        setIsTestCasesShown(true);
         if (remainingAttempts === 1) {
           if (!isContest) {
             setIsSubmitButtonDisabled(true);
@@ -78,9 +81,11 @@ const CodingQuestionText = ({ parentSubmitCallback, isContest }) => {
         if (!isContest) {
           setRemainingAttempts(remainingAttempts - 1);
         }
+        setIsTestCasesShown(true);
       })
       .catch((err) => {
         alert("Answer cannot be empty.");
+        console.log(err);
       });
   };
 

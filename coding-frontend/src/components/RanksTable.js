@@ -6,8 +6,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import axios from "axios";
 
-export default function BasicTable() {
+export default function RanksTable({ contestId }) {
   const [ranks, setRanks] = useState([
     { order: 1, nickname: "Ali", score: 100 },
     { order: 2, nickname: "Ahmed", score: 90 },
@@ -21,15 +22,29 @@ export default function BasicTable() {
     { order: 10, nickname: "Omar", score: 10 },
   ]);
 
+  const [contestants, setContestants] = useState([]);
+  React.useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL + "api/contest/all_contestants/" + contestId
+      )
+      .then((res) => {
+        console.log(res.data);
+      });
+  }, []);
 
   return (
-    <TableContainer component={Paper} style={{backgroundColor: "#e9e7e9"}}>
+    <TableContainer component={Paper} style={{ backgroundColor: "#e9e7e9" }}>
       <Table sx={{ minWidth: 450 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell style={{fontWeight: "bolder"}}>Rank</TableCell>
-            <TableCell style={{fontWeight: "bolder"}} align="left">Nickname</TableCell>
-            <TableCell style={{fontWeight: "bolder"}} align="left">Score</TableCell>
+            <TableCell style={{ fontWeight: "bolder" }}>Rank</TableCell>
+            <TableCell style={{ fontWeight: "bolder" }} align="left">
+              Nickname
+            </TableCell>
+            <TableCell style={{ fontWeight: "bolder" }} align="left">
+              Score
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

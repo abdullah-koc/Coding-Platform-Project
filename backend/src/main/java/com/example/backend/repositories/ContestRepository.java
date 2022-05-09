@@ -105,10 +105,10 @@ public class ContestRepository {
    }
 
    public List<UserDto> getAllContestants(String contest_id) {
-      String sql = "SELECT person_id, full_name, photo, email, phone FROM users NATURAL JOIN user_contest WHERE contest_id = ?";
+      String sql = "SELECT user_id, full_name, photo, email, phone FROM users NATURAL JOIN user_contest NATURAL JOIN people WHERE contest_id = ?";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
          UserDto user = new UserDto();
-         user.setPerson_id(rs.getString("person_id"));
+         user.setPerson_id(rs.getString("user_id"));
          user.setFull_name(rs.getString("full_name"));
          user.setPhoto(rs.getString("photo"));
          user.setEmail(rs.getString("email"));

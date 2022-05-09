@@ -20,7 +20,6 @@ export const ContestScreen = () => {
 
   const [contestInfo, setContestInfo] = useState({});
   const [questions, setQuestions] = useState([]);
-
   const [isContestEnded, setIsContestEnded] = useState(false);
 
   const getID = () => {
@@ -253,7 +252,6 @@ export const ContestScreen = () => {
                         question={question.title}
                         difficulty={question.difficulty}
                         likeRate={question.likeRate}
-                        isSolved={question.isSolved}
                         questionPoint={question.questionPoint}
                         style={{ marginTop: "20px" }}
                       />
