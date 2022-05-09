@@ -2,11 +2,44 @@ import React from "react";
 import { TextField, InputAdornment, Grid, Button, colors } from "@mui/material";
 import Colors from "../utils/Colors";
 import Box from "@mui/material/Box";
-import NavbarUser from "./Navbars/NavbarUser";
+import axios from "axios";
 
 const UserStatus = () => {
-  const [successRate, setSuccessRate] = React.useState(80);
+  const [successRate, setSuccessRate] = React.useState(0);
   const [nickname, setNickname] = React.useState("");
+  const [easyStats, setEasyStats] = React.useState({ total: 0, corrects: 0 });
+  const [mediumStats, setMediumStats] = React.useState({
+    total: 0,
+    corrects: 0,
+  });
+  const [hardStats, setHardStats] = React.useState({ total: 0, corrects: 0 });
+
+  React.useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/user/get/stats/" +
+          JSON.parse(localStorage.getItem("session")).nickname
+      )
+      .then((res) => {
+        const easy = res.data.filter((data) => data.difficulty === "Easy");
+        const medium = res.data.filter((data) => data.difficulty === "Medium");
+        const hard = res.data.filter((data) => data.difficulty === "Hard");
+        setEasyStats({ total: easy[0].total, corrects: easy[0].corrects });
+        setMediumStats({
+          total: medium[0].total,
+          corrects: medium[0].corrects,
+        });
+        setHardStats({ total: hard[0].total, corrects: hard[0].corrects });
+        setSuccessRate(
+          (
+            (easy[0].corrects + medium[0].corrects + hard[0].corrects) /
+            (easy[0].total + medium[0].total + hard[0].total)
+          ).toFixed(2) * 100
+        );
+      });
+  }, []);
+
   React.useEffect(() => {
     const user = JSON.parse(localStorage.getItem("session"));
     try {
@@ -79,7 +112,7 @@ const UserStatus = () => {
                 item
                 style={{ float: "right", color: Colors.statistics_color }}
               >
-                46/50
+                {easyStats.corrects} /{easyStats.total}
               </Grid>
             </Grid>
             <Grid item xs={4} style={{ marginTop: "8%" }}>
@@ -93,7 +126,7 @@ const UserStatus = () => {
                 item
                 style={{ float: "right", color: Colors.statistics_color }}
               >
-                24/36
+                {mediumStats.corrects} /{mediumStats.total}
               </Grid>
             </Grid>
             <Grid item xs={4} style={{ marginTop: "8%" }}>
@@ -107,7 +140,7 @@ const UserStatus = () => {
                 item
                 style={{ float: "right", color: Colors.statistics_color }}
               >
-                12/30
+                {hardStats.corrects} /{hardStats.total}
               </Grid>
             </Grid>
           </Grid>
