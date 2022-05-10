@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Button, Grid, Pagination, TextField } from "@mui/material";
+import {
+  Button,
+  Grid,
+  MenuItem,
+  Pagination,
+  Select,
+  TextField,
+} from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddQuestionDialog from "../components/AddQuestionDialog";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +14,7 @@ import QuestionCard from "../components/UserMainScreenComponents/QuestionCard";
 import InterviewQuestionCard from "../components/CompanyComponents/InterviewQuestionCard";
 import NavbarCompany from "../components/Navbars/NavbarCompany";
 import axios from "axios";
+import Colors from "../utils/Colors";
 
 export const CompanyCreateInterview = () => {
   let navigate = useNavigate();
@@ -19,7 +27,6 @@ export const CompanyCreateInterview = () => {
     }
   }, []);
 
-  const [questions, setQuestions] = useState([]);
   const [interviewName, setInterviewName] = useState("");
   const [interviewDateTime, setInterviewDateTime] = useState("");
   const [interviewDuration, setInterviewDuration] = useState("");
@@ -28,65 +35,30 @@ export const CompanyCreateInterview = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [curQuestions, setCurQuestions] = useState([]);
 
-  useEffect(() => {
-    setTotalPages(Math.ceil(questions.length / 7));
-    setCurQuestions(questions.slice(0, 7));
-  }, [questions]);
-
-  useEffect(() => {
-    setCurQuestions(questions.slice((page - 1) * 7, 7 * page));
-  }, [page]);
-
-  useEffect(() => {
-    axios.get(process.env.REACT_APP_URL + "api/question/all").then((res) => {
-      let companyQuestions = res.data.filter(
-        (question) =>
-          question.company_id ===
-          JSON.parse(localStorage.getItem("session")).company_id
-      );
-      setQuestions(companyQuestions);
-      setCurQuestions(companyQuestions.slice(0, 7));
-      setTotalPages(Math.ceil(companyQuestions.length / 7));
-    });
-  }, [isDialogOpen]);
-
-  const handleDialogCallback = (childData) => {
-    setIsDialogOpen(childData);
-  };
-  const handleAddQuestion = () => {
-    setIsDialogOpen(true);
-    <AddQuestionDialog
-      open={isDialogOpen}
-      handleParentOpen={handleDialogCallback}
-    ></AddQuestionDialog>;
-  };
-
   const handleCreateInterview = () => {
     if (
-      questions.length === 0 ||
       interviewName === "" ||
       interviewDateTime === "" ||
       interviewDuration === 0
     ) {
       alert("Please fill all the fields!");
     } else {
-      //TODO: backend of creating interview will be implemented
-      // axios
-      //   .post(process.env.REACT_APP_URL + "api/interview/create", {
-      //     company_id: JSON.parse(localStorage.getItem("session")).company_id,
-      //     interview_name: interviewName,
-      //     interview_date: new Date(interviewDateTime),
-      //     interview_duration: interviewDuration,
-      //   })
-      //   .then((res) => {
-      //     if (res.data.success) {
-      //       alert("Interview created successfully!");
-      //       navigate("/company");
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     alert("Something went wrong!");
-      //   });
+      axios
+        .post(process.env.REACT_APP_URL + "api/interview/create", {
+          company_id: JSON.parse(localStorage.getItem("session")).company_id,
+          interview_name: interviewName,
+          interview_date: new Date(interviewDateTime),
+          interview_duration: interviewDuration,
+        })
+        .then((res) => {
+          alert(
+            "Interview created successfully! Please add questions from the update interview page."
+          );
+          navigate("/company");
+        })
+        .catch((err) => {
+          alert("Something went wrong!");
+        });
     }
   };
 
@@ -103,9 +75,30 @@ export const CompanyCreateInterview = () => {
         }}
       >
         <Grid container>
-          <Grid item xs={5} style={{ paddingLeft: "20px", paddingTop: "20px" }}>
-            <h1>Set Interview Information</h1>
-            <div style={{ paddingTop: "10px" }}>
+          <Grid
+            item
+            xs={12}
+            style={{
+              paddingLeft: "20px",
+              paddingTop: "20px",
+            }}
+          >
+            <h1
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Set Interview Information
+            </h1>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               Interview Name:
               <TextField
                 variant="outlined"
@@ -118,7 +111,13 @@ export const CompanyCreateInterview = () => {
             </div>
 
             <br />
-            <div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               Date & Time:
               <TextField
                 variant="outlined"
@@ -132,7 +131,13 @@ export const CompanyCreateInterview = () => {
             </div>
 
             <br />
-            <div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               Duration:
               <TextField
                 variant="outlined"
@@ -146,46 +151,16 @@ export const CompanyCreateInterview = () => {
             </div>
 
             <br />
-            <Button onClick={() => handleCreateInterview()}>
-              Create Interview
-            </Button>
-          </Grid>
-          <Grid item xs={7} style={{ paddingTop: "20px" }}>
-            <h1>Questions</h1>
-            <AddCircleIcon
-              fontSize="large"
-              style={{ color: "#4DB6AC" }}
-              onClick={() => handleAddQuestion()}
-              cursor="pointer"
-            ></AddCircleIcon>
-            <AddQuestionDialog
-              open={isDialogOpen}
-              handleParentOpen={handleDialogCallback}
-            />
-            {questions.map((question, index) => (
-              <div style={{ marginBottom: "10px" }} key={index}>
-                <InterviewQuestionCard
-                  questionText={question.explanation}
-                  question_id={question.question_id}
-                  isCoding={question.question_id.startsWith("C")}
-                  title={question.title}
-                  difficulty={question.difficulty}
-                  questionPoint={question.question_point}
-                />
-              </div>
-            ))}
             <div
               style={{
                 display: "flex",
                 justifyContent: "center",
-                paddingTop: "10px",
+                alignItems: "center",
               }}
             >
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={(e, page) => setPage(page)}
-              />
+              <Button onClick={() => handleCreateInterview()}>
+                Create Interview
+              </Button>
             </div>
           </Grid>
         </Grid>

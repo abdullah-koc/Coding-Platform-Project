@@ -18,6 +18,7 @@ import DonationDialog from "./views/DonationDialog";
 import CompanyCreateInterview from "./views/CompanyCreateInterviewScreen";
 import CompanyProfileScreen from "./views/CompanyProfileScreen";
 import InterviewUpdatePage from "./views/InterviewUpdatePage";
+import Interviews from "./views/Interviews";
 
 const useStyles = makeStyles({
   root: {
@@ -75,6 +76,7 @@ const App = () => {
           />
           <Route path="/company/profile" element={<CompanyProfileScreen />} />
           <Route path="/interview/:i_id" element={<InterviewUpdatePage />} />
+          <Route path="/interviews" element={<Interviews />} />
         </Routes>
       </div>
     </div>

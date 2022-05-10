@@ -36,6 +36,9 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public List<UserDto> getAllUsers(){
+        return userRepository.getAllUsers();
+    }
 
     public boolean loginUser(String email, String password) {
         Person user = userRepository.findByEmail(email);

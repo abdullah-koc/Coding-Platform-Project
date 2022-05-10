@@ -1,5 +1,6 @@
 package com.example.backend.repositories;
 
+import com.example.backend.dto.UserDto;
 import com.example.backend.dto.UserStatsDto;
 import com.example.backend.entities.Attempt;
 import com.example.backend.entities.Person;
@@ -40,6 +41,15 @@ public class UserRepository {
                 user_id, user.getFull_name(), user.getEmail(), user.getPassword(), user.getNickname(), user.getBirth_date());
 
         return user;
+    }
+
+    public List<UserDto> getAllUsers(){
+        String sql = "SELECT * FROM users u , people p WHERE p.person_id = u.user_id";
+        try {
+            return jdbcTemplate.query(sql, new Object[]{}, new BeanPropertyRowMapper<>(UserDto.class));
+        } catch(EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public User findByEmail(String email) {

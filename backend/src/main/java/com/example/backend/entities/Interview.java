@@ -1,12 +1,12 @@
 package com.example.backend.entities;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Interview {
    private String company_id;
    private String interview_id;
    private String interview_name;
-   private Date interview_date;
+   private Timestamp interview_date;
    private int interview_duration;
 
    // getter and setter functions
@@ -34,11 +34,11 @@ public class Interview {
       this.interview_name = interview_name;
    }
 
-   public Date getInterview_date() {
+   public Timestamp getInterview_date() {
       return interview_date;
    }
 
-   public void setInterview_date(Date interview_date) {
+   public void setInterview_date(Timestamp interview_date) {
       this.interview_date = interview_date;
    }
 

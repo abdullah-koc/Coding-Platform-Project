@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-const AddQuestionDialog = ({ open, handleParentOpen }) => {
+const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
   const [questionType, setQuestionType] = useState("CQ");
   const [questionTitle, setQuestionTitle] = useState("");
   const [explanation, setExplanation] = useState("");
@@ -126,11 +126,20 @@ const AddQuestionDialog = ({ open, handleParentOpen }) => {
           .get(process.env.REACT_APP_URL + "api/question/all")
           .then((res) => {
             curQuestion = res.data.filter(
-              (question) =>
-                question.title === questionTitle &&
-                question.editor_id ===
-                  JSON.parse(localStorage.getItem("session")).person_id
+              (question) => question.title === questionTitle
             )[0];
+            console.log(interviewID);
+            if (interviewID) {
+              axios.post(
+                process.env.REACT_APP_URL +
+                  "api/interview/add_question/" +
+                  JSON.parse(localStorage.getItem("session")).company_id +
+                  "/" +
+                  interviewID +
+                  "/" +
+                  curQuestion.question_id
+              );
+            }
             selectedCategories.map((category) => {
               axios.post(
                 process.env.REACT_APP_URL +
@@ -150,7 +159,6 @@ const AddQuestionDialog = ({ open, handleParentOpen }) => {
               );
             }
           });
-
         alert("Question added successfully");
         //window.location.reload();
         handleClose();

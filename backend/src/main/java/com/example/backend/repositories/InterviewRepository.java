@@ -16,6 +16,8 @@ public class InterviewRepository {
 
    @Autowired
    private JdbcTemplate jdbcTemplate;
+   @Autowired
+   private UserRepository userRepository;
 
    public InterviewDto getInterview(String interview_id, String company_id) {
       String sql = "SELECT * FROM interviews WHERE interview_id = ? AND company_id = ?";
@@ -23,8 +25,7 @@ public class InterviewRepository {
          InterviewDto interviewDto = new InterviewDto();
          interviewDto.setInterview_id(rs.getString("interview_id"));
          interviewDto.setCompany_id(rs.getString("company_id"));
-         interviewDto.setInterview_date(rs.getDate("interview_date"));
-         interviewDto.setInterview_time(rs.getTime("interview_date"));
+         interviewDto.setInterview_date(rs.getTimestamp("interview_date"));
          interviewDto.setInterview_name(rs.getString("interview_name"));
          interviewDto.setInterview_duration(rs.getInt("interview_duration"));
          return interviewDto;
@@ -37,7 +38,7 @@ public class InterviewRepository {
          InterviewDto interviewDto = new InterviewDto();
          interviewDto.setInterview_id(rs.getString("interview_id"));
          interviewDto.setCompany_id(rs.getString("company_id"));
-         interviewDto.setInterview_date(rs.getDate("interview_date"));
+         interviewDto.setInterview_date(rs.getTimestamp("interview_date"));
          interviewDto.setInterview_name(rs.getString("interview_name"));
          interviewDto.setInterview_duration(rs.getInt("interview_duration"));
          return interviewDto;
@@ -50,7 +51,7 @@ public class InterviewRepository {
          InterviewDto interviewDto = new InterviewDto();
          interviewDto.setInterview_id(rs.getString("interview_id"));
          interviewDto.setCompany_id(rs.getString("company_id"));
-         interviewDto.setInterview_date(rs.getDate("interview_date"));
+         interviewDto.setInterview_date(rs.getTimestamp("interview_date"));
          interviewDto.setInterview_name(rs.getString("interview_name"));
          interviewDto.setInterview_duration(rs.getInt("interview_duration"));
          return interviewDto;
@@ -143,7 +144,7 @@ public class InterviewRepository {
    }
 
    public List<UserDto> getInterviewees(String company_id, String interview_id) {
-      String sql = "SELECT * FROM users NATURAL JOIN user_interview WHERE company_id = ? AND interview_id = ?";
+      String sql = "SELECT * FROM users, user_interview, people WHERE users.user_id = user_interview.user_id AND users.user_id = person_id AND company_id = ? AND interview_id = ?";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
          UserDto userDto = new UserDto();
          userDto.setPerson_id(rs.getString("person_id"));
@@ -167,16 +168,16 @@ public class InterviewRepository {
          InterviewDto interviewDto = new InterviewDto();
          interviewDto.setInterview_id(rs.getString("interview_id"));
          interviewDto.setCompany_id(rs.getString("company_id"));
-         interviewDto.setInterview_date(rs.getDate("interview_date"));
+         interviewDto.setInterview_date(rs.getTimestamp("interview_date"));
          interviewDto.setInterview_name(rs.getString("interview_name"));
-         interviewDto.setInterview_time(rs.getTime("interview_time"));
          interviewDto.setInterview_duration(rs.getInt("interview_duration"));
          return interviewDto;
       }, user_id);
    }
 
-   public void addInterviewee(String interview_id, String user_id, String company_id) {
-      String sql = "INSERT INTO user_interview (interview_id, user_id, company_id) VALUES (?, ?, ?)";
+   public void addInterviewee(String interview_id, String nickname, String company_id) {
+      String user_id = userRepository.findByNickname(nickname).getPerson_id();
+      String sql = "INSERT INTO user_interview (interview_id, user_id, company_id, is_passed) VALUES (?, ?, ?, false)";
       jdbcTemplate.update(sql, interview_id, user_id, company_id);
    }
 

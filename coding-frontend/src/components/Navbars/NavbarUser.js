@@ -48,7 +48,9 @@ const NavbarUser = () => {
   const goToContestPage = () => {
     navigate("/contests");
   };
-  const goToInterviewPage = () => {};
+  const goToInterviewPage = () => {
+    navigate("/interviews");
+  };
 
   const [personId, setPersonId] = React.useState("aa");
 

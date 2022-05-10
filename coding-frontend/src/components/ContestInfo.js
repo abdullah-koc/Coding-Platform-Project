@@ -50,7 +50,7 @@ const ContestInfo = ({
           style={{ display: "flex", alignItems: "center", paddingLeft: "20px" }}
         >
           <img
-            src={contest_photo}
+            src={contest_photo === null ? ExampleImage : contest_photo}
             alt="logo"
             style={{
               width: "60px",

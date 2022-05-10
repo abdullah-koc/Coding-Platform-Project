@@ -74,7 +74,7 @@ public class InterviewController {
       return interviewService.getQuestionsByCompany(company_id);
    }
 
-   @GetMapping(path = "/get_intervewees/{company_id}/{interview_id}")
+   @GetMapping(path = "/get_interviewees/{company_id}/{interview_id}")
    public List<UserDto> getInterviewees(@PathVariable String company_id, @PathVariable String interview_id) {
       return interviewService.getInterviewees(company_id, interview_id);
    }
@@ -84,9 +84,9 @@ public class InterviewController {
       return interviewService.getInterviewsByUser(user_id);
    }
 
-   @PostMapping(path = "/add_interviewee/{company_id}/{interview_id}/{user_id}")
-   public void addInterviewee(@PathVariable String interview_id, @PathVariable String user_id,
+   @PostMapping(path = "/add_interviewee/{company_id}/{interview_id}/{nickname}")
+   public void addInterviewee(@PathVariable String interview_id, @PathVariable String nickname,
          @PathVariable String company_id) {
-      interviewService.addInterviewee(interview_id, user_id, company_id);
+      interviewService.addInterviewee(interview_id, nickname, company_id);
    }
 }

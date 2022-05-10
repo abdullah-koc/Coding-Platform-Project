@@ -2,13 +2,13 @@ package com.example.backend.dto;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 public class InterviewDto {
    private String company_id;
    private String interview_id;
    private String interview_name;
-   private Date interview_date;
-   private Time interview_time;
+   private Timestamp interview_date;
    private int interview_duration;
 
    // getter and setter functions
@@ -36,18 +36,12 @@ public class InterviewDto {
       this.interview_name = interview_name;
    }
 
-   public Date getInterview_date() {
+   public Timestamp getInterview_date() {
       return interview_date;
    }
 
-   public Time getInterview_time(){return interview_time;}
-
-   public void setInterview_date(Date interview_date) {
+   public void setInterview_date(Timestamp interview_date) {
       this.interview_date = interview_date;
-   }
-
-   public void setInterview_time(Time interview_time) {
-      this.interview_time = interview_time;
    }
 
    public int getInterview_duration() {

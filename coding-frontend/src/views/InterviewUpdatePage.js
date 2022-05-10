@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Button, Grid, Pagination, TextField } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  MenuItem,
+  Pagination,
+  Select,
+  TextField,
+} from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddQuestionDialog from "../components/AddQuestionDialog";
 import { useNavigate } from "react-router-dom";
 import InterviewQuestionCard from "../components/CompanyComponents/InterviewQuestionCard";
 import NavbarCompany from "../components/Navbars/NavbarCompany";
 import axios from "axios";
+import Colors from "../utils/Colors";
 
 export const InterviewUpdatePage = () => {
   let navigate = useNavigate();
@@ -42,35 +52,20 @@ export const InterviewUpdatePage = () => {
       });
   }, []);
 
-  const [questions, setQuestions] = useState([
-    {
-      question_id: "CQ1",
-      isCoding: "C",
-      question: "Question 1",
-      difficulty: "Easy",
-      likeRate: 87,
-      isSolved: true,
-      questionPoint: 12,
-    },
-    {
-      question_id: "CQ2",
-      isCoding: "C",
-      question: "Question 2",
-      difficulty: "Hard",
-      likeRate: 87,
-      isSolved: true,
-      questionPoint: 12,
-    },
-    {
-      question_id: "NCQ3",
-      isCoding: "C",
-      question: "Question 3",
-      difficulty: "Medium",
-      likeRate: 87,
-      isSolved: true,
-      questionPoint: 12,
-    },
-  ]);
+  useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          `api/interview/get_questions/${
+            JSON.parse(localStorage.getItem("session")).company_id
+          }/${getID()}`
+      )
+      .then((res) => {
+        setQuestions(res.data);
+      });
+  }, []);
+
+  const [questions, setQuestions] = useState([]);
   const [interviewName, setInterviewName] = useState("");
   const [interviewDateTime, setInterviewDateTime] = useState("");
   const [interviewDuration, setInterviewDuration] = useState(3);
@@ -78,6 +73,47 @@ export const InterviewUpdatePage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [curQuestions, setCurQuestions] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const [usersToShow, setUsersToShow] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
+  const searchBarHandler = (e) => {
+    let searchText = e.target.value;
+    let filteredData = allUsers.filter((item) => {
+      return item.nickname.toLowerCase().includes(searchText.toLowerCase());
+    });
+    setUsersToShow(filteredData);
+  };
+
+  useEffect(() => {
+    axios.get(process.env.REACT_APP_URL + "api/user/all").then((res) => {
+      //add checked attribute to all users
+      let users = res.data.map((user) => {
+        user.checked = false;
+        return user;
+      });
+      axios
+        .get(
+          process.env.REACT_APP_URL +
+            "api/interview/get_interviewees/" +
+            JSON.parse(localStorage.getItem("session")).company_id +
+            "/" +
+            getID()
+        )
+        .then((response) => {
+          console.log(response.data);
+          users.forEach((user) => {
+            response.data.forEach((interviewee) => {
+              if (user.nickname === interviewee.nickname) {
+                user.checked = true;
+              }
+            });
+          });
+          setAllUsers(users);
+          setUsersToShow(users);
+        });
+    });
+  }, []);
 
   useEffect(() => {
     setTotalPages(Math.ceil(questions.length / 7));
@@ -90,17 +126,36 @@ export const InterviewUpdatePage = () => {
 
   const handleDialogCallback = (childData) => {
     setIsDialogOpen(childData);
+    if (!childData) {
+      window.location.reload();
+    }
   };
   const handleAddQuestion = () => {
     setIsDialogOpen(true);
-    <AddQuestionDialog
-      open={isDialogOpen}
-      handleParentOpen={handleDialogCallback}
-    ></AddQuestionDialog>;
+  };
+
+  const handleAddUsers = () => {
+    let newUsers = [];
+    selectedUsers.forEach((user) => {
+      newUsers.push(
+        axios.post(
+          process.env.REACT_APP_URL +
+            "api/interview/add_interviewee/" +
+            JSON.parse(localStorage.getItem("session")).company_id +
+            "/" +
+            getID() +
+            "/" +
+            user.nickname
+        )
+      );
+    });
+    axios.all(newUsers);
   };
 
   const handleSaveUpdates = () => {
-    alert("Saved updates");
+    handleAddUsers();
+    alert("Interview updated successfully");
+    navigate("/company");
   };
 
   return (
@@ -142,7 +197,7 @@ export const InterviewUpdatePage = () => {
                 onChange={(e) => setInterviewDateTime(e.target.value)}
                 type="datetime-local"
                 style={{ width: "200px", marginLeft: "32px" }}
-                placeholder={new Date(interviewDateTime).toLocaleTimeString}
+                placeholder={interviewDateTime}
               ></TextField>
             </div>
 
@@ -160,6 +215,45 @@ export const InterviewUpdatePage = () => {
                 placeholder={interviewDuration}
               ></TextField>
             </div>
+            <br />
+            <div style={{ height: "40vh", overflowY: "scroll" }}>
+              <h2>Set Attendees</h2>
+              <TextField
+                variant="outlined"
+                color="success"
+                size="small"
+                placeholder="🔎 Search Users"
+                style={{ marginBottom: "10px" }}
+                onChange={searchBarHandler}
+              />
+              <br />
+              {usersToShow.map((user, index) => (
+                <FormControlLabel
+                  key={index}
+                  control={
+                    <Checkbox
+                      checked={user.checked}
+                      onChange={(e) => {
+                        user.checked = e.target.checked;
+
+                        if (e.target.checked) {
+                          setSelectedUsers([...selectedUsers, user]);
+                        } else {
+                          setSelectedUsers(
+                            selectedUsers.filter(
+                              (u) => u.nickname !== user.nickname
+                            )
+                          );
+                        }
+                      }}
+                      name={user.nickname}
+                      color="primary"
+                    />
+                  }
+                  label={user.nickname}
+                />
+              ))}
+            </div>
 
             <br />
             <Button onClick={() => handleSaveUpdates()}>Save</Button>
@@ -175,15 +269,17 @@ export const InterviewUpdatePage = () => {
             <AddQuestionDialog
               open={isDialogOpen}
               handleParentOpen={handleDialogCallback}
+              interviewID={getID()}
             />
             {questions.map((question, index) => (
               <div style={{ marginBottom: "10px" }} key={index}>
                 <InterviewQuestionCard
                   question_id={question.question_id}
-                  isCoding={question.isCoding}
-                  title={question.question}
+                  isCoding={question.question_id.startsWith("C")}
+                  title={question.title}
                   difficulty={question.difficulty}
-                  questionPoint={question.questionPoint}
+                  questionPoint={question.question_point}
+                  questionText={question.explanation}
                 />
               </div>
             ))}
