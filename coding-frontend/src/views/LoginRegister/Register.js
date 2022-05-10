@@ -59,14 +59,9 @@ const Register = () => {
               cv: cvURL,
             })
             .then((response) => {
-              alert("Successfully registered");
-              axios
-                .get(process.env.REACT_APP_URL + "api/editor/" + email)
-                .then((response) => {
-                  var details;
-                  details = response.data;
-                  alert("You need to wait admin approval");
-                });
+              alert(
+                "Successfully registered! Check your email to activate your account"
+              );
             })
             .catch((error) => {
               alert("A user with this email/nickname already exists");
@@ -86,16 +81,9 @@ const Register = () => {
             cv_url: "",
           })
           .then((response) => {
-            alert("Successfully registered");
-            //get user details from axios
-            var details;
-            axios
-              .get(process.env.REACT_APP_URL + "api/user/" + email)
-              .then((response) => {
-                details = response.data;
-                localStorage.setItem("session", JSON.stringify(details));
-                navigate("/problems");
-              });
+            alert(
+              "Successfully registered! Check your email to activate your account"
+            );
           })
           .catch((error) => {
             alert("A user with this email/nickname already exists");

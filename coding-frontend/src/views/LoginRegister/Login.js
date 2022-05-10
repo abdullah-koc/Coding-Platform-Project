@@ -21,7 +21,7 @@ const Login = () => {
         )
         .then((response) => {
           if (!response.data) {
-            alert("Invalid Credentials");
+            alert("Invalid Credentials, or you did not activate your account");
             return;
           }
 
@@ -31,6 +31,10 @@ const Login = () => {
             .then((response) => {
               details = response.data;
               if (!response.data == "") {
+                if (response.data.is_confirmed === false) {
+                  alert("Please confirm your email");
+                  return;
+                }
                 localStorage.setItem("session", JSON.stringify(details));
                 alert("Successfully logged in");
 
@@ -53,7 +57,10 @@ const Login = () => {
                   alert("Your account is not approved yet");
                   return;
                 }
-
+                if (response.data.is_confirmed === false) {
+                  alert("Please confirm your email");
+                  return;
+                }
                 localStorage.setItem("session", JSON.stringify(details));
                 alert("Successfully logged in");
 
