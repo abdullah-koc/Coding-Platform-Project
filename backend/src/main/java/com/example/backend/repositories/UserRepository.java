@@ -36,6 +36,7 @@ public class UserRepository {
         }
 
         String user_id = "U" + user_id_count;
+        user.setPerson_id(user_id);
         jdbcTemplate.update(
                 "INSERT INTO people (person_id, full_name, email, password, nickname, birth_date) VALUES (?, ?, ?, ?, ?, ?)",
                 user_id, user.getFull_name(), user.getEmail(), user.getPassword(), user.getNickname(), user.getBirth_date());
@@ -98,5 +99,19 @@ public class UserRepository {
         } catch(EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    public User findById(String user_id) {
+        String sql = "SELECT * FROM users u, people p WHERE p.person_id = u.user_id and u.user_id = ?";;
+        try {
+            return (User) jdbcTemplate.queryForObject(sql, new Object[]{user_id}, new BeanPropertyRowMapper(User.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public void updateConfirmation(String user_id) {
+        String sql = "UPDATE people SET is_confirmed = ? WHERE person_id = ?";
+        jdbcTemplate.update(sql, true, user_id);
     }
 }

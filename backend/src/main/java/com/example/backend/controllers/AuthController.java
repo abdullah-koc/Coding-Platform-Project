@@ -7,6 +7,10 @@ import com.example.backend.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+
 @RestController
 @RequestMapping(path = "api/auth")
 public class AuthController {
@@ -27,7 +31,7 @@ public class AuthController {
     AdminService adminService;
 
     @PostMapping(path="/signUp")
-    public void signUp(@RequestBody SignUpDto signUpDto) {
+    public void signUp(@RequestBody SignUpDto signUpDto, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
         String type = signUpDto.getType();
 
         if(companyService.getCompanyByEmail(signUpDto.getEmail()) != null || personService.getPersonByEmail(signUpDto.getEmail()) != null ) {
@@ -44,7 +48,8 @@ public class AuthController {
             userDto.setFull_name(signUpDto.getFull_name());
             userDto.setPassword(signUpDto.getPassword());
             userDto.setNickname(signUpDto.getNickname());
-            userService.signUp(userDto);
+            String siteURL = request.getRequestURL().toString().replace(request.getServletPath(), "");
+            userService.signUp(userDto, siteURL);
         }
         else if(type.equals("Editor")) {
             EditorDto editorDto = new EditorDto();

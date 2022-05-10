@@ -7,6 +7,7 @@ import com.example.backend.entities.User;
 import com.example.backend.services.PhotoService;
 import com.example.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,15 @@ public class UserController {
     UserService userService;
     @Autowired
     private PhotoService photoService;
+
+    @GetMapping("/verify")
+    public String verifyUser(@Param("code") String code) {
+        if (userService.verifyUser(code)) {
+            return "verify_success";
+        } else {
+            return "verify_fail";
+        }
+    }
 
     @GetMapping("/all")
     public List<UserDto> getAllUsers(){

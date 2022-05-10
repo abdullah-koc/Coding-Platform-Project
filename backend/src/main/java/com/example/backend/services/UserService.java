@@ -9,10 +9,15 @@ import com.example.backend.entities.User;
 import com.example.backend.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +26,38 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public void signUp(UserDto userDto) {
+    @Autowired
+    private JavaMailSender mailSender;
+
+    private void sendVerificationEmail(User user, String siteURL)
+            throws MessagingException, UnsupportedEncodingException {
+        String toAddress = user.getEmail();
+        String fromAddress = "furkan.46.turunc@gmail.com";
+        String senderName = "Syncoder";
+        String subject = "Please verify your registration";
+        String content = "Dear [[name]],<br>"
+                + "Please click the link below to verify your registration:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Thank you,<br>"
+                + "Syncoder.";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getFull_name());
+        String verifyURL = siteURL + "/verify?code=" + user.getPerson_id();
+        content = content.replace("[[URL]]", verifyURL);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
+
+    public void signUp(UserDto userDto, String siteURL) throws MessagingException, UnsupportedEncodingException {
 
         User user = new User();
         user.setFull_name(userDto.getFull_name());
@@ -30,6 +66,19 @@ public class UserService {
         user.setNickname(userDto.getNickname());
         user.setPassword(userDto.getPassword());
         userRepository.signUp(user);
+        sendVerificationEmail(user, siteURL);
+    }
+    public boolean verifyUser(String verificationCode) {
+        User user = userRepository.findById(verificationCode);
+
+        if (user == null || user.getIs_confirmed()) {
+            return false;
+        } else {
+            user.setIs_confirmed(true);
+            userRepository.updateConfirmation(verificationCode);
+            return true;
+        }
+
     }
 
     public User getUserByEmail(String email) {

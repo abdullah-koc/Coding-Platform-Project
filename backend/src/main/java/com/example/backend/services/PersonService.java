@@ -12,7 +12,7 @@ public class PersonService {
 
     public boolean login(String email, String password) {
         Person person = personRepository.findByEmail(email);
-        if(person.getPassword().equals(password)) {
+        if(person.getPassword().equals(password) && person.getIs_confirmed()) {
             return true;
         }
         return false;
