@@ -5,6 +5,7 @@ import com.example.backend.entities.Editor;
 import com.example.backend.services.EditorService;
 import com.example.backend.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,15 @@ public class EditorController {
     EditorService editorService;
     @Autowired
     private PhotoService photoService;
+
+    @GetMapping("/verify")
+    public String verifyEditor(@Param("code") String code) {
+        if (editorService.verifyEditor(code)) {
+            return "verify_success";
+        } else {
+            return "verify_fail";
+        }
+    }
 
     @GetMapping("/{email}")
     public Editor getEditorByEmail(@PathVariable String email) {

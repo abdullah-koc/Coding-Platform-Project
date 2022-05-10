@@ -32,7 +32,7 @@ public class UserService {
     private void sendVerificationEmail(User user, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
-        String fromAddress = "furkan.46.turunc@gmail.com";
+        String fromAddress = "bingithelpdesk@gmail.com";
         String senderName = "Syncoder";
         String subject = "Please verify your registration";
         String content = "Dear [[name]],<br>"

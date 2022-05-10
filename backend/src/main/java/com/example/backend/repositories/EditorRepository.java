@@ -27,6 +27,7 @@ public class EditorRepository {
 
         String editor_id = "E" + editor_id_count;
         editor.setEditor_id(editor_id);
+        editor.setPerson_id(editor_id);
         jdbcTemplate.update(
                 "INSERT INTO people (person_id, full_name, email, password, nickname, birth_date) VALUES (?, ?, ?, ?, ?, ?)",
                 editor_id, editor.getFull_name(), editor.getEmail(), editor.getPassword(), editor.getNickname(), editor.getBirth_date());
@@ -53,6 +54,20 @@ public class EditorRepository {
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
+    }
+
+    public Editor findById(String editor_id) {
+        String sql = "SELECT * FROM editors e WHERE e.editor_id = ?";
+        try {
+            return (Editor) jdbcTemplate.queryForObject(sql, new Object[]{editor_id}, new BeanPropertyRowMapper(Editor.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public void updateConfirmation(String editor_id) {
+        String sql = "UPDATE people SET is_confirmed = ? WHERE person_id = ?";
+        jdbcTemplate.update(sql, true, editor_id);
     }
 
     public void updateSalary(String editor_id, int salary) {

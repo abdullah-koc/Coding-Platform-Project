@@ -60,7 +60,8 @@ public class AuthController {
             editorDto.setNickname(signUpDto.getNickname());
             System.out.println(signUpDto.getCv());
             editorDto.setCv(signUpDto.getCv());
-            editorService.signUp(editorDto);
+            String siteURL = request.getRequestURL().toString().replace(request.getServletPath(), "");
+            editorService.signUp(editorDto, siteURL);
         }
         else if(type.equals("Company")) {
             CompanyDto companyDto = new CompanyDto();

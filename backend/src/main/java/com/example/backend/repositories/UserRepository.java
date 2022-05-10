@@ -102,7 +102,7 @@ public class UserRepository {
     }
 
     public User findById(String user_id) {
-        String sql = "SELECT * FROM users u, people p WHERE p.person_id = u.user_id and u.user_id = ?";;
+        String sql = "SELECT * FROM users u, people p WHERE p.person_id = u.user_id and u.user_id = ?";
         try {
             return (User) jdbcTemplate.queryForObject(sql, new Object[]{user_id}, new BeanPropertyRowMapper(User.class));
         } catch (EmptyResultDataAccessException e) {
