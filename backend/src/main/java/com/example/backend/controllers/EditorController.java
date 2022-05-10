@@ -26,9 +26,9 @@ public class EditorController {
     @GetMapping("/verify")
     public String verifyEditor(@Param("code") String code) {
         if (editorService.verifyEditor(code)) {
-            return "verify_success";
+            return "verify success";
         } else {
-            return "verify_fail";
+            return "verify fail";
         }
     }
 

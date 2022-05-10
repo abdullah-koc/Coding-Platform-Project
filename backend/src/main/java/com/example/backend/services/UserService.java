@@ -49,7 +49,7 @@ public class UserService {
         helper.setSubject(subject);
 
         content = content.replace("[[name]]", user.getFull_name());
-        String verifyURL = siteURL + "/verify?code=" + user.getPerson_id();
+        String verifyURL = siteURL + "/api/user/verify?code=" + user.getPerson_id();
         content = content.replace("[[URL]]", verifyURL);
 
         helper.setText(content, true);

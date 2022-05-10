@@ -5,6 +5,7 @@ import com.example.backend.dto.SignUpDto;
 import com.example.backend.dto.UserDto;
 import com.example.backend.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -88,4 +89,5 @@ public class AuthController {
         else
             return false;
     }
+
 }

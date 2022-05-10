@@ -42,7 +42,7 @@ public class EditorService {
         helper.setSubject(subject);
 
         content = content.replace("[[name]]", editor.getFull_name());
-        String verifyURL = siteURL + "/verify?code=" + editor.getEditor_id();
+        String verifyURL = siteURL + "/api/editor/verify?code=" + editor.getEditor_id();
         content = content.replace("[[URL]]", verifyURL);
 
         helper.setText(content, true);
