@@ -144,7 +144,7 @@ public class InterviewRepository {
    }
 
    public List<UserDto> getInterviewees(String company_id, String interview_id) {
-      String sql = "SELECT * FROM users NATURAL JOIN user_interview WHERE company_id = ? AND interview_id = ?";
+      String sql = "SELECT * FROM users, user_interview, people WHERE users.user_id = user_interview.user_id AND users.user_id = person_id AND company_id = ? AND interview_id = ?";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
          UserDto userDto = new UserDto();
          userDto.setPerson_id(rs.getString("person_id"));

@@ -5,7 +5,6 @@ import AttendedInterviewInfo from "../components/AttendedInterviewInfo";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import InterviewInfo from "../components/InterviewInfo";
-import Datetime from 'react-datetime';
 
 export const Interviews = () => {
   let navigate = useNavigate();
@@ -43,7 +42,7 @@ export const Interviews = () => {
   useEffect(() => {
     axios.get(process.env.REACT_APP_URL + "api/interview/all").then((res) => {
       let allInterviews = res.data;
-      
+
       //remove attended contests from upc
       var upc = allInterviews.filter(
         (interview) =>
@@ -131,7 +130,9 @@ export const Interviews = () => {
                   interview_name={interview.interview_name}
                   interview_date={interview.interview_date}
                   interview_duration={interview.interview_duration}
-                  user_id={JSON.parse(localStorage.getItem("session")).person_id}
+                  user_id={
+                    JSON.parse(localStorage.getItem("session")).person_id
+                  }
                   company_id={interview.company_id}
                   style={{ marginTop: "20px" }}
                 />
@@ -157,11 +158,13 @@ export const Interviews = () => {
                 style={{ paddingRight: "40px", marginBottom: "10px" }}
               >
                 <AttendedInterviewInfo
-                    interview_id={interview.interview_id}
-                    interview_name={interview.interview_name}
-                    interview_date={interview.interview_date}
-                    interview_duration={interview.interview_duration}
-                    user_id={JSON.parse(localStorage.getItem("session")).person_id}
+                  interview_id={interview.interview_id}
+                  interview_name={interview.interview_name}
+                  interview_date={interview.interview_date}
+                  interview_duration={interview.interview_duration}
+                  user_id={
+                    JSON.parse(localStorage.getItem("session")).person_id
+                  }
                   style={{ marginTop: "20px" }}
                 />
               </div>

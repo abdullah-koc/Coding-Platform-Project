@@ -1,5 +1,6 @@
 package com.example.backend.controllers;
 
+import com.example.backend.dto.UserDto;
 import com.example.backend.dto.UserStatsDto;
 import com.example.backend.entities.Attempt;
 import com.example.backend.entities.User;
@@ -22,6 +23,11 @@ public class UserController {
     UserService userService;
     @Autowired
     private PhotoService photoService;
+
+    @GetMapping("/all")
+    public List<UserDto> getAllUsers(){
+        return userService.getAllUsers();
+    }
 
     @GetMapping("/{email}")
     public User getUserByEmail(@PathVariable String email) {
