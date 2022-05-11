@@ -307,7 +307,7 @@ public class QuestionRepository {
 
    public List<QuestionDto> getFilteredQuestions(String user_id, String category_name, String difficulty,
          String question_type,
-         String is_solved) {
+         String is_solved, String search_keyword) {
 
       String sql = "";
       if (!category_name.equals("all")) {
@@ -343,6 +343,13 @@ public class QuestionRepository {
             } else if (is_solved.equals("0")) {
                sql += " AND question_id NOT IN (SELECT question_id FROM attempts WHERE user_id = '" + user_id + "')";
             }
+         }
+      }
+      if (!search_keyword.equals("all")) {
+         if (sql.equals("")) {
+            sql += "SELECT * FROM questions WHERE title LIKE '%" + search_keyword + "%'";
+         } else {
+            sql += " AND title LIKE '%" + search_keyword + "%'";
          }
       }
       if (sql.equals("")) {
@@ -392,6 +399,34 @@ public class QuestionRepository {
       } else {
          return false;
       }
+   }
+
+   public List<QuestionDto> searchQuestions(String search_keyword) {
+      if (search_keyword == null) {
+         throw new IllegalArgumentException("Question does not exist!");
+      }
+      String sql = "SELECT *, NULL as video_link, 0 as video_request_count FROM (questions q JOIN non_coding_questions ncq ON q.question_id = ncq.non_coding_question_id) WHERE title LIKE '%"
+            + search_keyword
+            + "%' UNION ALL (SELECT *, NULL as type_description FROM (questions q JOIN coding_questions cq ON q.question_id = cq.coding_question_id))";
+      return jdbcTemplate.query(sql, (rs, i) -> {
+         QuestionDto question = new QuestionDto();
+         question.setQuestion_id(rs.getString("question_id"));
+         question.setTitle(rs.getString("title"));
+         question.setExplanation(rs.getString("explanation"));
+         question.setQuestion_duration(rs.getInt("question_duration"));
+         question.setDifficulty(rs.getString("difficulty"));
+         question.setCompany_id(rs.getString("company_id"));
+         question.setEditor_id(rs.getString("editor_id"));
+         question.setQuestion_point(rs.getInt("question_point"));
+         question.setSolution(rs.getString("solution"));
+         question.setMax_try(rs.getInt("max_try"));
+         question.setLike_count(rs.getInt("like_count"));
+         question.setDislike_count(rs.getInt("dislike_count"));
+         question.setCreation_date(rs.getDate("creation_date"));
+         question.setType_description(rs.getString("type_description"));
+         question.setVideo_link(rs.getString("video_link"));
+         return question;
+      });
    }
 
 }

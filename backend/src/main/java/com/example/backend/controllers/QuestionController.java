@@ -126,11 +126,12 @@ public class QuestionController {
       questionService.undislike(question_id);
    }
 
-   @GetMapping("/get_filtered_questions/{user_id}/{category_name}/{difficulty}/{question_type}/{is_solved}")
+   @GetMapping("/get_filtered_questions/{user_id}/{category_name}/{difficulty}/{question_type}/{is_solved}/{search_keyword}")
    public List<QuestionDto> getFilteredQuestions(@PathVariable String user_id, @PathVariable String category_name,
-         @PathVariable String difficulty,
-         @PathVariable String question_type, @PathVariable String is_solved) {
-      return questionService.getFilteredQuestions(user_id, category_name, difficulty, question_type, is_solved);
+         @PathVariable String difficulty, @PathVariable String question_type, @PathVariable String is_solved,
+         @PathVariable String search_keyword) {
+      return questionService.getFilteredQuestions(user_id, category_name, difficulty, question_type, is_solved,
+            search_keyword);
    }
 
    @GetMapping("/get_if_user_solved/{question_id}/{user_id}")
@@ -141,6 +142,11 @@ public class QuestionController {
    @GetMapping("/get_if_user_solved_correctly/{question_id}/{user_id}")
    public boolean getIfUserSolvedCorrectly(@PathVariable String question_id, @PathVariable String user_id) {
       return questionService.getIfUserSolvedCorrectly(question_id, user_id);
+   }
+
+   @GetMapping("/search_questions/{search_keyword}")
+   public List<QuestionDto> searchQuestions(@PathVariable String search_keyword) {
+      return questionService.searchQuestions(search_keyword);
    }
 
 }

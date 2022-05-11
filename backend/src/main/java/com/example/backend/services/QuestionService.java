@@ -101,8 +101,9 @@ public class QuestionService {
 
    public List<QuestionDto> getFilteredQuestions(String user_id, String category_name, String difficulty,
          String question_type,
-         String is_solved) {
-      return questionRepository.getFilteredQuestions(user_id, category_name, difficulty, question_type, is_solved);
+         String is_solved, String search_keyword) {
+      return questionRepository.getFilteredQuestions(user_id, category_name, difficulty, question_type, is_solved,
+            search_keyword);
    }
 
    public boolean getIfUserSolved(String question_id, String user_id) {
@@ -111,6 +112,10 @@ public class QuestionService {
 
    public boolean getIfUserSolvedCorrectly(String question_id, String user_id) {
       return questionRepository.getIfUserSolvedCorrectly(question_id, user_id);
+   }
+
+   public List<QuestionDto> searchQuestions(String search_keyword) {
+      return questionRepository.searchQuestions(search_keyword);
    }
 
 }
