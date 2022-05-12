@@ -101,9 +101,9 @@ public class QuestionService {
 
    public List<QuestionDto> getFilteredQuestions(String user_id, String category_name, String difficulty,
          String question_type,
-         String is_solved, String search_keyword) {
+         String is_solved, int min_point, int max_point, String search_keyword) {
       return questionRepository.getFilteredQuestions(user_id, category_name, difficulty, question_type, is_solved,
-            search_keyword);
+            min_point, max_point, search_keyword);
    }
 
    public boolean getIfUserSolved(String question_id, String user_id) {

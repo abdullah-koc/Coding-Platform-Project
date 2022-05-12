@@ -126,11 +126,12 @@ public class QuestionController {
       questionService.undislike(question_id);
    }
 
-   @GetMapping("/get_filtered_questions/{user_id}/{category_name}/{difficulty}/{question_type}/{is_solved}/{search_keyword}")
+   @GetMapping("/get_filtered_questions/{user_id}/{category_name}/{difficulty}/{question_type}/{is_solved}/{min_point}/{max_point}/{search_keyword}")
    public List<QuestionDto> getFilteredQuestions(@PathVariable String user_id, @PathVariable String category_name,
          @PathVariable String difficulty, @PathVariable String question_type, @PathVariable String is_solved,
-         @PathVariable String search_keyword) {
+         @PathVariable int min_point, @PathVariable int max_point, @PathVariable String search_keyword) {
       return questionService.getFilteredQuestions(user_id, category_name, difficulty, question_type, is_solved,
+            min_point, max_point,
             search_keyword);
    }
 

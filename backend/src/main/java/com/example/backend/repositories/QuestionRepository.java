@@ -307,54 +307,30 @@ public class QuestionRepository {
 
    public List<QuestionDto> getFilteredQuestions(String user_id, String category_name, String difficulty,
          String question_type,
-         String is_solved, String search_keyword) {
+         String is_solved, int min_point, int max_point, String search_keyword) {
 
-      String sql = "";
+      String sql = "SELECT * FROM questions WHERE question_point BETWEEN " + min_point + " AND " + max_point;
       if (!category_name.equals("all")) {
-         sql += "SELECT * FROM questions WHERE question_id IN (SELECT question_id FROM question_category WHERE category_name = '"
+         sql += "AND question_id IN (SELECT question_id FROM question_category WHERE category_name = '"
                + category_name + "')";
       }
       if (!difficulty.equals("all")) {
-         if (sql.equals("")) {
-            sql += "SELECT * FROM questions WHERE difficulty = '" + difficulty + "'";
-         } else {
-            sql += " AND difficulty = '" + difficulty + "'";
-         }
+         sql += " AND difficulty = '" + difficulty + "'";
       }
       if (!question_type.equals("all")) {
-         if (sql.equals("")) {
-            sql += "SELECT * FROM questions WHERE question_id LIKE '" + question_type + "%" + "'";
-         } else {
-            sql += " AND question_id LIKE '" + question_type + "%" + "'";
-         }
+         sql += " AND question_id LIKE '" + question_type + "%" + "'";
       }
       if (!is_solved.equals("all")) {
-         if (sql.equals("")) {
-            if (is_solved.equals("1")) {
-               sql += "SELECT * FROM questions WHERE question_id IN (SELECT question_id FROM attempts WHERE user_id = '"
-                     + user_id + "')";
-            } else if (is_solved.equals("0")) {
-               sql += "SELECT * FROM questions WHERE question_id NOT IN (SELECT question_id FROM attempts WHERE user_id = '"
-                     + user_id + "')";
-            }
-         } else {
-            if (is_solved.equals("1")) {
-               sql += " AND question_id IN (SELECT question_id FROM attempts WHERE user_id = '" + user_id + "')";
-            } else if (is_solved.equals("0")) {
-               sql += " AND question_id NOT IN (SELECT question_id FROM attempts WHERE user_id = '" + user_id + "')";
-            }
+         if (is_solved.equals("1")) {
+            sql += " AND question_id IN (SELECT question_id FROM attempts WHERE user_id = '" + user_id + "')";
+         } else if (is_solved.equals("0")) {
+            sql += " AND question_id NOT IN (SELECT question_id FROM attempts WHERE user_id = '" + user_id + "')";
          }
       }
       if (!search_keyword.equals("all")) {
-         if (sql.equals("")) {
-            sql += "SELECT * FROM questions WHERE title LIKE '%" + search_keyword + "%'";
-         } else {
-            sql += " AND title LIKE '%" + search_keyword + "%'";
-         }
+         sql += " AND title LIKE '%" + search_keyword + "%'";
       }
-      if (sql.equals("")) {
-         sql = "SELECT * FROM questions";
-      }
+
       return jdbcTemplate.query(sql, (rs, i) -> {
          QuestionDto question = new QuestionDto();
          question.setQuestion_id(rs.getString("question_id"));
