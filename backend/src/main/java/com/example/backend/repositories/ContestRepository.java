@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.example.backend.dto.ContestDto;
+import com.example.backend.dto.ContestResultDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.dto.UserDto;
 
@@ -59,7 +60,8 @@ public class ContestRepository {
    public Contest findById(String contest_id) {
       String sql = "SELECT * FROM contests c WHERE c.contest_id = ?";
       try {
-         return (Contest) jdbcTemplate.queryForObject(sql, new Object[]{contest_id}, new BeanPropertyRowMapper(Contest.class));
+         return (Contest) jdbcTemplate.queryForObject(sql, new Object[] { contest_id },
+               new BeanPropertyRowMapper(Contest.class));
       } catch (EmptyResultDataAccessException e) {
          return null;
       }
@@ -175,6 +177,16 @@ public class ContestRepository {
    public void updateContestPrize(String contest_id, String contest_prize) {
       String sql = "UPDATE contests SET prize = ? WHERE contest_id = ?";
       jdbcTemplate.update(sql, contest_prize, contest_id);
+   }
+
+   public List<ContestResultDto> getContestantsByOrder(String contest_id) {
+      String sql = "SELECT nickname, SUM(question_point) points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_contest NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN question_contest WHERE is_solved = b'1' AND contest_id = ? GROUP BY nickname ORDER BY points DESC;";
+      return jdbcTemplate.query(sql, (rs, rowNum) -> {
+         ContestResultDto contestResult = new ContestResultDto();
+         contestResult.setNickname(rs.getString("nickname"));
+         contestResult.setPoint(rs.getInt("points"));
+         return contestResult;
+      }, contest_id);
    }
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.backend.dto.ContestDto;
+import com.example.backend.dto.ContestResultDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.dto.UserDto;
 import com.example.backend.services.ContestService;
@@ -87,7 +88,8 @@ public class ContestController {
    }
 
    @PostMapping("/change/photo/{contest_id}")
-   public ResponseEntity<Map> changePhoto(@PathVariable String contest_id, @RequestParam MultipartFile multipartFile) throws IOException {
+   public ResponseEntity<Map> changePhoto(@PathVariable String contest_id, @RequestParam MultipartFile multipartFile)
+         throws IOException {
       Map result = photoService.uploadPhoto(multipartFile);
       contestService.changePhoto(contest_id, (String) result.get("url"));
       return new ResponseEntity(result, HttpStatus.OK);
@@ -106,6 +108,11 @@ public class ContestController {
    @PostMapping(path = "/update_contest_prize/{contest_id}")
    public void updateContestPrize(@PathVariable String contest_id, @RequestBody String contest_prize) {
       contestService.updateContestPrize(contest_id, contest_prize);
+   }
+
+   @GetMapping(path = "/get_contestants_by_order/{contest_id}")
+   public List<ContestResultDto> getContestantsByOrder(@PathVariable String contest_id) {
+      return contestService.getContestantsByOrder(contest_id);
    }
 
 }

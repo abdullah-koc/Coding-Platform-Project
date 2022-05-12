@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.example.backend.dto.ContestDto;
+import com.example.backend.dto.ContestResultDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.dto.UserDto;
 
@@ -84,6 +85,10 @@ public class ContestService {
 
    public void updateContestPrize(String contest_id, String contest_prize) {
       contestRepository.updateContestPrize(contest_id, contest_prize);
+   }
+
+   public List<ContestResultDto> getContestantsByOrder(String contest_id) {
+      return contestRepository.getContestantsByOrder(contest_id);
    }
 
 }
