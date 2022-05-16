@@ -21,9 +21,9 @@ const Register = () => {
   const [birthday, setBirthday] = useState("");
   const [cvURL, setCVURL] = useState("");
 
-  //password should be at least 8 characters long and contain at least one number and one capital letter
+  //password should be at least 8 characters long and contain at least one number, one capital letter and one special character
   const isPasswordValid = (password) => {
-    const regex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
   };
 
