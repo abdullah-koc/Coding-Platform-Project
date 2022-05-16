@@ -337,7 +337,7 @@ public class QuestionRepository {
       if (!search_keyword.equals("all")) {
          sql += " AND title LIKE '%" + search_keyword + "%'";
       }
-      
+
       return jdbcTemplate.query(sql, (rs, i) -> {
          QuestionDto question = new QuestionDto();
          question.setQuestion_id(rs.getString("question_id"));

@@ -12,6 +12,7 @@ import {
   RadioGroup,
   FormControlLabel,
   FormGroup,
+  Switch,
 } from "@mui/material";
 import axios from "axios";
 
@@ -31,7 +32,8 @@ const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
   const [inputs, setInputs] = useState([]);
   const [outputs, setOutputs] = useState([]);
   const [lockedStatus, setLockedStatus] = useState([]);
-  const [isContest, setIsContest] = useState(false);
+  const [isContest, setIsContest] = useState(true);
+
 
   useEffect(() => {
     axios.get(process.env.REACT_APP_URL + "api/category/all").then((res) => {
@@ -73,6 +75,17 @@ const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
     setTypeDescription("");
     handleParentOpen(false);
   };
+
+  const handleIsContest = (e) => {
+    if (e.target.checked) {
+      setIsContest(true);
+
+    } else {
+      setIsContest(false);
+    }
+    console.log(isContest);
+
+  }
 
   const addTestCaseHelper = (curQuestionId, ins, outs, locks, index) => {
     if (index === noOfTestCases) {
@@ -119,6 +132,7 @@ const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
           ("0" + new Date().getDate()).slice(-2),
         editor_id: JSON.parse(localStorage.getItem("session")).person_id,
         company_id: JSON.parse(localStorage.getItem("session")).company_id,
+        is_contest: isContest,
       })
       .then((res) => {
         var curQuestion;
@@ -258,6 +272,22 @@ const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
 
               <Grid item xs={6}>
                 <Grid container>
+                  <Grid
+                    item
+                    xs={12}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginTop: "10px",
+                    }}
+                  >
+                    <div>Contest Question:</div>
+                    <div style={{ marginLeft: "80px" }} />
+                    <div>
+                      {" "}
+                      <FormControlLabel control={<Switch />} label="Contest Question" onClick={(e) => handleIsContest(e)}/>
+                    </div>
+                  </Grid>
                   <Grid
                     item
                     xs={12}
