@@ -22,9 +22,10 @@ public class AttemptRepository {
     public void insertAttempt(Attempt attempt) {
         String last_attempt_id;
         int attempt_id_count;
-        String last_attempt_id_sql = "SELECT attempt_id FROM attempts WHERE LENGTH(attempt_id) >= ALL(SELECT LENGTH(attempt_id) FROM attempts) ORDER BY attempt_id DESC LIMIT 1";
+
+        String last_attempt_id_sql = "SELECT attempt_id FROM attempts WHERE user_id = ? AND question_id = ? AND LENGTH(attempt_id) >= ALL(SELECT LENGTH(attempt_id) FROM attempts) ORDER BY attempt_id DESC LIMIT 1";
         try {
-            last_attempt_id = (String) jdbcTemplate.queryForObject(last_attempt_id_sql, String.class);
+            last_attempt_id = (String) jdbcTemplate.queryForObject(last_attempt_id_sql, new Object[]{attempt.getUser_id(), attempt.getQuestion_id()}, String.class);
             attempt_id_count = Integer.parseInt(last_attempt_id.substring(1));
             attempt_id_count++;
         } catch (EmptyResultDataAccessException e) {
@@ -56,8 +57,13 @@ public class AttemptRepository {
             }
 
             String sql_max_try = "SELECT max_try FROM questions WHERE question_id = ?";
-            int max_try = jdbcTemplate.queryForObject(sql_max_try, Integer.class, attempt.getQuestion_id());
-            if (try_count < max_try && !is_solved_correctly(attempt.getUser_id(), attempt.getQuestion_id())) {
+            int max_try;
+            try {
+                max_try = jdbcTemplate.queryForObject(sql_max_try, Integer.class, attempt.getQuestion_id());
+            } catch(EmptyResultDataAccessException e) {
+                max_try = 0;
+            }
+            if (try_count < max_try) {
                 try_count++;
                 String sql = "INSERT INTO attempts(attempt_id, user_answer, try_count, is_solved, user_id, question_id, programming_language) VALUES(?, ?, ?, ?, ?, ?, ?)";
                 jdbcTemplate.update(sql, attemptId, attempt.getUser_answer(), try_count, true, attempt.getUser_id(),
