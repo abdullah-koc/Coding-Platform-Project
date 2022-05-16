@@ -54,11 +54,18 @@ public class QuestionRepository {
          question.setQuestion_id("NCQ" + question_id_count);
       }
 
-      String sql = "INSERT INTO questions (question_id, title, explanation, question_duration, difficulty, question_point, solution, max_try, like_count, dislike_count, editor_id, company_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      int is_contest;
+      if (question.getIs_contest() == true) {
+         is_contest = 1;
+      } else {
+         is_contest = 0;
+      }
+
+      String sql = "INSERT INTO questions (question_id, title, explanation, question_duration, difficulty, question_point, solution, max_try, like_count, dislike_count, editor_id, company_id, is_contest) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
       jdbcTemplate.update(sql, question.getQuestion_id(), question.getTitle(), question.getExplanation(),
             question.getQuestion_duration(), question.getDifficulty(), question.getQuestion_point(),
             question.getSolution(), question.getMax_try(), question.getLike_count(), question.getDislike_count(),
-            question.getEditor_id(), question.getCompany_id());
+            question.getEditor_id(), question.getCompany_id(), is_contest);
 
       if (question.getQuestion_id().substring(0, 2).equals("NQ")) {
          // update type description if exists
@@ -89,7 +96,7 @@ public class QuestionRepository {
          question.setVideo_link(resultSet.getString("video_link"));
          question.setEditor_id(resultSet.getString("editor_id"));
          question.setCompany_id(resultSet.getString("company_id"));
-
+         question.setIs_contest(resultSet.getBoolean("is_contest"));
          return question;
       });
    }
@@ -121,6 +128,7 @@ public class QuestionRepository {
             question.setCreation_date(rs.getDate("creation_date"));
             question.setVideo_link(rs.getString("video_link"));
             question.setVideo_request_count(rs.getInt("video_request_count"));
+            question.setIs_contest(rs.getBoolean("is_contest"));
             return question;
          }, question_id);
       } else {
@@ -141,6 +149,7 @@ public class QuestionRepository {
             question.setDislike_count(rs.getInt("dislike_count"));
             question.setCreation_date(rs.getDate("creation_date"));
             question.setType_description(rs.getString("type_description"));
+            question.setIs_contest(rs.getBoolean("is_contest"));
             return question;
          }, question_id);
       }
@@ -346,6 +355,7 @@ public class QuestionRepository {
          question.setLike_count(rs.getInt("like_count"));
          question.setDislike_count(rs.getInt("dislike_count"));
          question.setCreation_date(rs.getDate("creation_date"));
+         question.setIs_contest(rs.getBoolean("is_contest"));
          return question;
       });
 
@@ -401,6 +411,7 @@ public class QuestionRepository {
          question.setCreation_date(rs.getDate("creation_date"));
          question.setType_description(rs.getString("type_description"));
          question.setVideo_link(rs.getString("video_link"));
+         question.setIs_contest(rs.getBoolean("is_contest"));
          return question;
       });
    }

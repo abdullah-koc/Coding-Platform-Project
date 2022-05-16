@@ -16,6 +16,7 @@ public class Question {
    private Date creation_date;
    private String editor_id;
    private String company_id;
+   private boolean is_contest;
 
    public Question(String string, String string2, String string3, int int1, String string4, int int2, String string5,
          int int3, int int4, int int5, Date date) {
@@ -127,5 +128,13 @@ public class Question {
 
    public void setCompany_id(String company_id) {
       this.company_id = company_id;
+   }
+
+   public boolean getIs_contest() {
+      return is_contest;
+   }
+
+   public void setIs_contest(boolean is_contest) {
+      this.is_contest = is_contest;
    }
 }

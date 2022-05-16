@@ -20,6 +20,7 @@ public class QuestionDto {
    private int video_request_count;
    private String type_description;
    private String question_type;
+   private boolean is_contest;
 
    // getter and setter functions
    public String getQuestion_id() {
@@ -156,5 +157,13 @@ public class QuestionDto {
 
    public void setQuestion_type(String question_type) {
       this.question_type = question_type;
+   }
+
+   public boolean getIs_contest() {
+      return is_contest;
+   }
+
+   public void setIs_contest(boolean is_contest) {
+      this.is_contest = is_contest;
    }
 }
