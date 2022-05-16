@@ -416,4 +416,26 @@ public class QuestionRepository {
       });
    }
 
+   public List<QuestionDto> getAvailableContestQuestions() {
+      String sql = "SELECT * FROM questions WHERE is_contest = 1";
+      return jdbcTemplate.query(sql, (rs, i) -> {
+         QuestionDto question = new QuestionDto();
+         question.setQuestion_id(rs.getString("question_id"));
+         question.setTitle(rs.getString("title"));
+         question.setExplanation(rs.getString("explanation"));
+         question.setQuestion_duration(rs.getInt("question_duration"));
+         question.setDifficulty(rs.getString("difficulty"));
+         question.setCompany_id(rs.getString("company_id"));
+         question.setEditor_id(rs.getString("editor_id"));
+         question.setQuestion_point(rs.getInt("question_point"));
+         question.setSolution(rs.getString("solution"));
+         question.setMax_try(rs.getInt("max_try"));
+         question.setLike_count(rs.getInt("like_count"));
+         question.setDislike_count(rs.getInt("dislike_count"));
+         question.setCreation_date(rs.getDate("creation_date"));
+         question.setIs_contest(rs.getBoolean("is_contest"));
+         return question;
+      });
+   }
+
 }

@@ -118,4 +118,8 @@ public class QuestionService {
       return questionRepository.searchQuestions(search_keyword);
    }
 
+   public List<QuestionDto> getAvailableContestQuestions() {
+      return questionRepository.getAvailableContestQuestions();
+   }
+
 }
