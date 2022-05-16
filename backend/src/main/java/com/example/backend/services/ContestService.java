@@ -3,6 +3,7 @@ package com.example.backend.services;
 import java.sql.Date;
 import java.util.List;
 
+import com.example.backend.dto.CompanyDto;
 import com.example.backend.dto.ContestDto;
 import com.example.backend.dto.ContestResultDto;
 import com.example.backend.dto.QuestionDto;
@@ -69,7 +70,7 @@ public class ContestService {
       contestRepository.updateContestName(contest_id, contest_name);
    }
 
-   public void changePhoto(String contest_id, String photo){
+   public void changePhoto(String contest_id, String photo) {
       Contest contest = contestRepository.findById(contest_id);
       contest.setPhoto(photo);
       contestRepository.updateContestPhoto(contest_id, photo);
@@ -89,6 +90,10 @@ public class ContestService {
 
    public List<ContestResultDto> getContestantsByOrder(String contest_id) {
       return contestRepository.getContestantsByOrder(contest_id);
+   }
+
+   public List<CompanyDto> getSponsors(String contest_id) {
+      return contestRepository.getSponsors(contest_id);
    }
 
 }

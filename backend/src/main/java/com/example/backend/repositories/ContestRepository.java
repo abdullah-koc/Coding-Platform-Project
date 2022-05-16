@@ -3,6 +3,7 @@ package com.example.backend.repositories;
 import java.sql.Date;
 import java.util.List;
 
+import com.example.backend.dto.CompanyDto;
 import com.example.backend.dto.ContestDto;
 import com.example.backend.dto.ContestResultDto;
 import com.example.backend.dto.QuestionDto;
@@ -186,6 +187,17 @@ public class ContestRepository {
          contestResult.setNickname(rs.getString("nickname"));
          contestResult.setPoint(rs.getInt("points"));
          return contestResult;
+      }, contest_id);
+   }
+
+   public List<CompanyDto> getSponsors(String contest_id) {
+      String sql = "SELECT company_id, company_name, company_photo FROM companies NATURAL JOIN company_contest WHERE contest_id = ?";
+      return jdbcTemplate.query(sql, (rs, rowNum) -> {
+         CompanyDto company = new CompanyDto();
+         company.setCompany_id(rs.getString("company_id"));
+         company.setCompany_name(rs.getString("company_name"));
+         company.setCompany_photo(rs.getString("company_photo"));
+         return company;
       }, contest_id);
    }
 

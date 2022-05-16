@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.example.backend.dto.CompanyDto;
 import com.example.backend.dto.ContestDto;
 import com.example.backend.dto.ContestResultDto;
 import com.example.backend.dto.QuestionDto;
@@ -113,6 +114,11 @@ public class ContestController {
    @GetMapping(path = "/get_contestants_by_order/{contest_id}")
    public List<ContestResultDto> getContestantsByOrder(@PathVariable String contest_id) {
       return contestService.getContestantsByOrder(contest_id);
+   }
+
+   @GetMapping(path = "/get_sponsors/{contest_id}")
+   public List<CompanyDto> getSponsors(@PathVariable String contest_id) {
+      return contestService.getSponsors(contest_id);
    }
 
 }

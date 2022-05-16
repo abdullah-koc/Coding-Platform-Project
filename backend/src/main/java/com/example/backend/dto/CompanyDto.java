@@ -2,14 +2,31 @@ package com.example.backend.dto;
 
 public class CompanyDto {
 
+    private String company_id;
+    private String company_photo;
     private String company_name;
     private String company_email;
     private String company_password;
     private String company_phone;
     private String company_address;
 
-
     public CompanyDto() {
+    }
+
+    public String getCompany_id() {
+        return company_id;
+    }
+
+    public void setCompany_id(String company_id) {
+        this.company_id = company_id;
+    }
+
+    public String getCompany_photo() {
+        return company_photo;
+    }
+
+    public void setCompany_photo(String company_photo) {
+        this.company_photo = company_photo;
     }
 
     public String getCompany_name() {
