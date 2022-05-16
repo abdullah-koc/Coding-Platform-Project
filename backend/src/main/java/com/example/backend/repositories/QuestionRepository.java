@@ -317,11 +317,9 @@ public class QuestionRepository {
    public List<QuestionDto> getFilteredQuestions(String user_id, String category_name, String difficulty,
          String question_type,
          String is_solved, int min_point, int max_point, String search_keyword) {
-
       String sql = "SELECT * FROM questions WHERE question_point BETWEEN " + min_point + " AND " + max_point;
       if (!category_name.equals("all")) {
-         sql += "AND question_id IN (SELECT question_id FROM question_category WHERE category_name = '"
-               + category_name + "')";
+         sql += " AND question_id IN (SELECT question_id FROM question_category WHERE category_name = '" + category_name + "')";
       }
       if (!difficulty.equals("all")) {
          sql += " AND difficulty = '" + difficulty + "'";
@@ -339,7 +337,7 @@ public class QuestionRepository {
       if (!search_keyword.equals("all")) {
          sql += " AND title LIKE '%" + search_keyword + "%'";
       }
-
+      
       return jdbcTemplate.query(sql, (rs, i) -> {
          QuestionDto question = new QuestionDto();
          question.setQuestion_id(rs.getString("question_id"));
