@@ -150,7 +150,7 @@ public class QuestionController {
       return questionService.searchQuestions(search_keyword);
    }
 
-   @GetMapping("get_contest_questions")
+   @GetMapping("/get_contest_questions")
    public List<QuestionDto> getAvailableContestQuestions() {
       return questionService.getAvailableContestQuestions();
    }
