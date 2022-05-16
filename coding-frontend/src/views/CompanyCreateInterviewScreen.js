@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Grid,
-  MenuItem,
-  Pagination,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Button, Grid, TextField } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AddQuestionDialog from "../components/AddQuestionDialog";
 import { useNavigate } from "react-router-dom";

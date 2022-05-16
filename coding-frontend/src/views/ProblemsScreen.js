@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Grid, MenuItem, Select, Pagination, Button } from "@mui/material";
+import {
+  Grid,
+  MenuItem,
+  Select,
+  Pagination,
+  Button,
+  TextField,
+} from "@mui/material";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import NavbarUser from "../components/Navbars/NavbarUser";
@@ -7,6 +14,7 @@ import Colors from "../utils/Colors";
 import QuestionCard from "../components/UserMainScreenComponents/QuestionCard";
 import UserStatus from "../components/UserStatus";
 import { useNavigate } from "react-router-dom";
+import Slider from "@mui/material/Slider";
 import axios from "axios";
 
 const ProblemsScreen = () => {
@@ -31,6 +39,8 @@ const ProblemsScreen = () => {
   const [curQuestions, setCurQuestions] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
   const [temp, setTemp] = useState([]);
+  const [value, setValue] = useState([0, 100]);
+  const [searchText, setSearchText] = useState("all");
 
   const getIsSolved = (id) => {
     axios
@@ -46,7 +56,21 @@ const ProblemsScreen = () => {
       });
   };
 
-  useEffect(() => {
+  const [marks, setMarks] = useState([
+    {
+      value: 0,
+      label: "0 Points",
+    },
+    {
+      value: 100,
+      label: "100 Points",
+    },
+  ]);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    setSearchText(searchText === "" ? "all" : searchText);
+    let val = searchText === "" ? "all" : searchText;
     axios
       .get(
         process.env.REACT_APP_URL +
@@ -59,7 +83,81 @@ const ProblemsScreen = () => {
           "/" +
           questionType +
           "/" +
-          status
+          status +
+          "/" +
+          value[0] +
+          "/" +
+          value[1] +
+          "/" +
+          val
+      )
+      .then((res) => {
+        let userQuestions = res.data.filter(
+          (question) => question.editor_id !== null
+        );
+        setQuestions(userQuestions);
+      })
+      .catch((err) => {
+        alert("Problem occured!");
+      });
+  };
+
+  const searchBarHandler = (e) => {
+    setSearchText(e.target.value === "" ? "all" : e.target.value);
+    let val = e.target.value === "" ? "all" : e.target.value;
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/question/get_filtered_questions/" +
+          JSON.parse(localStorage.getItem("session")).person_id +
+          "/" +
+          category +
+          "/" +
+          difficulty +
+          "/" +
+          questionType +
+          "/" +
+          status +
+          "/" +
+          value[0] +
+          "/" +
+          value[1] +
+          "/" +
+          val
+      )
+      .then((res) => {
+        let userQuestions = res.data.filter(
+          (question) => question.editor_id !== null
+        );
+        setQuestions(userQuestions);
+      })
+      .catch((err) => {
+        alert("Problem occured!");
+      });
+  };
+
+  useEffect(() => {
+    setSearchText(searchText === "" ? "all" : searchText);
+    let val = searchText === "" ? "all" : searchText;
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          "api/question/get_filtered_questions/" +
+          JSON.parse(localStorage.getItem("session")).person_id +
+          "/" +
+          category +
+          "/" +
+          difficulty +
+          "/" +
+          questionType +
+          "/" +
+          status +
+          "/" +
+          0 +
+          "/" +
+          10 +
+          "/" +
+          val
       )
       .then((res) => {
         let userQuestions = res.data.filter(
@@ -125,6 +223,10 @@ const ProblemsScreen = () => {
     });
     setQuestions(sortedData);
     setCurQuestions(sortedData.slice((page - 1) * 7, 7 * page));
+  }
+
+  function valuetext(value) {
+    return `${value} Points`;
   }
 
   return (
@@ -215,6 +317,29 @@ const ProblemsScreen = () => {
                   <MenuItem value={"1"}>Solved</MenuItem>
                   <MenuItem value={"0"}>Not Solved</MenuItem>
                 </Select>
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item xs={6}>
+                <TextField
+                  variant="outlined"
+                  color="success"
+                  size="small"
+                  placeholder="🔎 Search Questions"
+                  style={{ marginBottom: "10px" }}
+                  onChange={searchBarHandler}
+                />
+              </Grid>
+              <Grid item xs={6} style={{ paddingRight: "50px" }}>
+                <Slider
+                  getAriaLabel={() => "Point range"}
+                  value={value}
+                  onChange={handleChange}
+                  marks={marks}
+                  style={{ color: Colors.dark_color }}
+                  valueLabelDisplay="auto"
+                  getAriaValueText={valuetext}
+                />
               </Grid>
             </Grid>
             <Grid
