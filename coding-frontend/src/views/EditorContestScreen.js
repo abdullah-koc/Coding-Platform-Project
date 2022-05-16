@@ -39,10 +39,11 @@ const EditorContestScreen = () => {
       });
   }, []);
   React.useEffect(() => {
-    axios.get(process.env.REACT_APP_URL + "api/question/all").then((res) => {
+    axios.get(process.env.REACT_APP_URL + "api/question/get_contest_questions").then((res) => {
       setQuestions(res.data);
       setDataToShow(res.data);
     });
+    console.log(questions);
   }, []);
 
   const navigateToContest = (id) => {

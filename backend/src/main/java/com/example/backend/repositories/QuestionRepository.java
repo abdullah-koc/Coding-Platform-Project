@@ -415,7 +415,7 @@ public class QuestionRepository {
    }
 
    public List<QuestionDto> getAvailableContestQuestions() {
-      String sql = "SELECT * FROM questions WHERE is_contest = 1";
+      String sql = "SELECT * FROM questions WHERE is_contest = true";
       return jdbcTemplate.query(sql, (rs, i) -> {
          QuestionDto question = new QuestionDto();
          question.setQuestion_id(rs.getString("question_id"));
