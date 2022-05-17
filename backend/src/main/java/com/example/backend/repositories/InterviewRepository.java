@@ -62,10 +62,9 @@ public class InterviewRepository {
 
       String last_interview_id;
       int interview_id_count;
-      String last_interview_id_sql = "SELECT interview_id FROM interviews WHERE company_id = ? AND LENGTH(interview_id) >= ALL(SELECT LENGTH(interview_id) FROM interviews WHERE company_id = ?) ORDER BY interview_id DESC LIMIT 1";
+      String last_interview_id_sql = "SELECT interview_id FROM interviews LENGTH(interview_id) >= ALL(SELECT LENGTH(interview_id) FROM interviews) ORDER BY interview_id DESC LIMIT 1";
       try {
-         last_interview_id = (String) jdbcTemplate.queryForObject(last_interview_id_sql, String.class,
-               interviewDto.getCompany_id(), interviewDto.getCompany_id());
+         last_interview_id = (String) jdbcTemplate.queryForObject(last_interview_id_sql, String.class);
          interview_id_count = Integer.parseInt(last_interview_id.substring(1));
          interview_id_count++;
       } catch (EmptyResultDataAccessException e) {
@@ -87,8 +86,8 @@ public class InterviewRepository {
    }
 
    public void deleteInterview(String interview_id, String company_id) {
-      String sql = "DELETE FROM interviews WHERE interview_id = ? AND company_id = ?";
-      jdbcTemplate.update(sql, interview_id, company_id);
+      String sql = "DELETE FROM interviews WHERE interview_id = ?";
+      jdbcTemplate.update(sql, interview_id);
    }
 
    public void addQuestion(String interview_id, String question_id, String company_id) {
