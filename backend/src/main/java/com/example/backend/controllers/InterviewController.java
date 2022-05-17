@@ -99,4 +99,10 @@ public class InterviewController {
    public List<UserDto> seePastResults(@PathVariable String interview_id, @PathVariable String user_id) {
       return interviewService.seePastResults(interview_id, user_id);
    }
+
+   @PostMapping(path = "/add_result/{interview_id}/{user_id}/{is_passed}")
+   public void addResult(@PathVariable String interview_id, @PathVariable String user_id,
+         @PathVariable boolean is_passed) {
+      interviewService.addResult(interview_id, user_id, is_passed);
+   }
 }

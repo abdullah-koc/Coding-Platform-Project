@@ -76,4 +76,8 @@ public class InterviewService {
       return interviewRepository.seePastResults(interview_id, user_id);
    }
 
+   public void addResult(String interview_id, String user_id, boolean is_passed) {
+      interviewRepository.addResult(interview_id, user_id, is_passed);
+   }
+
 }

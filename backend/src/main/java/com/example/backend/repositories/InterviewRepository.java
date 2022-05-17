@@ -211,4 +211,9 @@ public class InterviewRepository {
       }, interview_id, user_id);
    }
 
+   public void addResult(String interview_id, String user_id, boolean is_passed) {
+      String sql = "UPDATE user_interview SET is_passed = ? WHERE interview_id = ? AND user_id = ?";
+      jdbcTemplate.update(sql, is_passed, interview_id, user_id);
+   }
+
 }
