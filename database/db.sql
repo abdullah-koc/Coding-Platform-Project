@@ -186,7 +186,7 @@ DROP TABLE IF EXISTS `companies`;
 CREATE TABLE `companies` (
   `company_id` varchar(20) NOT NULL,
   `company_name` varchar(45) NOT NULL,
-  `company_photo` varchar(45) DEFAULT NULL,
+  `company_photo` varchar(1000) DEFAULT NULL,
   `company_address` varchar(300) DEFAULT NULL,
   `company_phone` varchar(300) DEFAULT NULL,
   `company_email` varchar(45) NOT NULL,
@@ -788,4 +788,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-17 16:50:21
+-- Dump completed on 2022-05-17 17:03:38
