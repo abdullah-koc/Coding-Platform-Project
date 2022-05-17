@@ -32,9 +32,6 @@ public class UserService {
     @Autowired
     private JavaMailSender mailSender;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     private void sendVerificationEmail(User user, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
@@ -70,7 +67,7 @@ public class UserService {
         user.setEmail(userDto.getEmail());
         user.setBirth_date(userDto.getBirth_date());
         user.setNickname(userDto.getNickname());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setPassword(userDto.getPassword());
         userRepository.signUp(user);
         sendVerificationEmail(user, siteURL);
     }

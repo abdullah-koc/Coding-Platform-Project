@@ -23,9 +23,6 @@ public class EditorService {
     @Autowired
     private JavaMailSender mailSender;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     private void sendVerificationEmail(Editor editor, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
         String toAddress = editor.getEmail();
@@ -61,7 +58,7 @@ public class EditorService {
         editor.setEmail(editorDto.getEmail());
         editor.setBirth_date(editorDto.getBirth_date());
         editor.setNickname(editorDto.getNickname());
-        editor.setPassword(passwordEncoder.encode(editorDto.getPassword()));
+        editor.setPassword(editorDto.getPassword());
         editor.setCv(editorDto.getCv());
         editorRepository.signUp(editor);
         sendVerificationEmail(editor, siteURL);
