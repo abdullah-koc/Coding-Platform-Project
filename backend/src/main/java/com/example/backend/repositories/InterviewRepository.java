@@ -156,7 +156,7 @@ public class InterviewRepository {
          userDto.setDepartment(rs.getString("department"));
          userDto.setCur_company(rs.getString("cur_company"));
          userDto.setSuccess_rate(rs.getString("success_rate"));
-         userDto.setUser_point(rs.getString("user_point"));
+         userDto.setUser_point(rs.getInt("user_point"));
          return userDto;
       }, company_id, interview_id);
    }
@@ -178,6 +178,37 @@ public class InterviewRepository {
       String user_id = userRepository.findByNickname(nickname).getPerson_id();
       String sql = "INSERT INTO user_interview (interview_id, user_id, company_id, is_passed) VALUES (?, ?, ?, false)";
       jdbcTemplate.update(sql, interview_id, user_id, company_id);
+   }
+
+   public List<UserDto> seeResults(String interview_id) {
+      String sql = "SELECT full_name, email, , photo, phone, birth_date, nickname, SUM(question_point) points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_interview NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN interview_question WHERE is_solved = b'1' AND interview_id = ? GROUP BY nickname ORDER BY points DESC";
+      return jdbcTemplate.query(sql, (rs, rowNum) -> {
+         UserDto userDto = new UserDto();
+         userDto.setFull_name(rs.getString("full_name"));
+         userDto.setEmail(rs.getString("email"));
+         userDto.setPhone(rs.getString("phone"));
+         userDto.setBirth_date(rs.getDate("birth_date"));
+         userDto.setNickname(rs.getString("nickname"));
+         userDto.setPhoto(rs.getString("photo"));
+         userDto.setUser_point(rs.getInt("points"));
+         return userDto;
+      }, interview_id);
+
+   }
+
+   public List<UserDto> seePastResults(String interview_id, String user_id) {
+      String sql = "SELECT full_name, email, , photo, phone, birth_date, nickname, SUM(question_point) points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_interview NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN interview_question WHERE is_solved = b'1' AND interview_id = ? AND user_id = ? GROUP BY nickname ORDER BY points DESC";
+      return jdbcTemplate.query(sql, (rs, rowNum) -> {
+         UserDto userDto = new UserDto();
+         userDto.setFull_name(rs.getString("full_name"));
+         userDto.setEmail(rs.getString("email"));
+         userDto.setPhone(rs.getString("phone"));
+         userDto.setBirth_date(rs.getDate("birth_date"));
+         userDto.setNickname(rs.getString("nickname"));
+         userDto.setPhoto(rs.getString("photo"));
+         userDto.setUser_point(rs.getInt("points"));
+         return userDto;
+      }, interview_id, user_id);
    }
 
 }

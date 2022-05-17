@@ -68,4 +68,12 @@ public class InterviewService {
       interviewRepository.addInterviewee(interview_id, nickname, company_id);
    }
 
+   public List<UserDto> seeResults(String interview_id) {
+      return interviewRepository.seeResults(interview_id);
+   }
+
+   public List<UserDto> seePastResults(String interview_id, String user_id) {
+      return interviewRepository.seePastResults(interview_id, user_id);
+   }
+
 }

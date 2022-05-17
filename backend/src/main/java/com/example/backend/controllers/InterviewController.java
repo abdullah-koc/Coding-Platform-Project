@@ -89,4 +89,14 @@ public class InterviewController {
          @PathVariable String company_id) {
       interviewService.addInterviewee(interview_id, nickname, company_id);
    }
+
+   @GetMapping(path = "/see_results/{interview_id}")
+   public List<UserDto> seeResults(@PathVariable String interview_id) {
+      return interviewService.seeResults(interview_id);
+   }
+
+   @GetMapping(path = "/see_past_results/{interview_id}/{user_id}")
+   public List<UserDto> seePastResults(@PathVariable String interview_id, @PathVariable String user_id) {
+      return interviewService.seePastResults(interview_id, user_id);
+   }
 }

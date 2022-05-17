@@ -5,7 +5,7 @@ public class UserDto extends PersonDto {
    private String department;
    private String cur_company;
    private String success_rate;
-   private String user_point;
+   private int user_point;
 
    public String getSchool() {
       return school;
@@ -39,11 +39,11 @@ public class UserDto extends PersonDto {
       this.success_rate = success_rate;
    }
 
-   public String getUser_point() {
+   public int getUser_point() {
       return user_point;
    }
 
-   public void setUser_point(String user_point) {
+   public void setUser_point(int user_point) {
       this.user_point = user_point;
    }
 }

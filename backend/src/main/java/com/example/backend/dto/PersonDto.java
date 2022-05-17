@@ -1,6 +1,7 @@
 package com.example.backend.dto;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class PersonDto implements Serializable {
 
@@ -11,7 +12,7 @@ public class PersonDto implements Serializable {
     private String photo;
     private String password;
     private String phone;
-    private String birth_date;
+    private Date birth_date;
 
     public String getPerson_id() {
         return person_id;
@@ -53,11 +54,11 @@ public class PersonDto implements Serializable {
         this.password = password;
     }
 
-    public String getBirth_date() {
+    public Date getBirth_date() {
         return birth_date;
     }
 
-    public void setBirth_date(String birth_date) {
+    public void setBirth_date(Date birth_date) {
         this.birth_date = birth_date;
     }
 
