@@ -1,5 +1,7 @@
 package com.example.backend.entities;
 
+import java.sql.Date;
+
 public class Person {
 
 
@@ -116,7 +118,7 @@ public class Person {
         return birth_date;
     }
 
-    public void setBirth_date(String birth_date) {
-        this.birth_date = birth_date;
+    public void setBirth_date(Date date) {
+        this.birth_date = date;
     }
 }

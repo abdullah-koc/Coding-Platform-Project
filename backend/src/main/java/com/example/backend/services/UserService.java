@@ -74,6 +74,7 @@ public class UserService {
         userRepository.signUp(user);
         sendVerificationEmail(user, siteURL);
     }
+
     public boolean verifyUser(String verificationCode) {
         User user = userRepository.findById(verificationCode);
 
@@ -91,32 +92,32 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public List<UserDto> getAllUsers(){
+    public List<UserDto> getAllUsers() {
         return userRepository.getAllUsers();
     }
 
     public boolean loginUser(String email, String password) {
         Person user = userRepository.findByEmail(email);
-        if(user.getPassword().equals(password) && user.getIs_confirmed()) {
+        if (user.getPassword().equals(password) && user.getIs_confirmed()) {
             return true;
         }
         return false;
     }
 
-    public void changeSchool(String user_id, String school){
+    public void changeSchool(String user_id, String school) {
         User user;
         userRepository.updateSchool(user_id, school);
     }
 
-    public void changeDepartment(String user_id,String department){
+    public void changeDepartment(String user_id, String department) {
         userRepository.updateDepartment(user_id, department);
     }
 
-    public void changeCurrentCompany(String user_id, String cur_company){
-       userRepository.updateCurrentCompany(user_id, cur_company);
+    public void changeCurrentCompany(String user_id, String cur_company) {
+        userRepository.updateCurrentCompany(user_id, cur_company);
     }
 
-    public void changePhoto(String nickname, String photo){
+    public void changePhoto(String nickname, String photo) {
         User user = userRepository.findByNickname(nickname);
         user.setPhoto(photo);
         userRepository.updatePhoto(user.getPerson_id(), photo);
