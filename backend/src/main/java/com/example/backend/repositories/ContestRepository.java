@@ -188,7 +188,7 @@ public class ContestRepository {
          contestResult.setNickname(rs.getString("nickname"));
          contestResult.setPoint(rs.getInt("points"));
          return contestResult;
-      }, contest_id);
+      }, contest_id, contest_id, contest_id);
    }
 
    public List<CompanyDto> getSponsors(String contest_id) {
