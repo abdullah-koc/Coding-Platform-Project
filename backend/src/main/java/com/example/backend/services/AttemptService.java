@@ -47,7 +47,7 @@ public class AttemptService {
         return attemptRepository.is_solved_correctly(user_id, question_id);
     }
 
-    public Attempt findAttemptByAttemptId(String attempt_id) {
-        return attemptRepository.findAttemptByAttemptId(attempt_id);
+    public Attempt findAttemptById(String question_id, String user_id,String attempt_id) {
+        return attemptRepository.findAttemptById(question_id, user_id, attempt_id);
     }
 }

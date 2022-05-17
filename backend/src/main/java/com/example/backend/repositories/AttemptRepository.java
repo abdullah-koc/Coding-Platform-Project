@@ -74,16 +74,16 @@ public class AttemptRepository {
     }
 
     public void insertAttemptTestCase(Attempt attempt, TestCase testCase) {
-        if (findAttemptByAttemptId(attempt.getAttempt_id()) != null) {
-            String sql = "INSERT INTO attempt_test_case(attempt_id, test_case_id, is_passed) VALUES(?, ?, ?)";
-            jdbcTemplate.update(sql, attempt.getAttempt_id(), testCase.getTest_case_id(), new Random().nextBoolean());
+        if (findAttemptById(attempt.getQuestion_id(), attempt.getUser_id(), attempt.getAttempt_id()) != null) {
+            String sql = "INSERT INTO attempt_test_case(attempt_id, test_case_id, is_passed, coding_question_id, user_id) VALUES(?, ?, ?, ?, ?)";
+            jdbcTemplate.update(sql, attempt.getAttempt_id(), testCase.getTest_case_id(), new Random().nextBoolean(), attempt.getQuestion_id(), attempt.getUser_id());
 
-            String attempt_test_case_sql = "SELECT * FROM attempt_test_case WHERE attempt_id = ? AND test_case_id = ? AND is_passed = ?";
+            String attempt_test_case_sql = "SELECT * FROM attempt_test_case WHERE attempt_id = ? AND user_id = ? AND coding_quuestion_id = ? AND test_case_id = ? AND is_passed = ?";
             try {
                 if (jdbcTemplate.queryForMap(attempt_test_case_sql,
-                        new Object[] { attempt.getAttempt_id(), testCase.getTest_case_id(), false }) != null) {
-                    String update_is_solved = "UPDATE attempts SET is_solved = ? WHERE attempt_id = ?";
-                    jdbcTemplate.update(update_is_solved, false, attempt.getAttempt_id());
+                        new Object[] { attempt.getAttempt_id(), attempt.getUser_id(), attempt.getQuestion_id(), testCase.getTest_case_id(), false }) != null) {
+                    String update_is_solved = "UPDATE attempts SET is_solved = ? WHERE question_id = ? AND user_id = ? AND attempt_id = ?";
+                    jdbcTemplate.update(update_is_solved, false, attempt.getQuestion_id(), attempt.getUser_id(), attempt.getAttempt_id());
                     attempt.setIs_solved(false);
                 }
             } catch (EmptyResultDataAccessException e) {
@@ -93,11 +93,11 @@ public class AttemptRepository {
     }
 
     public void updateUserPoint(Attempt attempt) {
-        if (findAttemptByAttemptId(attempt.getAttempt_id()) != null) {
+        if (findAttemptById(attempt.getQuestion_id(), attempt.getUser_id(), attempt.getAttempt_id()) != null) {
             try {
-                String is_solved_sql = "SELECT is_solved FROM attempts WHERE attempt_id = ?";
+                String is_solved_sql = "SELECT is_solved FROM attempts WHERE user_id = ? AND question_id = ? AND attempt_id = ?";
                 boolean is_solved = (boolean) jdbcTemplate.queryForObject(is_solved_sql, Boolean.class,
-                        attempt.getAttempt_id());
+                        new Object[]{attempt.getUser_id(), attempt.getQuestion_id(), attempt.getAttempt_id()});
                 List<Attempt> userAttempts = findUserOwnAttempts(attempt.getUser_id(), attempt.getQuestion_id());
                 boolean already_solved_correctly = false;
                 for (int i = 0; i < userAttempts.size() - 1; i++) {
@@ -146,10 +146,10 @@ public class AttemptRepository {
         }
     }
 
-    public Attempt findAttemptByAttemptId(String attempt_id) {
-        String sql = "SELECT * FROM attempts WHERE attempt_id = ?";
+    public Attempt findAttemptById(String question_id, String user_id, String attempt_id) {
+        String sql = "SELECT * FROM attempts WHERE question_id = ? AND user_id = ? AND attempt_id = ?";
         try {
-            return (Attempt) jdbcTemplate.queryForObject(sql, new Object[] { attempt_id },
+            return (Attempt) jdbcTemplate.queryForObject(sql, new Object[] { question_id, user_id, attempt_id },
                     new BeanPropertyRowMapper(Attempt.class));
         } catch (EmptyResultDataAccessException e) {
             return null;

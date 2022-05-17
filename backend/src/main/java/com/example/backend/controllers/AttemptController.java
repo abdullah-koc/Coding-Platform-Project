@@ -36,8 +36,8 @@ public class AttemptController {
         return attemptService.is_solved_correctly(user_id, question_id);
     }
 
-    @GetMapping("/get/{attempt_id}")
-    public Attempt findAttemptByAttemptId(@PathVariable String attempt_id) {
-        return attemptService.findAttemptByAttemptId(attempt_id);
+    @GetMapping("/get/{question_id}/{user_id}/{attempt_id}")
+    public Attempt findAttemptById(@PathVariable String question_id, @PathVariable String user_id, @PathVariable String attempt_id) {
+        return attemptService.findAttemptById(question_id, user_id, attempt_id);
     }
 }
