@@ -38,7 +38,7 @@ const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
     if (isContest) {
       setMaxTry(1000);
     } else {
-      setMaxTry(3);
+      setMaxTry(1);
     }
   }, [isContest]);
 
@@ -155,21 +155,21 @@ const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
             if (interviewID) {
               axios.post(
                 process.env.REACT_APP_URL +
-                  "api/interview/add_question/" +
-                  JSON.parse(localStorage.getItem("session")).company_id +
-                  "/" +
-                  interviewID +
-                  "/" +
-                  curQuestion.question_id
+                "api/interview/add_question/" +
+                JSON.parse(localStorage.getItem("session")).company_id +
+                "/" +
+                interviewID +
+                "/" +
+                curQuestion.question_id
               );
             }
             selectedCategories.map((category) => {
               axios.post(
                 process.env.REACT_APP_URL +
-                  "api/question/add_category/" +
-                  curQuestion.question_id +
-                  "/" +
-                  category.category_name
+                "api/question/add_category/" +
+                curQuestion.question_id +
+                "/" +
+                category.category_name
               );
             });
             if (questionType === "CQ") {

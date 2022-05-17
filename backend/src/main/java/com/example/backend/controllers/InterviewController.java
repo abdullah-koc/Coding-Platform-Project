@@ -105,4 +105,9 @@ public class InterviewController {
          @PathVariable boolean is_passed) {
       interviewService.addResult(interview_id, user_id, is_passed);
    }
+
+   @GetMapping(path = "/get_if_passed/{interview_id}/{user_id}")
+   public boolean getIfPassed(@PathVariable String interview_id, @PathVariable String user_id) {
+      return interviewService.getIfPassed(interview_id, user_id);
+   }
 }

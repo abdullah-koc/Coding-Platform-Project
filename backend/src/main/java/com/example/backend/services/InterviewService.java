@@ -80,4 +80,8 @@ public class InterviewService {
       interviewRepository.addResult(interview_id, user_id, is_passed);
    }
 
+   public boolean getIfPassed(String interview_id, String user_id) {
+      return interviewRepository.getIfPassed(interview_id, user_id);
+   }
+
 }

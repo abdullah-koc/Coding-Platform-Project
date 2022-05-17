@@ -62,7 +62,7 @@ public class InterviewRepository {
 
       String last_interview_id;
       int interview_id_count;
-      String last_interview_id_sql = "SELECT interview_id FROM interviews LENGTH(interview_id) >= ALL(SELECT LENGTH(interview_id) FROM interviews) ORDER BY interview_id DESC LIMIT 1";
+      String last_interview_id_sql = "SELECT interview_id FROM interviews WHERE LENGTH(interview_id) >= ALL(SELECT LENGTH(interview_id) FROM interviews) ORDER BY interview_id DESC LIMIT 1";
       try {
          last_interview_id = (String) jdbcTemplate.queryForObject(last_interview_id_sql, String.class);
          interview_id_count = Integer.parseInt(last_interview_id.substring(1));
@@ -216,6 +216,11 @@ public class InterviewRepository {
    public void addResult(String interview_id, String user_id, boolean is_passed) {
       String sql = "UPDATE user_interview SET is_passed = ? WHERE interview_id = ? AND user_id = ?";
       jdbcTemplate.update(sql, is_passed, interview_id, user_id);
+   }
+
+   public boolean getIfPassed(String interview_id, String user_id) {
+      String sql = "SELECT is_passed FROM user_interview WHERE interview_id = ? AND user_id = ?";
+      return jdbcTemplate.queryForObject(sql, Boolean.class, interview_id, user_id);
    }
 
 }
