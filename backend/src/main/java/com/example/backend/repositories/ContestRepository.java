@@ -182,13 +182,13 @@ public class ContestRepository {
    }
 
    public List<ContestResultDto> getContestantsByOrder(String contest_id) {
-      String sql = "SELECT nickname, SUM(question_point) points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_contest NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN question_contest WHERE is_solved = b'1' AND contest_id = ? UNION SELECT nickname, SUM(question_point) points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_contest NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN question_contest WHERE is_solved = b'0' AND contest_id = ? AND nickname NOT IN (SELECT nickname, SUM(question_point) points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_contest NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN question_contest WHERE is_solved = b'1' AND contest_id = ?) GROUP BY nickname ORDER BY points DESC";
+      String sql = "SELECT nickname, SUM(question_point) points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_contest NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN question_contest WHERE is_solved = b'1' AND contest_id = ? GROUP BY nickname ORDER BY points DESC";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
          ContestResultDto contestResult = new ContestResultDto();
          contestResult.setNickname(rs.getString("nickname"));
          contestResult.setPoint(rs.getInt("points"));
          return contestResult;
-      }, contest_id, contest_id, contest_id);
+      }, contest_id);
    }
 
    public List<CompanyDto> getSponsors(String contest_id) {
