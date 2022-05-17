@@ -1,6 +1,7 @@
 package com.example.backend.dto;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class SignUpDto implements Serializable {
 
@@ -9,12 +10,10 @@ public class SignUpDto implements Serializable {
     private String nickname;
     private String password;
     private String company_phone;
-    private String birth_date;
+    private Date birth_date;
     private String company_address;
     private String type;
     private String cv;
-
-
 
     public SignUpDto() {
 
@@ -68,11 +67,11 @@ public class SignUpDto implements Serializable {
         this.company_phone = company_phone;
     }
 
-    public String getBirth_date() {
+    public Date getBirth_date() {
         return birth_date;
     }
 
-    public void setBirth_date(String birth_date) {
+    public void setBirth_date(Date birth_date) {
         this.birth_date = birth_date;
     }
 

@@ -1,5 +1,7 @@
 package com.example.backend.entities;
 
+import java.sql.Date;
+
 public class User extends Person {
     private String school;
     private String department;
@@ -12,20 +14,20 @@ public class User extends Person {
     }
 
     public User(String user_id,
-                String full_name,
-                String email,
-                String photo,
-                String password,
-                String nickname,
-                String phone,
-                boolean is_confirmed,
-                String reg_date,
-                String birth_date,
-                String school,
-                String department,
-                String cur_company,
-                String success_rate,
-                String user_point) {
+            String full_name,
+            String email,
+            String photo,
+            String password,
+            String nickname,
+            String phone,
+            boolean is_confirmed,
+            Date reg_date,
+            Date birth_date,
+            String school,
+            String department,
+            String cur_company,
+            String success_rate,
+            String user_point) {
         super(user_id, full_name, email, photo, password, nickname, phone, is_confirmed, reg_date, birth_date);
         this.school = school;
         this.department = department;

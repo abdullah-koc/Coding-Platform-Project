@@ -1,5 +1,7 @@
 package com.example.backend.entities;
 
+import java.sql.Date;
+
 public class Editor extends Person {
     private String experience_level;
     private int salary;
@@ -14,18 +16,18 @@ public class Editor extends Person {
     }
 
     public Editor(String editor_id,
-                  String full_name,
-                  String email,
-                  String photo,
-                  String password,
-                  String nickname,
-                  String phone,
-                  boolean is_confirmed,
-                  String reg_date,
-                  String birth_date,
-                  String experience_level,
-                  int salary,
-                  String cv) {
+            String full_name,
+            String email,
+            String photo,
+            String password,
+            String nickname,
+            String phone,
+            boolean is_confirmed,
+            Date reg_date,
+            Date birth_date,
+            String experience_level,
+            int salary,
+            String cv) {
         super(editor_id, full_name, email, photo, password, nickname, phone, is_confirmed, reg_date, birth_date);
         this.experience_level = experience_level;
         this.salary = salary;
@@ -35,6 +37,7 @@ public class Editor extends Person {
     public String getEditor_id() {
         return editor_id;
     }
+
     public void setEditor_id(String editor_id) {
         this.editor_id = editor_id;
     }
@@ -55,7 +58,9 @@ public class Editor extends Person {
         this.salary = salary;
     }
 
-    public String getCv() { return cv;}
+    public String getCv() {
+        return cv;
+    }
 
     public void setCv(String cv) {
         this.cv = cv;

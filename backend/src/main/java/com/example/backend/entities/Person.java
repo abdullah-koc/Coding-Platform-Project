@@ -4,7 +4,6 @@ import java.sql.Date;
 
 public class Person {
 
-
     private String person_id;
     private String full_name;
     private String email;
@@ -13,23 +12,23 @@ public class Person {
     private String nickname;
     private String phone;
     private boolean is_confirmed;
-    private String reg_date;
-    private String birth_date;
+    private Date reg_date;
+    private Date birth_date;
 
     public Person() {
 
     }
 
     public Person(String person_id,
-                  String full_name,
-                  String email,
-                  String photo,
-                  String password,
-                  String nickname,
-                  String phone,
-                  boolean is_confirmed,
-                  String reg_date,
-                  String birth_date) {
+            String full_name,
+            String email,
+            String photo,
+            String password,
+            String nickname,
+            String phone,
+            boolean is_confirmed,
+            Date reg_date,
+            Date birth_date) {
         this.person_id = person_id;
         this.full_name = full_name;
         this.email = email;
@@ -106,15 +105,15 @@ public class Person {
         this.is_confirmed = is_confirmed;
     }
 
-    public String getReg_date() {
+    public Date getReg_date() {
         return reg_date;
     }
 
-    public void setReg_date(String reg_date) {
+    public void setReg_date(Date reg_date) {
         this.reg_date = reg_date;
     }
 
-    public String getBirth_date() {
+    public Date getBirth_date() {
         return birth_date;
     }
 
