@@ -78,7 +78,7 @@ public class AttemptRepository {
             String sql = "INSERT INTO attempt_test_case(attempt_id, test_case_id, is_passed, coding_question_id, user_id) VALUES(?, ?, ?, ?, ?)";
             jdbcTemplate.update(sql, attempt.getAttempt_id(), testCase.getTest_case_id(), new Random().nextBoolean(), attempt.getQuestion_id(), attempt.getUser_id());
 
-            String attempt_test_case_sql = "SELECT * FROM attempt_test_case WHERE attempt_id = ? AND user_id = ? AND coding_quuestion_id = ? AND test_case_id = ? AND is_passed = ?";
+            String attempt_test_case_sql = "SELECT * FROM attempt_test_case WHERE attempt_id = ? AND user_id = ? AND coding_question_id = ? AND test_case_id = ? AND is_passed = ?";
             try {
                 if (jdbcTemplate.queryForMap(attempt_test_case_sql,
                         new Object[] { attempt.getAttempt_id(), attempt.getUser_id(), attempt.getQuestion_id(), testCase.getTest_case_id(), false }) != null) {
