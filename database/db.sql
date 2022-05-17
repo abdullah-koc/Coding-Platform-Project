@@ -789,3 +789,16 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2022-05-17 17:03:38
+CREATE OR REPLACE VIEW statusBar AS
+SELECT
+       p.nickname,
+       q.difficulty,
+       COUNT(a.question_id) as total,
+       SUM(CASE WHEN is_solved = 1 THEN 1 ELSE 0 END) AS corrects,
+       SUM(CASE WHEN is_solved = 1 THEN 1 ELSE 0 END) / COUNT(a.question_id) * 100
+FROM attempts a, questions q, people p
+WHERE a.user_id = p.person_id AND q.question_id = a.question_id AND a.try_count >= ALL(SELECT try_count FROM attempts a2 WHERE a.question_id = a2.question_id)
+GROUP BY p.nickname, q.difficulty
+ORDER BY q.difficulty;
+CREATE INDEX nickname_index USING BTREE ON people(nickname);
+CREATE INDEX title_index USING BTREE ON questions(title);
