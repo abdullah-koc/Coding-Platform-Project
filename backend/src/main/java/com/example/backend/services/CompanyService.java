@@ -4,6 +4,7 @@ import com.example.backend.dto.CompanyDto;
 import com.example.backend.entities.Company;
 import com.example.backend.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -12,11 +13,14 @@ public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     public void signUp(CompanyDto companyDto) {
         Company company = new Company();
         company.setCompany_name(companyDto.getCompany_name());
         company.setCompany_email(companyDto.getCompany_email());
-        company.setCompany_password(companyDto.getCompany_password());
+        company.setCompany_password(passwordEncoder.encode(companyDto.getCompany_password()));
         company.setCompany_phone(companyDto.getCompany_phone());
         company.setCompany_address(companyDto.getCompany_address());
         companyRepository.signUp(company);
@@ -42,8 +46,8 @@ public class CompanyService {
 
     public void changePassword(String company_id, String password){
         Company company = companyRepository.findCompanyById(company_id);
-        company.setCompany_password(password);
-        companyRepository.updatePassword(company_id, password);
+        company.setCompany_password(passwordEncoder.encode(password));
+        companyRepository.updatePassword(company_id, passwordEncoder.encode(password));
     }
 
     public void changePhone(String company_id, String phone){

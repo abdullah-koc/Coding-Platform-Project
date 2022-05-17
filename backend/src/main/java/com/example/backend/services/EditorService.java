@@ -6,6 +6,7 @@ import com.example.backend.repositories.EditorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -21,6 +22,9 @@ public class EditorService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     private void sendVerificationEmail(Editor editor, String siteURL)
             throws MessagingException, UnsupportedEncodingException {
@@ -57,7 +61,7 @@ public class EditorService {
         editor.setEmail(editorDto.getEmail());
         editor.setBirth_date(editorDto.getBirth_date());
         editor.setNickname(editorDto.getNickname());
-        editor.setPassword(editorDto.getPassword());
+        editor.setPassword(passwordEncoder.encode(editorDto.getPassword()));
         editor.setCv(editorDto.getCv());
         editorRepository.signUp(editor);
         sendVerificationEmail(editor, siteURL);
