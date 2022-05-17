@@ -113,41 +113,7 @@ export const Interviews = () => {
         }}
       >
         <Grid container spacing={4}>
-          <Grid item xs={6}>
-            <h1>Upcoming Interviews</h1>
-            {upcomingInterviews.length === 0 && (
-              <h3 style={{ textAlign: "center" }}>
-                No upcoming interviews. Check back later!
-              </h3>
-            )}
-            {curUpcomingInterviews.map((interview, index) => (
-              <div
-                key={index}
-                style={{ paddingRight: "40px", marginBottom: "10px" }}
-              >
-                <InterviewInfo
-                  interview_id={interview.interview_id}
-                  interview_name={interview.interview_name}
-                  interview_date={interview.interview_date}
-                  interview_duration={interview.interview_duration}
-                  user_id={
-                    JSON.parse(localStorage.getItem("session")).person_id
-                  }
-                  company_id={interview.company_id}
-                  style={{ marginTop: "20px" }}
-                />
-              </div>
-            ))}
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <Pagination
-                count={totalPagesUpcoming}
-                page={upcomingPage}
-                onChange={(e, page) => setUpcomingPage(page)}
-              />
-            </div>
-          </Grid>
-
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <h1>Current and Past Interviews</h1>
             {attendedInterviews.length === 0 && (
               <h3 style={{ textAlign: "center" }}>No attended interviews.</h3>

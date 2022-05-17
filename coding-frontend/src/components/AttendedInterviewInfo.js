@@ -38,13 +38,32 @@ export const InterviewInfo = ({
   // find after 2 hours from the interview date
   var end_time = new Date(date.getTime() + interview_duration * 60 * 60 * 1000);
 
+  const [result, setResult] = React.useState(false);
+  React.useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_URL +
+          `api/interview/get_if_passed/${interview_id}/${
+            JSON.parse(localStorage.getItem("session")).person_id
+          }`
+      )
+      .then((res) => {
+        setResult(res.data);
+      });
+  }, []);
+
   return (
     <div className={classes.root}>
       <Grid container>
         <Grid
           item
           xs={3}
-          style={{ display: "flex", alignItems: "center", paddingLeft: "20px", fontWeight: "bold" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            paddingLeft: "20px",
+            fontWeight: "bold",
+          }}
         >
           {interview_name}
         </Grid>
@@ -62,16 +81,17 @@ export const InterviewInfo = ({
                 new Date(interview_date) > new Date()
                   ? Colors.dark_color
                   : Colors.primary_color,
-              cursor: "pointer",
               color: "white",
               width: "100px",
             }}
-            disabled={new Date(interview_date) > new Date()}
+            disabled={!(right_now > date && right_now <= end_time)}
           >
-            {((right_now > date) && (right_now <= end_time))
+            {right_now > date && right_now <= end_time
               ? "Start"
               : new Date(date) < new Date(right_now)
-              ? "Results"
+              ? result
+                ? "Passed"
+                : "Failed"
               : "Not Started"}
           </Button>
         </Grid>

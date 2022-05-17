@@ -53,17 +53,6 @@ const CodingQuestionText = ({
       });
   }, [question]);
 
-  React.useEffect(() => {
-    if (remainingAttempts <= 0) {
-      setIsSubmitButtonDisabled(true);
-      parentSubmitCallback(true);
-    }
-    if (remainingAttempts >= 1) {
-      setIsSubmitButtonDisabled(false);
-      parentSubmitCallback(false);
-    }
-  }, [remainingAttempts]);
-
   const handleSubmitButtonPress = () => {
     axios
       .post(process.env.REACT_APP_URL + "api/attempt/make/attempt", {

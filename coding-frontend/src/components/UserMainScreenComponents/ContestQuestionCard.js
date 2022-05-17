@@ -35,7 +35,10 @@ const ContestQuestionCard = ({
 
   useEffect(() => {
     axios
-      .get(process.env.REACT_APP_URL + `api/contest/all_questions/${getID()}`)
+      .get(
+        process.env.REACT_APP_URL +
+          `api/interview/get_questions/${10}/${getID()}`
+      )
       .then((res) => {
         var data = res.data.filter((item) => item.title === question);
         var ID = data[0].question_id;

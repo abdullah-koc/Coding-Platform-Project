@@ -31,29 +31,29 @@ const CodingQuestionInfo = ({ isContest }) => {
     }
   }, []);
 
-  React.useEffect(() => {
-    if (isContest) {
-      axios
-        .get(
-          process.env.REACT_APP_URL +
-            "api/contest/get/all/" +
-            JSON.parse(localStorage.getItem("session")).person_id
-        )
-        .then((res) => {
-          let count = 0;
-          let contestID = getContestID();
-          let userID = JSON.parse(localStorage.getItem("session")).person_id;
-          res.data.map((contest) => {
-            if (contest.contest_id === contestID) {
-              count++;
-            }
-          });
-          if (count === 0) {
-            navigate("/");
-          }
-        });
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   if (isContest) {
+  //     axios
+  //       .get(
+  //         process.env.REACT_APP_URL +
+  //           "api/contest/get/all/" +
+  //           JSON.parse(localStorage.getItem("session")).person_id
+  //       )
+  //       .then((res) => {
+  //         let count = 0;
+  //         let contestID = getContestID();
+  //         let userID = JSON.parse(localStorage.getItem("session")).person_id;
+  //         res.data.map((contest) => {
+  //           if (contest.contest_id === contestID) {
+  //             count++;
+  //           }
+  //         });
+  //         if (count === 0) {
+  //           navigate("/");
+  //         }
+  //       });
+  //   }
+  // }, []);
 
   const [mode, setMode] = React.useState(0);
   const [question, setQuestion] = React.useState({});

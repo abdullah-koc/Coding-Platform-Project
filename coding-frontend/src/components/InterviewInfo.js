@@ -29,24 +29,6 @@ export const InterviewInfo = ({
 }) => {
   let navigate = useNavigate();
   const classes = useStyles();
-  const handleAddInterview = () => {
-    axios
-      .post(
-        process.env.REACT_APP_URL +
-          `api/interview/add_interviewee/` +
-          company_id +
-          `/` +
-          interview_id +
-          `/` +
-          user_id
-      )
-      .then((res) => {
-        alert("You have successfully added the interview");
-      })
-      .catch((err) => {
-        alert("You could not added the interview");
-      });
-  };
 
   var date = new Date(interview_date);
   return (
@@ -55,7 +37,12 @@ export const InterviewInfo = ({
         <Grid
           item
           xs={4}
-          style={{ display: "flex", alignItems: "center", paddingLeft: "20px", fontWeight: "bold" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            paddingLeft: "20px",
+            fontWeight: "bold",
+          }}
         >
           {interview_name}
         </Grid>
