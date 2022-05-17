@@ -26,9 +26,9 @@ public class TestCaseController {
         return testCaseService.getAllTestCasesOnCodingQuestion(coding_question_id);
     }
 
-    @GetMapping("/get/matches/{attempt_id}")
-    public List<AttemptTestCaseDto> getAllAttemptTestCaseMatches(@PathVariable String attempt_id) {
-        return testCaseService.getAllAttemptTestCaseMatches(attempt_id);
+    @GetMapping("/get/matches/{question_id}/{user_id}/{attempt_id}")
+    public List<AttemptTestCaseDto> getAllAttemptTestCaseMatches(@PathVariable String question_id, @PathVariable String user_id, @PathVariable String attempt_id) {
+        return testCaseService.getAllAttemptTestCaseMatches(question_id, user_id, attempt_id);
     }
 
     @GetMapping("/get/{coding_question_id}/{test_case_id}")

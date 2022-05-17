@@ -29,8 +29,8 @@ public class TestCaseService {
         return testCaseRepository.findTestCases(coding_question_id);
     }
 
-    public List<AttemptTestCaseDto> getAllAttemptTestCaseMatches(String attempt_id) {
-        return testCaseRepository.getAllAttemptTestCaseMatches(attempt_id);
+    public List<AttemptTestCaseDto> getAllAttemptTestCaseMatches(String question_id, String user_id, String attempt_id) {
+        return testCaseRepository.getAllAttemptTestCaseMatches(question_id, user_id, attempt_id);
     }
 
     public TestCase findTestCaseById(String coding_question_id, String test_case_id) {

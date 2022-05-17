@@ -42,10 +42,10 @@ public class TestCaseRepository {
         }
     }
 
-    public List<AttemptTestCaseDto> getAllAttemptTestCaseMatches(String attempt_id) {
+    public List<AttemptTestCaseDto> getAllAttemptTestCaseMatches(String question_id, String user_id, String attempt_id) {
         try {
-            String sql = "SELECT * FROM attempt_test_case WHERE attempt_id = ?";
-            return jdbcTemplate.query(sql, new Object[] { attempt_id}, new BeanPropertyRowMapper(AttemptTestCaseDto.class));
+            String sql = "SELECT * FROM attempt_test_case WHERE question_id = ? AND user_id = ? AND attempt_id = ?";
+            return jdbcTemplate.query(sql, new Object[] { question_id, user_id, attempt_id}, new BeanPropertyRowMapper(AttemptTestCaseDto.class));
 
         } catch(EmptyResultDataAccessException e) {
             System.out.println("null");
