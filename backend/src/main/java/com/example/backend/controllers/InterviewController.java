@@ -1,5 +1,6 @@
 package com.example.backend.controllers;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import com.example.backend.dto.InterviewDto;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.mail.MessagingException;
 
 @RestController
 @RequestMapping(path = "api/interview")
@@ -102,7 +105,7 @@ public class InterviewController {
 
    @PostMapping(path = "/add_result/{interview_id}/{user_id}/{is_passed}")
    public void addResult(@PathVariable String interview_id, @PathVariable String user_id,
-         @PathVariable boolean is_passed) {
+         @PathVariable boolean is_passed) throws MessagingException, UnsupportedEncodingException {
       interviewService.addResult(interview_id, user_id, is_passed);
    }
 

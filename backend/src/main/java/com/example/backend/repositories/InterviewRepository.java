@@ -6,8 +6,11 @@ import com.example.backend.dto.InterviewDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.dto.UserDto;
 
+import com.example.backend.entities.Interview;
+import com.example.backend.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -221,6 +224,15 @@ public class InterviewRepository {
    public boolean getIfPassed(String interview_id, String user_id) {
       String sql = "SELECT is_passed FROM user_interview WHERE interview_id = ? AND user_id = ?";
       return jdbcTemplate.queryForObject(sql, Boolean.class, interview_id, user_id);
+   }
+
+   public Interview findById(String interview_id) {
+      String sql = "SELECT * FROM interviews WHERE interview_id = ?";
+      try {
+         return (Interview) jdbcTemplate.queryForObject(sql, new Object[]{interview_id}, new BeanPropertyRowMapper(Interview.class));
+      } catch (EmptyResultDataAccessException e) {
+         return null;
+      }
    }
 
 }

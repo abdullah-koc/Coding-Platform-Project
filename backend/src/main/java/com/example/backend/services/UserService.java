@@ -2,10 +2,7 @@ package com.example.backend.services;
 
 import com.example.backend.dto.UserDto;
 import com.example.backend.dto.UserStatsDto;
-import com.example.backend.entities.Attempt;
-import com.example.backend.entities.Company;
-import com.example.backend.entities.Person;
-import com.example.backend.entities.User;
+import com.example.backend.entities.*;
 import com.example.backend.repositories.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

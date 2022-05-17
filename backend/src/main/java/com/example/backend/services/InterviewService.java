@@ -1,20 +1,35 @@
 package com.example.backend.services;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import com.example.backend.dto.InterviewDto;
 import com.example.backend.dto.QuestionDto;
 import com.example.backend.dto.UserDto;
+import com.example.backend.entities.Interview;
+import com.example.backend.entities.User;
 import com.example.backend.repositories.InterviewRepository;
 
+import com.example.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 @Service
 public class InterviewService {
 
    @Autowired
    InterviewRepository interviewRepository;
+
+   @Autowired
+   UserRepository userRepository;
+
+   @Autowired
+   private JavaMailSender mailSender;
 
    public InterviewDto getInterview(String interview_id, String company_id) {
       return interviewRepository.getInterview(interview_id, company_id);
@@ -76,7 +91,41 @@ public class InterviewService {
       return interviewRepository.seePastResults(interview_id, user_id);
    }
 
-   public void addResult(String interview_id, String user_id, boolean is_passed) {
+   private void sendResultOfInterview(User user, Interview interview, boolean is_passed) throws MessagingException, UnsupportedEncodingException {
+      String toAddress = user.getEmail();
+      String fromAddress = "bingithelpdesk@gmail.com";
+      String senderName = "Syncoder";
+      String subject = "Interview Result";
+      String content = "Dear [[name]],<br>"
+              + "This is the result of your interview [[INTERVIEW]]: "
+              + "[[RESULT]]<br>"
+              + "Thank you,<br>"
+              + "Syncoder.";
+
+      MimeMessage message = mailSender.createMimeMessage();
+      MimeMessageHelper helper = new MimeMessageHelper(message);
+
+      helper.setFrom(fromAddress, senderName);
+      helper.setTo(toAddress);
+      helper.setSubject(subject);
+
+      content = content.replace("[[name]]", user.getFull_name());
+      content = content.replace("[[INTERVIEW]]", interview.getInterview_name());
+
+      if(is_passed)
+         content = content.replace("[[RESULT]]", "You passed the interview. Congrats!");
+      else
+         content = content.replace("[[RESULT]]", "Unfortunately, you couldn't pass the interview. Don't worry, you can follow us for future opportunities");
+
+      helper.setText(content, true);
+
+      mailSender.send(message);
+   }
+
+   public void addResult(String interview_id, String user_id, boolean is_passed) throws MessagingException, UnsupportedEncodingException {
+      User user = userRepository.findById(user_id);
+      Interview interview = interviewRepository.findById(interview_id);
+      sendResultOfInterview(user, interview, is_passed);
       interviewRepository.addResult(interview_id, user_id, is_passed);
    }
 
