@@ -36,6 +36,10 @@ export const CompanyCreateInterview = () => {
     ) {
       alert("Please fill all the fields!");
     } else {
+      if (new Date(interviewDateTime) < new Date()) {
+        alert("Please enter a valid date!");
+        return;
+      }
       axios
         .post(process.env.REACT_APP_URL + "api/interview/create", {
           company_id: JSON.parse(localStorage.getItem("session")).company_id,

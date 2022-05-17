@@ -21,12 +21,21 @@ export const ContestScreen = () => {
   const [contestInfo, setContestInfo] = useState({});
   const [questions, setQuestions] = useState([]);
   const [isContestEnded, setIsContestEnded] = useState(false);
+  const [sponsors, setSponsors] = useState([]);
 
   const getID = () => {
     let url = window.location.href;
     let id = url.split("/")[url.split("/").length - 1];
     return id;
   };
+
+  useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_URL + `api/contest/get_sponsors/${getID()}`)
+      .then((res) => {
+        setSponsors(res.data);
+      });
+  }, []);
 
   useEffect(() => {
     axios
@@ -44,10 +53,6 @@ export const ContestScreen = () => {
         setQuestions(res.data);
       });
   }, [contestInfo]);
-
-  const handleSubmission = () => {
-    alert("Contest Submitted");
-  };
 
   const handleGoToQuestion = (id) => {
     if (id.startsWith("CQ")) {
@@ -71,7 +76,7 @@ export const ContestScreen = () => {
         <Grid container>
           <Grid
             item
-            xs={5}
+            xs={isContestEnded ? 12 : 5}
             style={{
               paddingLeft: "20px",
               fontSize: "20px",
@@ -204,6 +209,45 @@ export const ContestScreen = () => {
                     </li>
                   </ul>
                 </Grid>
+                <Grid container>
+                  <Grid item xs={12} style={{ marginTop: "20px" }}>
+                    <Grid container>
+                      {sponsors && (
+                        <Grid item xs={12}>
+                          <h3>Sponsors</h3>
+                        </Grid>
+                      )}
+                      {sponsors.map((sponsor, index) => (
+                        <Grid item xs={3} key={index}>
+                          <Grid container>
+                            <Grid item xs={12}>
+                              <img
+                                src={sponsor.company_photo}
+                                alt="logo"
+                                style={{
+                                  width: "80px",
+                                  height: "80px",
+                                  borderRadius: "50%",
+                                  marginRight: "20px",
+                                }}
+                              />
+                            </Grid>
+                            <Grid item xs={12}>
+                              <p
+                                style={{
+                                  fontWeight: "bold",
+                                  display: "inline",
+                                }}
+                              >
+                                {sponsor.company_name}
+                              </p>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Grid>
+                </Grid>
               </div>
             )}
             {isContestEnded === true && (
@@ -231,35 +275,6 @@ export const ContestScreen = () => {
               paddingTop: "10px",
             }}
           >
-            {isContestEnded === true && (
-              <div>
-                <h1>Contest Questions</h1>
-                <Grid
-                  style={{
-                    height: "575px",
-                    overflowX: "auto",
-                    overflowY: "auto",
-                  }}
-                >
-                  {questions.map((question, index) => (
-                    <div
-                      key={index}
-                      style={{ paddingRight: "40px", marginBottom: "10px" }}
-                      onClick={() => handleGoToQuestion(question.id)}
-                    >
-                      <ContestQuestionCard
-                        isCoding={question.question_id.startsWith("CQ")}
-                        question={question.title}
-                        difficulty={question.difficulty}
-                        likeRate={question.likeRate}
-                        questionPoint={question.questionPoint}
-                        style={{ marginTop: "20px" }}
-                      />
-                    </div>
-                  ))}
-                </Grid>
-              </div>
-            )}
             {isContestEnded === false && (
               <div>
                 <h1>Questions</h1>
@@ -292,21 +307,6 @@ export const ContestScreen = () => {
                       />
                     </div>
                   ))}
-                </Grid>
-                <Grid
-                  style={{
-                    paddingTop: "20px",
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    paddingRight: "50px",
-                  }}
-                >
-                  <Button
-                    style={{ backgroundColor: "#64DD17", color: "white" }}
-                    onClick={handleSubmission}
-                  >
-                    Finish Contest
-                  </Button>
                 </Grid>
               </div>
             )}

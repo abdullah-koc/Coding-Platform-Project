@@ -23,8 +23,17 @@ const UserStatus = () => {
       )
       .then((res) => {
         const easy = res.data.filter((data) => data.difficulty === "Easy");
+        if (!easy) {
+          setEasyStats({ total: 0, corrects: 0 });
+        }
         const medium = res.data.filter((data) => data.difficulty === "Medium");
+        if (!medium) {
+          setMediumStats({ total: 0, corrects: 0 });
+        }
         const hard = res.data.filter((data) => data.difficulty === "Hard");
+        if (!hard) {
+          setHardStats({ total: 0, corrects: 0 });
+        }
         setEasyStats({ total: easy[0].total, corrects: easy[0].corrects });
         setMediumStats({
           total: medium[0].total,

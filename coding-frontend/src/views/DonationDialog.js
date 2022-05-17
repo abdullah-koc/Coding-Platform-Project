@@ -17,8 +17,6 @@ import PaymentForm from "../components/CompanyComponents/PaymentForm";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-
-
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -63,7 +61,8 @@ export default function DonationDialog() {
   React.useEffect(() => {
     if (
       localStorage.getItem("session") === null ||
-      JSON.parse(localStorage.getItem("session")).company_id !== null) {
+      JSON.parse(localStorage.getItem("session")).company_id === null
+    ) {
       navigate("/");
     }
   }, []);
@@ -76,10 +75,10 @@ export default function DonationDialog() {
     axios
       .get(
         process.env.REACT_APP_URL +
-        "api/company/get/donation/" +
-        JSON.parse(localStorage.getItem("session")).company_id +
-        "/" +
-        getContestID()
+          "api/company/get/donation/" +
+          JSON.parse(localStorage.getItem("session")).company_id +
+          "/" +
+          getContestID()
       )
       .then((res) => {
         if (res.data > 0) {
@@ -98,12 +97,12 @@ export default function DonationDialog() {
     }
     axios.post(
       process.env.REACT_APP_URL +
-      "api/company/donate/" +
-      JSON.parse(localStorage.getItem("session")).company_id +
-      "/" +
-      getContestID() +
-      "/" +
-      donationAmount
+        "api/company/donate/" +
+        JSON.parse(localStorage.getItem("session")).company_id +
+        "/" +
+        getContestID() +
+        "/" +
+        donationAmount
     );
     alert("Donated!");
     navigate("/company");

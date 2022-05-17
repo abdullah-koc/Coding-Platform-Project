@@ -8,28 +8,32 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
 
-export default function RanksTable({ contestId }) {
-  const [ranks, setRanks] = useState([
-    { order: 1, nickname: "Ali", score: 100 },
-    { order: 2, nickname: "Ahmed", score: 90 },
-    { order: 3, nickname: "Sara", score: 80 },
-    { order: 4, nickname: "Mohamed", score: 70 },
-    { order: 5, nickname: "Hassan", score: 60 },
-    { order: 6, nickname: "Omar", score: 50 },
-    { order: 7, nickname: "Sami", score: 40 },
-    { order: 8, nickname: "Khaled", score: 30 },
-    { order: 9, nickname: "Hassan", score: 20 },
-    { order: 10, nickname: "Omar", score: 10 },
-  ]);
+export default function RanksTable() {
+  const [ranks, setRanks] = useState([]);
 
-  const [contestants, setContestants] = useState([]);
+  const getID = () => {
+    let url = window.location.href;
+    let id = url.split("/")[url.split("/").length - 1];
+    return id;
+  };
+
   React.useEffect(() => {
     axios
       .get(
-        process.env.REACT_APP_URL + "api/contest/all_contestants/" + contestId
+        process.env.REACT_APP_URL +
+          "api/contest/get_contestants_by_order/" +
+          getID()
       )
       .then((res) => {
         console.log(res.data);
+        let dataWithOrder = res.data.map((item, index) => {
+          return {
+            order: index + 1,
+            nickname: item.nickname,
+            score: item.point,
+          };
+        });
+        setRanks(dataWithOrder);
       });
   }, []);
 
@@ -48,9 +52,9 @@ export default function RanksTable({ contestId }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {ranks.map((row) => (
+          {ranks.map((row, index) => (
             <TableRow
-              key={row.name}
+              key={index}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">

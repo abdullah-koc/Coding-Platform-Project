@@ -50,7 +50,8 @@ const App = () => {
           {/*done*/}
           <Route path="/contests" element={<Contests />} /> {/*done*/}
           <Route path="/contests/:id" element={<ContestScreen />} />
-          <Route path="/contest/:id/donate" element={<DonationDialog />} /> {/*done*/}
+          <Route path="/contest/:id/donate" element={<DonationDialog />} />{" "}
+          {/*done*/}
           <Route path="/cquestion/:id" element={<CodingQuestionInfo />} />
           <Route
             path="/contests/c/:c_id/:id"
@@ -68,14 +69,19 @@ const App = () => {
             element={<EditorProfileScreen />}
           />{" "}
           {/*done*/}
-          <Route path="/admin" element={<AdminScreen />} />  {/*done*/}
+          <Route path="/admin" element={<AdminScreen />} /> {/*done*/}
           <Route path="/company" element={<CompanyMainScreen />} /> {/*done*/}
           <Route
             path="/company/create-interview"
             element={<CompanyCreateInterview />}
           />
-          <Route path="/company/profile" element={<CompanyProfileScreen />} /> {/*done*/}
-          <Route path="/interview/:i_id" element={<InterviewUpdatePage />} /> {/*done*/}
+          <Route path="/company/profile" element={<CompanyProfileScreen />} />{" "}
+          {/*done*/}
+          <Route
+            path="/interview/:i_id"
+            element={<InterviewUpdatePage />}
+          />{" "}
+          {/*done*/}
           <Route path="/interviews" element={<Interviews />} /> {/*done*/}
         </Routes>
       </div>

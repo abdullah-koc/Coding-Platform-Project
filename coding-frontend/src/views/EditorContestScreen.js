@@ -39,11 +39,14 @@ const EditorContestScreen = () => {
       });
   }, []);
   React.useEffect(() => {
-    axios.get(process.env.REACT_APP_URL + "api/question/get_contest_questions").then((res) => {
-      setQuestions(res.data);
-      setDataToShow(res.data);
+    axios.get(process.env.REACT_APP_URL + "api/question/all").then((res) => {
+      let contestQuestions = res.data.filter(
+        (question) =>
+          question.editor_id !== null && question.is_contest === true
+      );
+      setQuestions(contestQuestions);
+      setDataToShow(contestQuestions);
     });
-    console.log(questions);
   }, []);
 
   const navigateToContest = (id) => {
@@ -92,6 +95,13 @@ const EditorContestScreen = () => {
     //if start date is after end date
     if (newStartDate > newEndDate) {
       alert("Start date cannot be after end date");
+      return;
+    }
+    if (
+      new Date(newStartDate) < new Date() ||
+      new Date(newEndDate) < new Date()
+    ) {
+      alert("Start date and end date cannot be before today");
       return;
     }
     axios

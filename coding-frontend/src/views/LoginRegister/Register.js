@@ -21,9 +21,9 @@ const Register = () => {
   const [birthday, setBirthday] = useState("");
   const [cvURL, setCVURL] = useState("");
 
-  //password should be at least 8 characters long and contain at least one number, one capital letter and one special character
   const isPasswordValid = (password) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
   };
 
@@ -46,6 +46,10 @@ const Register = () => {
           alert("Please upload your CV");
           return;
         } else {
+          if (new Date(birthday) > new Date()) {
+            alert("Please enter a valid date");
+            return;
+          }
           axios
             .post(process.env.REACT_APP_URL + "api/auth/signUp", {
               full_name: fullName,

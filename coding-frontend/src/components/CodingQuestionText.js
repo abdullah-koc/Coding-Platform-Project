@@ -47,7 +47,8 @@ const CodingQuestionText = ({
         if (!isContest) {
           setRemainingAttempts(question.max_try - res.data.length);
         } else {
-          setRemainingAttempts(100);
+          setQuestionText(res.data[res.data.length - 1].user_answer);
+          setRemainingAttempts(1000);
         }
       });
   }, [question]);

@@ -89,7 +89,7 @@ public class ContestRepository {
    }
 
    public List<QuestionDto> getAllQuestions(String contest_id) {
-      String sql = "SELECT question_id, title, explanation, question_duration, difficulty, question_point, solution, max_try, like_count, dislike_count, creation_date FROM questions NATURAL JOIN question_contest WHERE contest_id = ?";
+      String sql = "SELECT question_id, title, explanation, question_duration, difficulty, question_point, solution, max_try, like_count, dislike_count, creation_date, is_contest FROM questions NATURAL JOIN question_contest WHERE contest_id = ?";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
          QuestionDto question = new QuestionDto();
          question.setQuestion_id(rs.getString("question_id"));
@@ -109,7 +109,7 @@ public class ContestRepository {
    }
 
    public List<UserDto> getAllContestants(String contest_id) {
-      String sql = "SELECT user_id, full_name, photo, email, phone FROM users NATURAL JOIN user_contest NATURAL JOIN people WHERE contest_id = ?";
+      String sql = "SELECT user_id, full_name, photo, email, phone FROM users u JOIN people p ON u.user_id = p.person_id NATURAL JOIN user_contest WHERE is_solved = b'1' AND contest_id = ?";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
          UserDto user = new UserDto();
          user.setPerson_id(rs.getString("user_id"));

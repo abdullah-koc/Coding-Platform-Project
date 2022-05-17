@@ -31,7 +31,10 @@ const AttendedContestInfo = ({
 
   let navigate = useNavigate();
   const handleStartContest = () => {
-    if (new Date(start_date) <= new Date()) {
+    if (
+      new Date(start_date).setHours(0, 0, 0, 0) <=
+      new Date().setHours(0, 0, 0, 0)
+    ) {
       navigate("/contests/" + contest_id);
     }
   };
@@ -74,7 +77,8 @@ const AttendedContestInfo = ({
         <Grid item xs={4} style={{ display: "flex", alignItems: "center" }}>
           {start_date} - {end_date}
         </Grid>
-        {new Date(start_date) > new Date() ? (
+        {new Date(start_date).setHours(0, 0, 0, 0) >
+        new Date().setHours(0, 0, 0, 0) ? (
           <Grid
             item
             xs={1}
@@ -99,19 +103,26 @@ const AttendedContestInfo = ({
             onClick={() => handleStartContest()}
             style={{
               backgroundColor:
-                new Date(start_date) > new Date()
+                new Date(start_date).setHours(0, 0, 0, 0) >
+                new Date().setHours(0, 0, 0, 0)
                   ? Colors.dark_color
                   : Colors.primary_color,
               cursor: "pointer",
               color: "white",
               width: "100px",
             }}
-            disabled={new Date(start_date) > new Date()}
+            disabled={
+              new Date(start_date).setHours(0, 0, 0, 0) >
+              new Date().setHours(0, 0, 0, 0)
+            }
           >
-            {new Date(start_date) <= new Date() &&
-            new Date(end_date) >= new Date()
+            {new Date(start_date).setHours(0, 0, 0, 0) <=
+              new Date().setHours(0, 0, 0, 0) &&
+            new Date(end_date).setHours(0, 0, 0, 0) >=
+              new Date().setHours(0, 0, 0, 0)
               ? "Start"
-              : new Date(end_date) < new Date()
+              : new Date(end_date).setHours(0, 0, 0, 0) <
+                new Date().setHours(0, 0, 0, 0)
               ? "Results"
               : "Not Started"}
           </Button>

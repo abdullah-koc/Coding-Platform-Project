@@ -24,7 +24,7 @@ const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
   const [advisedDuration, setAdvisedDuration] = useState(0);
   const [questionPoint, setQuestionPoint] = useState(0);
   const [solution, setSolution] = useState("");
-  const [maxTry, setMaxTry] = useState(3);
+  const [maxTry, setMaxTry] = useState(interviewID !== null ? 1 : 3);
   const [typeDescription, setTypeDescription] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -32,8 +32,15 @@ const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
   const [inputs, setInputs] = useState([]);
   const [outputs, setOutputs] = useState([]);
   const [lockedStatus, setLockedStatus] = useState([]);
-  const [isContest, setIsContest] = useState(true);
+  const [isContest, setIsContest] = useState(false);
 
+  useEffect(() => {
+    if (isContest) {
+      setMaxTry(1000);
+    } else {
+      setMaxTry(3);
+    }
+  }, [isContest]);
 
   useEffect(() => {
     axios.get(process.env.REACT_APP_URL + "api/category/all").then((res) => {
@@ -79,13 +86,11 @@ const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
   const handleIsContest = (e) => {
     if (e.target.checked) {
       setIsContest(true);
-
     } else {
       setIsContest(false);
     }
     console.log(isContest);
-
-  }
+  };
 
   const addTestCaseHelper = (curQuestionId, ins, outs, locks, index) => {
     if (index === noOfTestCases) {
@@ -111,6 +116,10 @@ const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
       maxTry === 0
     ) {
       alert("Please fill all fields");
+      return;
+    }
+    if (noOfTestCases === 0 && questionType === "CQ") {
+      alert("Please add at least one test case");
       return;
     }
 
@@ -272,22 +281,28 @@ const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
 
               <Grid item xs={6}>
                 <Grid container>
-                  <Grid
-                    item
-                    xs={12}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginTop: "10px",
-                    }}
-                  >
-                    <div>Contest Question:</div>
-                    <div style={{ marginLeft: "80px" }} />
-                    <div>
-                      {" "}
-                      <FormControlLabel control={<Switch />} label="Contest Question" onClick={(e) => handleIsContest(e)}/>
-                    </div>
-                  </Grid>
+                  {!interviewID && (
+                    <Grid
+                      item
+                      xs={12}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginTop: "10px",
+                      }}
+                    >
+                      <div>Contest Question:</div>
+                      <div style={{ marginLeft: "80px" }} />
+                      <div>
+                        {" "}
+                        <FormControlLabel
+                          control={<Switch />}
+                          label="Contest Question"
+                          onClick={(e) => handleIsContest(e)}
+                        />
+                      </div>
+                    </Grid>
+                  )}
                   <Grid
                     item
                     xs={12}
@@ -376,6 +391,7 @@ const AddQuestionDialog = ({ open, handleParentOpen, interviewID }) => {
                         size="small"
                         style={{ width: "200px" }}
                         value={maxTry}
+                        disabled={isContest || interviewID}
                         type="number"
                         onChange={(e) => setMaxTry(e.target.value)}
                       />

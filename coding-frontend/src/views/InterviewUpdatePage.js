@@ -153,6 +153,10 @@ export const InterviewUpdatePage = () => {
   };
 
   const handleSaveUpdates = () => {
+    if (new Date(interviewDateTime) < new Date()) {
+      alert("Please select a date in the future");
+      return;
+    }
     handleAddUsers();
     alert("Interview updated successfully");
     navigate("/company");

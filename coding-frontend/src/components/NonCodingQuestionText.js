@@ -15,6 +15,12 @@ const NonCodingQuestionText = ({ parentSubmitCallback }) => {
     return id;
   };
 
+  const getWhetherContest = () => {
+    let url = window.location.href;
+    let bool = url.split("/")[3];
+    return bool === "contests";
+  };
+
   React.useEffect(() => {
     axios
       .get(process.env.REACT_APP_URL + "api/question/" + getID())
@@ -33,9 +39,14 @@ const NonCodingQuestionText = ({ parentSubmitCallback }) => {
           }/${getID()}`
       )
       .then((res) => {
+        console.log(getWhetherContest());
         if (res.data.length > 0) {
-          setIsSubmitButtonDisabled(true);
-          parentSubmitCallback(true);
+          if (getWhetherContest()) {
+            setQuestionText(res.data[res.data.length - 1].user_answer);
+          } else {
+            setIsSubmitButtonDisabled(true);
+            parentSubmitCallback(true);
+          }
         }
       });
   }, [question]);

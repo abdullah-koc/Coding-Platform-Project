@@ -42,19 +42,33 @@ const ProblemsScreen = () => {
   const [value, setValue] = useState([0, 100]);
   const [searchText, setSearchText] = useState("all");
 
-  const getIsSolved = (id) => {
-    axios
-      .get(
-        process.env.REACT_APP_URL +
-          "api/question/get_if_user_solved/" +
-          id +
-          "/" +
-          JSON.parse(localStorage.getItem("session")).person_id
-      )
-      .then((res) => {
-        return res.data;
-      });
-  };
+  useEffect(() => {
+    let arr = [];
+    questions.map((q) => {
+      arr.push(
+        axios.get(
+          process.env.REACT_APP_URL +
+            `api/question/get_if_user_solved/${q.question_id}/${
+              JSON.parse(localStorage.getItem("session")).person_id
+            }`
+        )
+      );
+    });
+    axios.all(arr).then(
+      axios.spread((...res) => {
+        setCurQuestions(
+          res
+            .map((r, i) => {
+              return {
+                ...questions[i],
+                is_solved: r.data,
+              };
+            })
+            .slice((page - 1) * 7, 7 * page)
+        );
+      })
+    );
+  }, [questions]);
 
   const [marks, setMarks] = useState([
     {
@@ -93,7 +107,8 @@ const ProblemsScreen = () => {
       )
       .then((res) => {
         let userQuestions = res.data.filter(
-          (question) => question.editor_id !== null
+          (question) =>
+            question.editor_id !== null && question.is_contest === false
         );
         setQuestions(userQuestions);
       })
@@ -127,7 +142,8 @@ const ProblemsScreen = () => {
       )
       .then((res) => {
         let userQuestions = res.data.filter(
-          (question) => question.editor_id !== null
+          (question) =>
+            question.editor_id !== null && question.is_contest === false
         );
         setQuestions(userQuestions);
       })
@@ -153,15 +169,16 @@ const ProblemsScreen = () => {
           "/" +
           status +
           "/" +
-          0 +
+          value[0] +
           "/" +
-          10 +
+          value[1] +
           "/" +
           val
       )
       .then((res) => {
         let userQuestions = res.data.filter(
-          (question) => question.editor_id !== null
+          (question) =>
+            question.editor_id !== null && question.is_contest === false
         );
         setQuestions(userQuestions);
       })
@@ -451,7 +468,7 @@ const ProblemsScreen = () => {
                             (question.like_count + question.dislike_count))
                         ).toFixed(1)
                   }
-                  isSolved={temp[index]}
+                  isSolved={question.is_solved}
                   questionPoint={question.question_point}
                   style={{ marginTop: "20px" }}
                 />
