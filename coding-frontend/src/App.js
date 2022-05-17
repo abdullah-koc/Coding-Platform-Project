@@ -19,6 +19,7 @@ import CompanyCreateInterview from "./views/CompanyCreateInterviewScreen";
 import CompanyProfileScreen from "./views/CompanyProfileScreen";
 import InterviewUpdatePage from "./views/InterviewUpdatePage";
 import Interviews from "./views/Interviews";
+import InterviewResultsScreen from "./views/InterviewResultsScreen";
 
 const useStyles = makeStyles({
   root: {
@@ -82,6 +83,10 @@ const App = () => {
             element={<InterviewUpdatePage />}
           />{" "}
           {/*done*/}
+          <Route
+            path="/interview/results/:i_id"
+            element={<InterviewResultsScreen />}
+          />{" "}
           <Route path="/interviews" element={<Interviews />} /> {/*done*/}
         </Routes>
       </div>

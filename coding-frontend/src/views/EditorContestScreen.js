@@ -35,7 +35,6 @@ const EditorContestScreen = () => {
       .then((response) => {
         setContests(response.data);
         setNewID(response.data.length);
-        console.log(response.data);
       });
   }, []);
   React.useEffect(() => {
@@ -137,7 +136,6 @@ const EditorContestScreen = () => {
   };
 
   const handlePhotoChange = (event) => {
-    console.log(event.target.files[0]);
     setNewPhoto(event.target.files[0]);
   };
 

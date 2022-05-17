@@ -8,7 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
 
-export default function RanksTable() {
+export default function RanksTable({ contestId }) {
   const [ranks, setRanks] = useState([]);
 
   const getID = () => {
@@ -18,23 +18,41 @@ export default function RanksTable() {
   };
 
   React.useEffect(() => {
-    axios
-      .get(
-        process.env.REACT_APP_URL +
-          "api/contest/get_contestants_by_order/" +
-          getID()
-      )
-      .then((res) => {
-        console.log(res.data);
-        let dataWithOrder = res.data.map((item, index) => {
-          return {
-            order: index + 1,
-            nickname: item.nickname,
-            score: item.point,
-          };
+    if (!contestId) {
+      axios
+        .get(
+          process.env.REACT_APP_URL +
+            "api/contest/get_contestants_by_order/" +
+            getID()
+        )
+        .then((res) => {
+          let dataWithOrder = res.data.map((item, index) => {
+            return {
+              order: index + 1,
+              nickname: item.nickname,
+              score: item.point,
+            };
+          });
+          setRanks(dataWithOrder);
         });
-        setRanks(dataWithOrder);
-      });
+    } else {
+      axios
+        .get(
+          process.env.REACT_APP_URL +
+            "api/contest/get_contestants_by_order/" +
+            contestId
+        )
+        .then((res) => {
+          let dataWithOrder = res.data.map((item, index) => {
+            return {
+              order: index + 1,
+              nickname: item.nickname,
+              score: item.point,
+            };
+          });
+          setRanks(dataWithOrder);
+        });
+    }
   }, []);
 
   return (

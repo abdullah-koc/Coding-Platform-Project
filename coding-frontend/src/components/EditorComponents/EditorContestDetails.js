@@ -25,16 +25,6 @@ const EditorContestDetails = ({
     handleParentOpen(false);
   };
 
-  const [contestQuestions, setContestQuestions] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_URL + "api/contest/all_questions/" + contestId)
-      .then((res) => {
-        setContestQuestions(res.data);
-      });
-  }, []);
-
   return (
     <div>
       <Dialog fullWidth maxWidth="md" open={open}>
@@ -55,19 +45,6 @@ const EditorContestDetails = ({
             >
               Start - End Dates: 12.12.2022 - 12.12.2023
             </Grid>
-            {contestQuestions.map((question, index) => (
-              <Grid item xs={12} style={{ marginBottom: "10px" }} key={index}>
-                <EditorQuestionCard
-                  questionId={question.question_id}
-                  isCoding={question.question_id.startsWith("CQ")}
-                  question={question.title}
-                  questionText={question.explanation}
-                  difficulty={question.difficulty}
-                  questionPoint={question.question_point}
-                  inContestScreen={true}
-                />
-              </Grid>
-            ))}
             <Grid
               item
               xs={12}

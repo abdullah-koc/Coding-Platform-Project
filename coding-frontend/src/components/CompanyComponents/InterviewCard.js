@@ -45,6 +45,10 @@ export const InterviewCard = ({
       });
   };
   const handleGoToInterviewUpdatePage = () => {
+    if (new Date(interview_date) < new Date()) {
+      navigate(`/interview/results/${interview_id}`);
+      return;
+    }
     navigate(`/interview/${interview_id}`);
   };
   return (
