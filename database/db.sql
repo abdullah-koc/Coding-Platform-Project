@@ -800,5 +800,3 @@ FROM attempts a, questions q, people p
 WHERE a.user_id = p.person_id AND q.question_id = a.question_id AND a.try_count >= ALL(SELECT try_count FROM attempts a2 WHERE a.question_id = a2.question_id)
 GROUP BY p.nickname, q.difficulty
 ORDER BY q.difficulty;
-CREATE INDEX nickname_index USING BTREE ON people(nickname);
-CREATE INDEX title_index USING BTREE ON questions(title);
