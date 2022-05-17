@@ -184,7 +184,7 @@ public class InterviewRepository {
    }
 
    public List<UserDto> seeResults(String interview_id) {
-      String sql = "SELECT person_id ,full_name, email, photo, phone, birth_date, nickname, SUM(question_point) points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_interview NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN interview_question WHERE is_solved = b'1' AND interview_id = ? GROUP BY nickname ORDER BY points DESC";
+      String sql = "(SELECT person_id ,full_name, email, photo, phone, birth_date, nickname, SUM(question_point) points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_interview NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN interview_question WHERE is_solved = b'1' AND interview_id = ? GROUP BY nickname ORDER BY points DESC) UNION (SELECT person_id ,full_name, email, photo, phone, birth_date, nickname, 0 AS points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_interview NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN interview_question WHERE interview_id = ? AND nickname NOT IN (SELECT nickname FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_interview NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN interview_question WHERE is_solved = b'1' AND interview_id = ?)) ";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
          UserDto userDto = new UserDto();
          userDto.setPerson_id(rs.getString("person_id"));
@@ -196,12 +196,12 @@ public class InterviewRepository {
          userDto.setPhoto(rs.getString("photo"));
          userDto.setUser_point(rs.getInt("points"));
          return userDto;
-      }, interview_id);
+      }, interview_id, interview_id, interview_id);
 
    }
 
    public List<UserDto> seePastResults(String interview_id, String user_id) {
-      String sql = "SELECT person_id, full_name, email, photo, phone, birth_date, nickname, SUM(question_point) points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_interview NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN interview_question WHERE is_solved = b'1' AND interview_id = ? AND user_id = ? GROUP BY nickname ORDER BY points DESC";
+      String sql = "(SELECT person_id ,full_name, email, photo, phone, birth_date, nickname, SUM(question_point) points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_interview NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN interview_question WHERE is_solved = b'1' AND interview_id = ? AND user_id = ? GROUP BY nickname ORDER BY points DESC) UNION (SELECT person_id ,full_name, email, photo, phone, birth_date, nickname, 0 AS points FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_interview NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN interview_question WHERE interview_id = ? AND nickname NOT IN (SELECT nickname FROM (users u JOIN people p ON u.user_id = p.person_id) NATURAL JOIN user_interview NATURAL JOIN attempts NATURAL JOIN questions NATURAL JOIN interview_question WHERE is_solved = b'1' AND interview_id = ? AND user_id = ?)) ";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
          UserDto userDto = new UserDto();
          userDto.setPerson_id(rs.getString("person_id"));

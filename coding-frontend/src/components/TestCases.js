@@ -46,19 +46,24 @@ const TestCases = ({ isExisting, attemptID, tests }) => {
       axios
         .get(
           process.env.REACT_APP_URL +
-            "api/attempt/" +
-            JSON.parse(localStorage.getItem("session")).person_id +
-            "/" +
-            getID()
+          "api/attempt/" +
+          JSON.parse(localStorage.getItem("session")).person_id +
+          "/" +
+          getID()
         )
         .then((res) => {
           axios
             .get(
               process.env.REACT_APP_URL +
-                "api/testcase/get/matches/" +
-                res.data[res.data.length - 1].attempt_id
+              "api/testcase/get/matches/" +
+              getID() +
+              "/" +
+              JSON.parse(localStorage.getItem("session")).person_id +
+              "/" +
+              res.data[res.data.length - 1].attempt_id
             )
             .then((res) => {
+              console.log(res.data);
               setIsPassedArr(res.data);
               setCurIsPassed(res.data[0].is_passed);
             });
@@ -119,8 +124,8 @@ const TestCases = ({ isExisting, attemptID, tests }) => {
               {testCase.is_locked === undefined
                 ? ""
                 : testCase.is_locked
-                ? "🔒"
-                : ""}
+                  ? "🔒"
+                  : ""}
             </div>
           ))}
         </Grid>
