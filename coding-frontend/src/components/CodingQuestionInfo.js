@@ -95,10 +95,10 @@ const CodingQuestionInfo = ({ isContest }) => {
     axios
       .get(
         process.env.REACT_APP_URL +
-          "api/attempt/" +
-          JSON.parse(localStorage.getItem("session")).person_id +
-          "/" +
-          getID()
+        "api/attempt/" +
+        JSON.parse(localStorage.getItem("session")).person_id +
+        "/" +
+        getID()
       )
       .then((res) => {
         setPreviousAttempts(res.data);
@@ -115,7 +115,7 @@ const CodingQuestionInfo = ({ isContest }) => {
       reqArr.push(
         axios.get(
           process.env.REACT_APP_URL +
-            `api/testcase/get/matches/${attempt.attempt_id}`
+          `api/testcase/get/matches/${getID()}/${JSON.parse(localStorage.getItem("session")).person_id}/${attempt.attempt_id}`
         )
       );
     });
@@ -123,6 +123,8 @@ const CodingQuestionInfo = ({ isContest }) => {
       axios.spread((...responses) => {
         let testCases = [];
         responses.map((response) => {
+          console.log(response.data)
+
           testCases.push(response.data);
         });
         setPreviousTestCases(testCases);

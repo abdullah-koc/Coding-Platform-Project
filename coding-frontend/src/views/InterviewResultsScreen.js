@@ -30,6 +30,7 @@ export const InterviewResultsScreen = () => {
       .get(process.env.REACT_APP_URL + `api/interview/see_results/${getID()}`)
       .then((res) => {
         setResults(res.data);
+        console.log(res.data);
       });
   }, []);
 
@@ -37,7 +38,7 @@ export const InterviewResultsScreen = () => {
     axios
       .post(
         process.env.REACT_APP_URL +
-          `api/interview/add_result/${getID()}/${id}/${true}`
+        `api/interview/add_result/${getID()}/${id}/${true}`
       )
       .then((res) => {
         setDisabled(true);
@@ -48,7 +49,7 @@ export const InterviewResultsScreen = () => {
     axios
       .post(
         process.env.REACT_APP_URL +
-          `api/interview/add_result/${getID()}/${id}/${false}`
+        `api/interview/add_result/${getID()}/${id}/${false}`
       )
       .then((res) => {
         setDisabled(true);
