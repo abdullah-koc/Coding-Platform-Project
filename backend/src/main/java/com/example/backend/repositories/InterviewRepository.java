@@ -20,7 +20,7 @@ public class InterviewRepository {
    private UserRepository userRepository;
 
    public InterviewDto getInterview(String interview_id, String company_id) {
-      String sql = "SELECT * FROM interviews WHERE interview_id = ? AND company_id = ?";
+      String sql = "SELECT * FROM interviews WHERE interview_id = ?";
       return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
          InterviewDto interviewDto = new InterviewDto();
          interviewDto.setInterview_id(rs.getString("interview_id"));
@@ -29,7 +29,7 @@ public class InterviewRepository {
          interviewDto.setInterview_name(rs.getString("interview_name"));
          interviewDto.setInterview_duration(rs.getInt("interview_duration"));
          return interviewDto;
-      }, interview_id, company_id);
+      }, interview_id);
    }
 
    public List<InterviewDto> getAllInterviews() {
@@ -91,17 +91,17 @@ public class InterviewRepository {
    }
 
    public void addQuestion(String interview_id, String question_id, String company_id) {
-      String sql = "INSERT INTO interview_question (interview_id, question_id, company_id) VALUES (?, ?, ?)";
-      jdbcTemplate.update(sql, interview_id, question_id, company_id);
+      String sql = "INSERT INTO interview_question (interview_id, question_id) VALUES (?, ?)";
+      jdbcTemplate.update(sql, interview_id, question_id);
    }
 
    public void removeQuestion(String interview_id, String question_id, String company_id) {
-      String sql = "DELETE FROM interview_question WHERE interview_id = ? AND question_id = ? AND company_id = ?";
-      jdbcTemplate.update(sql, interview_id, question_id, company_id);
+      String sql = "DELETE FROM interview_question WHERE interview_id = ? AND question_id = ?";
+      jdbcTemplate.update(sql, interview_id, question_id);
    }
 
    public List<QuestionDto> getQuestions(String interview_id, String company_id) {
-      String sql = "SELECT * FROM interview_question NATURAL JOIN questions WHERE interview_id = ? AND company_id = ?";
+      String sql = "SELECT * FROM interview_question NATURAL JOIN questions WHERE interview_id = ?";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
          QuestionDto question = new QuestionDto();
          question.setQuestion_id(rs.getString("question_id"));
@@ -118,7 +118,7 @@ public class InterviewRepository {
          question.setCompany_id(rs.getString("company_id"));
          question.setEditor_id(rs.getString("editor_id"));
          return question;
-      }, interview_id, company_id);
+      }, interview_id);
    }
 
    public List<QuestionDto> getQuestionsByCompany(String company_id) {
@@ -143,7 +143,7 @@ public class InterviewRepository {
    }
 
    public List<UserDto> getInterviewees(String company_id, String interview_id) {
-      String sql = "SELECT * FROM users, user_interview, people WHERE users.user_id = user_interview.user_id AND users.user_id = person_id AND company_id = ? AND interview_id = ?";
+      String sql = "SELECT * FROM users, user_interview, people WHERE users.user_id = user_interview.user_id AND users.user_id = person_id AND interview_id = ?";
       return jdbcTemplate.query(sql, (rs, rowNum) -> {
          UserDto userDto = new UserDto();
          userDto.setPerson_id(rs.getString("person_id"));
@@ -158,7 +158,7 @@ public class InterviewRepository {
          userDto.setSuccess_rate(rs.getString("success_rate"));
          userDto.setUser_point(rs.getInt("user_point"));
          return userDto;
-      }, company_id, interview_id);
+      }, interview_id);
    }
 
    public List<InterviewDto> getInterviewsByUser(String user_id) {
@@ -176,8 +176,8 @@ public class InterviewRepository {
 
    public void addInterviewee(String interview_id, String nickname, String company_id) {
       String user_id = userRepository.findByNickname(nickname).getPerson_id();
-      String sql = "INSERT INTO user_interview (interview_id, user_id, company_id, is_passed) VALUES (?, ?, ?, false)";
-      jdbcTemplate.update(sql, interview_id, user_id, company_id);
+      String sql = "INSERT INTO user_interview (interview_id, user_id, is_passed) VALUES (?, ?, false)";
+      jdbcTemplate.update(sql, interview_id, user_id);
    }
 
    public List<UserDto> seeResults(String interview_id) {
@@ -208,7 +208,7 @@ public class InterviewRepository {
          userDto.setPhoto(rs.getString("photo"));
          userDto.setUser_point(rs.getInt("points"));
          return userDto;
-      }, interview_id, user_id); 
+      }, interview_id, user_id);
    }
 
 }
