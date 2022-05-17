@@ -53,7 +53,9 @@ CREATE TABLE `attempt_test_case` (
   `attempt_id` varchar(20) NOT NULL,
   `test_case_id` varchar(20) NOT NULL,
   `is_passed` bit(1) NOT NULL DEFAULT b'0',
-  PRIMARY KEY (`attempt_id`,`test_case_id`),
+  `coding_question_id` varchar(20) NOT NULL,
+  `user_id` varchar(20) NOT NULL,
+  PRIMARY KEY (`attempt_id`,`test_case_id`,`coding_question_id`,`user_id`),
   KEY `test_case_atmpt_id_idx` (`test_case_id`),
   CONSTRAINT `atmpt_test_id` FOREIGN KEY (`attempt_id`) REFERENCES `attempts` (`attempt_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `test_case_atmpt_id` FOREIGN KEY (`test_case_id`) REFERENCES `test_cases` (`test_case_id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -83,8 +85,8 @@ CREATE TABLE `attempts` (
   `is_solved` bit(1) NOT NULL DEFAULT b'0',
   `user_id` varchar(20) NOT NULL,
   `question_id` varchar(20) NOT NULL,
-  `programming_language` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`attempt_id`),
+  `programming_language` varchar(45) NOT NULL,
+  PRIMARY KEY (`attempt_id`,`user_id`,`question_id`),
   KEY `user_id_idx` (`user_id`),
   KEY `question_id_idx` (`question_id`),
   CONSTRAINT `q_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -328,11 +330,8 @@ DROP TABLE IF EXISTS `interview_question`;
 CREATE TABLE `interview_question` (
   `interview_id` varchar(20) NOT NULL,
   `question_id` varchar(20) NOT NULL,
-  `company_id` varchar(20) NOT NULL,
-  PRIMARY KEY (`interview_id`,`question_id`,`company_id`),
+  PRIMARY KEY (`interview_id`,`question_id`),
   KEY `question_i_id_idx` (`question_id`),
-  KEY `company_c_id_idx` (`company_id`),
-  CONSTRAINT `company_c_id` FOREIGN KEY (`company_id`) REFERENCES `interviews` (`company_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `interview_q_id` FOREIGN KEY (`interview_id`) REFERENCES `interviews` (`interview_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `question_i_id` FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -420,7 +419,8 @@ CREATE TABLE `people` (
   PRIMARY KEY (`person_id`),
   UNIQUE KEY `email_UNIQUE` (`email`),
   UNIQUE KEY `nickname_UNIQUE` (`nickname`),
-  UNIQUE KEY `phone_UNIQUE` (`phone`)
+  UNIQUE KEY `phone_UNIQUE` (`phone`),
+  KEY `nickname_index` (`nickname`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -548,6 +548,7 @@ CREATE TABLE `questions` (
   PRIMARY KEY (`question_id`),
   KEY `editor_id_idx` (`editor_id`),
   KEY `company_id_idx` (`company_id`),
+  KEY `title_index` (`title`) USING BTREE,
   CONSTRAINT `company_id` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `editor_id` FOREIGN KEY (`editor_id`) REFERENCES `editors` (`editor_id`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -681,11 +682,8 @@ CREATE TABLE `user_interview` (
   `user_id` varchar(20) NOT NULL,
   `interview_id` varchar(20) NOT NULL,
   `is_passed` bit(1) NOT NULL,
-  `company_id` varchar(20) NOT NULL,
-  PRIMARY KEY (`user_id`,`interview_id`,`company_id`),
+  PRIMARY KEY (`user_id`,`interview_id`),
   KEY `inter_user_id_idx` (`interview_id`),
-  KEY `comp_user_id_idx` (`company_id`),
-  CONSTRAINT `comp_user_id` FOREIGN KEY (`company_id`) REFERENCES `interviews` (`company_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `inter_user_id` FOREIGN KEY (`interview_id`) REFERENCES `interviews` (`interview_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_inter_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -790,20 +788,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-16 15:03:09
-
-CREATE OR REPLACE VIEW statusBar AS
-SELECT
-       p.nickname,
-       q.difficulty,
-       COUNT(a.question_id) as total,
-       SUM(CASE WHEN is_solved = 1 THEN 1 ELSE 0 END) AS corrects,
-       SUM(CASE WHEN is_solved = 1 THEN 1 ELSE 0 END) / COUNT(a.question_id) * 100
-FROM attempts a, questions q, people p
-WHERE a.user_id = p.person_id AND q.question_id = a.question_id AND a.try_count >= ALL(SELECT try_count FROM attempts a2 WHERE a.question_id = a2.question_id)
-GROUP BY p.nickname, q.difficulty
-ORDER BY q.difficulty;
-
-CREATE INDEX nickname_index USING BTREE ON people(nickname);
-CREATE INDEX title_index USING BTREE ON questions(title);
-
+-- Dump completed on 2022-05-17 16:50:21

@@ -208,7 +208,7 @@ public class InterviewRepository {
          userDto.setPhoto(rs.getString("photo"));
          userDto.setUser_point(rs.getInt("points"));
          return userDto;
-      }, interview_id, user_id);
+      }, interview_id, user_id); 
    }
 
 }
