@@ -152,7 +152,8 @@ const EditorProfileScreen = () => {
   };
 
   const isPasswordValid = (password) => {
-    const regex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
   };
   const handlePasswordChange = () => {
