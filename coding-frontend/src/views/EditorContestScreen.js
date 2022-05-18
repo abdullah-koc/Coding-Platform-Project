@@ -34,6 +34,7 @@ const EditorContestScreen = () => {
       .get(process.env.REACT_APP_URL + "api/contest/all")
       .then((response) => {
         setContests(response.data);
+        console.log(response.data.length)
         setNewID(response.data.length);
       });
   }, []);
@@ -115,11 +116,11 @@ const EditorContestScreen = () => {
         addedQuestions.map((q) => {
           axios.post(
             process.env.REACT_APP_URL +
-              "api/contest/insert_question/" +
-              "C" +
-              newID +
-              "/" +
-              q
+            "api/contest/insert_question/" +
+            "C" +
+            newID +
+            "/" +
+            q
           );
         });
         alert("Contest added successfully");
@@ -131,6 +132,7 @@ const EditorContestScreen = () => {
         window.location.reload();
       })
       .catch((err) => {
+        console.log(err)
         alert("Error adding contest");
       });
   };

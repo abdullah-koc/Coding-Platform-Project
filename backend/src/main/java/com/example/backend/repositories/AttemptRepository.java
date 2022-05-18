@@ -23,9 +23,12 @@ public class AttemptRepository {
         String last_attempt_id;
         int attempt_id_count;
 
-        String last_attempt_id_sql = "SELECT attempt_id FROM attempts WHERE user_id = ? AND question_id = ? AND LENGTH(attempt_id) >= ALL(SELECT LENGTH(attempt_id) FROM attempts) ORDER BY attempt_id DESC LIMIT 1";
+        String last_attempt_id_sql = "SELECT attempt_id FROM attempts WHERE user_id = ? AND question_id = ? AND LENGTH(attempt_id) >= ALL(SELECT LENGTH(attempt_id) FROM attempts WHERE user_id = ? AND question_id = ?) ORDER BY attempt_id DESC LIMIT 1";
         try {
-            last_attempt_id = (String) jdbcTemplate.queryForObject(last_attempt_id_sql, new Object[]{attempt.getUser_id(), attempt.getQuestion_id()}, String.class);
+            last_attempt_id = (String) jdbcTemplate.queryForObject(last_attempt_id_sql,
+                    new Object[] { attempt.getUser_id(), attempt.getQuestion_id(), attempt.getUser_id(),
+                            attempt.getQuestion_id() },
+                    String.class);
             attempt_id_count = Integer.parseInt(last_attempt_id.substring(1));
             attempt_id_count++;
         } catch (EmptyResultDataAccessException e) {
@@ -60,7 +63,7 @@ public class AttemptRepository {
             int max_try;
             try {
                 max_try = jdbcTemplate.queryForObject(sql_max_try, Integer.class, attempt.getQuestion_id());
-            } catch(EmptyResultDataAccessException e) {
+            } catch (EmptyResultDataAccessException e) {
                 max_try = 0;
             }
             if (try_count < max_try) {
@@ -76,14 +79,17 @@ public class AttemptRepository {
     public void insertAttemptTestCase(Attempt attempt, TestCase testCase) {
         if (findAttemptById(attempt.getQuestion_id(), attempt.getUser_id(), attempt.getAttempt_id()) != null) {
             String sql = "INSERT INTO attempt_test_case(attempt_id, test_case_id, is_passed, coding_question_id, user_id) VALUES(?, ?, ?, ?, ?)";
-            jdbcTemplate.update(sql, attempt.getAttempt_id(), testCase.getTest_case_id(), new Random().nextBoolean(), attempt.getQuestion_id(), attempt.getUser_id());
+            jdbcTemplate.update(sql, attempt.getAttempt_id(), testCase.getTest_case_id(), new Random().nextBoolean(),
+                    attempt.getQuestion_id(), attempt.getUser_id());
 
             String attempt_test_case_sql = "SELECT * FROM attempt_test_case WHERE attempt_id = ? AND user_id = ? AND coding_question_id = ? AND test_case_id = ? AND is_passed = ?";
             try {
                 if (jdbcTemplate.queryForMap(attempt_test_case_sql,
-                        new Object[] { attempt.getAttempt_id(), attempt.getUser_id(), attempt.getQuestion_id(), testCase.getTest_case_id(), false }) != null) {
+                        new Object[] { attempt.getAttempt_id(), attempt.getUser_id(), attempt.getQuestion_id(),
+                                testCase.getTest_case_id(), false }) != null) {
                     String update_is_solved = "UPDATE attempts SET is_solved = ? WHERE question_id = ? AND user_id = ? AND attempt_id = ?";
-                    jdbcTemplate.update(update_is_solved, false, attempt.getQuestion_id(), attempt.getUser_id(), attempt.getAttempt_id());
+                    jdbcTemplate.update(update_is_solved, false, attempt.getQuestion_id(), attempt.getUser_id(),
+                            attempt.getAttempt_id());
                     attempt.setIs_solved(false);
                 }
             } catch (EmptyResultDataAccessException e) {
@@ -97,7 +103,7 @@ public class AttemptRepository {
             try {
                 String is_solved_sql = "SELECT is_solved FROM attempts WHERE user_id = ? AND question_id = ? AND attempt_id = ?";
                 boolean is_solved = (boolean) jdbcTemplate.queryForObject(is_solved_sql, Boolean.class,
-                        new Object[]{attempt.getUser_id(), attempt.getQuestion_id(), attempt.getAttempt_id()});
+                        new Object[] { attempt.getUser_id(), attempt.getQuestion_id(), attempt.getAttempt_id() });
                 List<Attempt> userAttempts = findUserOwnAttempts(attempt.getUser_id(), attempt.getQuestion_id());
                 boolean already_solved_correctly = false;
                 for (int i = 0; i < userAttempts.size() - 1; i++) {
