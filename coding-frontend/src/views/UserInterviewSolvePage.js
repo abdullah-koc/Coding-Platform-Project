@@ -120,6 +120,7 @@ export const UserInterviewSolvePage = () => {
                     onClick={() => handleGoToQuestion(question.question_id)}
                   >
                     <ContestQuestionCard
+                      isContest={false}
                       isCoding={question.question_id.startsWith("CQ")}
                       question={question.title}
                       difficulty={question.difficulty}

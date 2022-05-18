@@ -292,6 +292,7 @@ export const ContestScreen = () => {
                       onClick={() => handleGoToQuestion(question.question_id)}
                     >
                       <ContestQuestionCard
+                        isContest={true}
                         isCoding={question.question_id.startsWith("CQ")}
                         question={question.title}
                         difficulty={question.difficulty}

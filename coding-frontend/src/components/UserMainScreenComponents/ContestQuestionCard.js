@@ -18,6 +18,7 @@ const useStyles = makeStyles({
 });
 
 const ContestQuestionCard = ({
+  isContest,
   isCoding,
   question,
   difficulty,
@@ -34,25 +35,23 @@ const ContestQuestionCard = ({
   };
 
   useEffect(() => {
-    axios
-      .get(
-        process.env.REACT_APP_URL +
-          `api/interview/get_questions/${10}/${getID()}`
-      )
-      .then((res) => {
-        var data = res.data.filter((item) => item.title === question);
-        var ID = data[0].question_id;
-        axios
-          .get(
-            process.env.REACT_APP_URL +
-              `api/question/get_if_user_solved/${ID}/${
-                JSON.parse(localStorage.getItem("session")).person_id
-              }`
-          )
-          .then((res) => {
-            setIsSubmitted(res.data);
-          });
-      });
+    var axiosText = isContest
+      ? `api/contest/all_questions/${getID()}`
+      : `api/interview/get_questions/${10}/${getID()}`;
+    axios.get(process.env.REACT_APP_URL + axiosText).then((res) => {
+      var data = res.data.filter((item) => item.title === question);
+      var ID = data[0].question_id;
+      axios
+        .get(
+          process.env.REACT_APP_URL +
+            `api/question/get_if_user_solved/${ID}/${
+              JSON.parse(localStorage.getItem("session")).person_id
+            }`
+        )
+        .then((res) => {
+          setIsSubmitted(res.data);
+        });
+    });
   }, []);
 
   return (
