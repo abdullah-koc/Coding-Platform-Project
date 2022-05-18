@@ -5,6 +5,10 @@ import com.example.backend.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+
 @RestController
 @RequestMapping(path = "api/person")
 public class PersonController {
@@ -26,5 +30,11 @@ public class PersonController {
     public void changePhoto(@PathVariable String person_id, @PathVariable String photo){
         personService.changePhoto(person_id, photo);
     }
+
+    @PostMapping("/forget/password/{email}")
+    public void forgetPassword(@PathVariable String email) throws MessagingException, UnsupportedEncodingException {
+        personService.forgetPassword(email);
+    }
+
 
 }
