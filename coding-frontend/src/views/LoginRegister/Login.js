@@ -11,6 +11,21 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleForgetPassword = () => {
+    if (email === "") {
+      alert("Please enter your email");
+      return;
+    }
+    axios
+      .post(process.env.REACT_APP_URL + "api/person/forget/password/" + email)
+      .then((res) => {
+        alert("Please check your email for neew password");
+      })
+      .catch((err) => {
+        alert("Email is not registered");
+      });
+  };
+
   const handleLogin = () => {
     if (email === "" || password === "") {
       alert("Please fill all the fields");
@@ -170,6 +185,16 @@ const Login = () => {
           onClick={handleLogin}
         >
           Login
+        </Button>
+      </Grid>
+      <Grid item xs={12} style={{ marginTop: "6%" }}>
+        <Button
+          variant="outlined"
+          size="small"
+          color="warning"
+          onClick={handleForgetPassword}
+        >
+          Forget Password?
         </Button>
       </Grid>
     </Grid>
